@@ -1,0 +1,56 @@
+<ion-view view-title="Ship Order" name="Ship" cache-view="false" class="padding10">
+    <ion-header-bar class="bar bar-header tabs-top shiporder-header" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <div class="row h-100 p-a-0">
+            <div class="col-25">
+                <a style="padding: 12px 8px; padding-right: 50px;" class="button button-icon" ng-click="goBack()"><i class="icon ion-android-arrow-back iconColor f-s-30"></i></a>
+            </div>
+            <div class="col text-xs-center">
+                <h4 class="whiteText m-a-0 fs-2x">{{pageTitle}}</h4>
+            </div>
+            <div class="col-25">
+                <div style="height: 0" class="row p-a-0">
+                    <div class="col p-a-0">
+                        <div class="user-dash m-r-0 pull-xs-right">
+                            <span class='uinfo text-truncate'><i class="ion-person uname"></i><span>{{loginData.uname || 'Username'}}</span></span>
+                            <span class='uinfo text-truncate'><i class="ion-home insite"></i><span>{{selectedSite.Code}}</span></span>
+                            <span class="uinfo text-truncate app-version"><small>V {{$root.appVersion}}</small></span>
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <a href='' class="add-order-rgtbtn ion-android-more-vertical" ng-click="$root.openSettingsPopover($event,'bySettings')"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll='false' class="tank-content select-block">
+        <ion-scroll class="w-p-100 h-100">
+            <div>
+                <div class="wrapper-element">
+                    <div class="row">
+                        <div class="col col-100">
+                            <div class="row pkg-bgd tank-reading">
+                                <div class="col"><i class="icon ion-arrow-swap fs-2x m-r-1"></i> Source Inventory Site</div>
+                            </div>
+                            <button class="button button-small" id="sel_inv_site" ng-click="loadInsites();insitemodal.show()">{{selectedInSite.Code}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="wrapper-element">
+                    <div class="col col-100">
+                        <div class="row pkg-bgd tank-reading">
+                            <div class="col "><i class="icon ion-arrow-swap fs-2x m-r-1"></i> Confirm Source Tank</div>
+                        </div>
+                        <div ng-if="selectedInTank.Descr" class="f-s-17 row">
+                            <div class="col m-t-10">
+                                <p style="margin-left:30px" class="m-y-0 fs-2x"> Tank Description: {{selectedInTank.Descr}}</p>
+                            </div>
+                        </div>
+                        <button class="button button-small" id="sel_std_tank" ng-click="showTankModal('Source',null)"> {{selectedInTank.Descr || 'Select Tank'}}</button>
+                    </div>
+                </div>
+            </div>
+        </ion-scroll>
+        <a class="button button-small affirm" ng-disabled="!selectedInTank.Descr" id="std_tnk_cnu" ng-click="goTankBE()">Continue</a>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,35 @@
+<ion-modal-view class="addOrderModal titleModal tr">
+    <ion-header-bar style="width: 100%; border: none; background: #202e87">
+        <div class="row p-a-0">
+            <div class="col p-a-0">
+                <h4 class="m-a-0 text-white fs-18x">Reason for NA</h4>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0 fs-18x text-xs-right text-white">
+                    <a style="min-width: 20px; padding: 0 10px" href="" ng-click="naReasonModal.hide()" class="pull-xs-right text-white">
+                        <i class="ion-close-round"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll="false">
+        <form name="transferForm" novalidate>
+            <div class='inputParent'>
+                <div class="row p-y-0">
+                    <div class="col">
+                        Please provide a reason for NA   
+                    </div>
+                </div>
+                <div class="row p-y-0">                    
+                    <div class="col" style="margin-top:10px">
+                        <textarea ng-model="naReason.txt" id="reason" name="" cols="30" rows="5" placeholder="Enter Reason here..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <br/>
+           
+            <button ng-click="setNa(isDvry, naReason.txt)" type="submit" class="big-rd-btn button button-icon ion-checkmark-round orderDone rgt-5-btm-5"> </button>
+        </form>
+    </ion-content>
+</ion-modal-view>

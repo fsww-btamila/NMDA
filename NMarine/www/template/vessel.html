@@ -1,0 +1,58 @@
+<ion-content scroll='false' ng-class="pageTitle == 'Delivered' ? 'disableUI':false" has-tabs="false">
+    <div ng-hide='OrderList.Orders.OrderHdr.Vessels.length>0' class="row m-t-20">
+        <div class="col">
+            <center><a class="button icon-left ion-android-add affirm" ng-click="setVesselType('vessel'); openModal('vesselmodal')">Add Vessel</a></center>
+        </div>
+    </div>
+    <div class="row m-t-0 p-a-0 avail-header" ng-show='OrderList.Orders.OrderHdr.Vessels.length>0'>
+        <div class="col p-a-0">
+            <ion-list>
+                <ion-item class="card p-x-0 m-a-0">
+                    <div class="row row-top item-text-wrap">
+                        <div class="col-offset-10 col col-25">
+                            <p class="m-a-0 fs-18x">Name</p>
+                        </div>
+                        <div class="col ellipsis text-xs-right">
+                            <p class="m-a-0 fs-18x">Gross Tonnage</p>
+                        </div>
+                        <div style="padding-right: 5px" class="col-40">
+                            <md-button ng-show='OrderList.Orders.OrderHdr.Vessels.length == 0' style="background: #ff7800;" ng-click="setVesselType('vessel'); openModal('vesselmodal')" class="md-fab md-mini affirm m-a-0 pull-xs-right">
+                                <i class="ion-plus-round f-s-18" style="padding:0 !important"></i>
+                            </md-button>
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+    </div>
+    <div class="row m-t-0 h-80 p-a-0" ng-show='OrderList.Orders.OrderHdr.Vessels.length>0'>
+        <div class="col h-100 p-a-0">
+            <ion-scroll class="orderPane availabilityList h-100">
+                <div>
+                    <ion-item class="p-x-0 m-a-0 bdr-0" ng-repeat="vessel in OrderList.Orders.OrderHdr.Vessels">
+                        <div class="row row-top">
+                            <div class="col col-10">
+                                <i class="icon ion-android-boat f-s-25"></i>
+                            </div>
+                            <div class="col col-25">
+                                <p class="m-a-0">
+                                    <i ng-class="{'icon ion-android-person f-s-20': OrderList.Orders.OrderHdr.Vessels.StandardAcctNo == OrderList.Orders.OrderHdr.CustomerNumber}"></i> {{vessel.VesselCode}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <div class="text-xs-right">
+                                    <p class="m-a-0">{{vessel.GrossTonnage}}</p>
+                                </div>
+                            </div>
+                            <div class="col col-40">
+                                <!-- <i style="padding-left: 10px" ng-click="removeVessel(vessel)" class="ion-ios-trash f-s-30 pull-xs-right"></i> -->
+                                <div ng-click="removeVessel(vessel)" class="button button-icon delete-tank-btn float-plus hide-on-keyboard-open" ng-if="OrderList.Orders.OrderHdr.Status!='Delivered'">
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </div>
+            </ion-scroll>
+        </div>
+    </div>
+</ion-content>

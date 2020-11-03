@@ -1,0 +1,94 @@
+<ion-view>
+  <ion-content style="top: 0" class="innerWidth m-t-0">
+    <div class="row packagedDetails bdr-b-blue h-70p">
+      <div class="col col-50 f-s-18">
+        <h5 class="m-a-0"><i class="ion-soup-can-blue"></i><span class="d-inline-block m-l-1">{{currentItem.Code }}</span></h5>
+        <div class="row packagedDetails">
+          <div class="col fs-14x">{{currentItem.Descr}}</div>
+        </div>
+        <div ng-if="false" class="row">
+          <div class="col packagedDetails fs-14x">{{currentItem.SellByUOM}}</div>
+        </div>
+      </div>
+      <div ng-if="activeAction=='Deliver' && currentItem.Ship.quantityShipped" class="col">
+        <div class="row">
+          <div class="col text-xs-right fs-16x">Quantity Shipped</div>
+        </div>
+        <div class="row">
+          <div class="col text-xs-right fs-16x">{{currentItem.Ship.quantityShipped | number: 2}}</div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <div class="col text-xs-right fs-16x">Quantity Ordered</div>
+        </div>
+        <div class="row">
+          <div class="col text-xs-right fs-16x">{{currentItem.Qty | number: 2}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="row h-40p">
+      <div class="col col-50 f-s-18">
+      </div>
+      <div class="col packagedDetails">
+        <div class="row">
+          <div class="col text-xs-right">{{currentItem.SellByUOM}}</div>
+        </div>
+      </div>
+      <div ng-if="activeAction=='Deliver' && currentItem.Ship.quantityShipped" class="col packagedDetails">
+        <div class="row">
+          <div class="col text-xs-right">{{currentItem.SellByUOM}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="row summaryBody">
+      <div class="col col-60 pos-relative h-100">
+        <div class="pull-xs-bottom">
+          <div class="card" ng-click="hideItemProperty('po')" id="po">
+            <div class="packagedDetails p-x-1" ng-click="a=true">
+             <escaped-input enc-value="currentItem.PONo" id="textareaPo" label="Item PO Number" placeholder="Add Item PO Number" maxlen="24" style="resize: none !important; padding-left: 21.5px" />
+            </div>
+          </div>
+          <div class="card" ng-click="hideItemProperty('note')" id="note">
+            <div class="packagedDetails p-x-1" ng-click="b=true">
+             <escaped-input enc-value="currentItem.Notes" id="textareaNotes" label="Item Notes" placeholder="Add Item Note" maxlen="255" style="resize: none !important; padding-left: 21.5px"/>
+            </div>
+          </div>
+          <div class="card" ng-click="hideItemProperty('deliveryIns')" id="deliveryIns">
+            <div class="packagedDetails p-x-1" ng-click="c=true"> 
+              <escaped-input enc-value="currentEntry.ShippingInstruction" id="textareaIns" label="{{activeString}} Instructions" maxlen="255" placeholder="Add {{activeString}} Instructions" style="resize: none !important; padding-left: 21.5px"/>
+            </div>
+          </div>
+          <div class="card" ng-if="order.OrderHdr.Status =='Delivered' && currentItem.HazmatDesc">
+            <div class="packagedDetails p-x-1" ng-click="d=true">
+              <label class="icon-left ion-ios-flame">&nbsp Hazmat Instructions</label>
+              <textarea ng-model='currentItem.HazmatDesc' id="text-area" class="addNoteArea m-t-1rem w-100-per nopointer" style="resize: none !important; padding-left: 21.5px" elastic ng-trim="false" disabled focus-me="d"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col col-40">
+        <div class="row m-y-3 packagedDetails">
+          <div class="col" ng-class="{'disablePointer': order.OrderHdr.Status =='Delivered'}">
+            <span class="col text-xs-right md-no-float fs-16x">
+              {{(activeAction=='Deliver')?'Quantity Delivered':'Quantity Shipped'}}
+              <button ng-show="currentEntry.overallStatus == 'finished' && order.OrderHdr.Status !='Delivered'" ng-click="(currentEntry.overallStatus == 'finished') ? resetPkgItem() : ''" class="btn button-icon d-inline"><i class="ion-edit"></i></button>
+            </span>
+            <md-input-container class="md-no-float md-block input-component m-a-0 nopointer no-error">
+              <input style="color: #202387" name='totQty' type="text" ng-model="currentEntry.quantityShipped" id="quantityInput" required class="nopointer text-xs-right fs-2x p-r-1">
+            </md-input-container>
+            <span class="pull-xs-right">{{currentItem.SellByUOM}}</span>
+          </div>
+        </div>
+        <div ng-hide="order.OrderHdr.Status==='Delivered'" class="row" ng-class="{'nopointer-opac': checkFinished()}">
+          <div class="col-80 pos-relative" style="left: 19%;">
+            <numeric-pad max="15" current-item="currentItem" quantity="numericIn.quantity"></numeric-pad>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-btm-rgt">
+      <button ng-show="currentEntry.overallStatus!= 'finished'" ng-click="setItemFinished()" id="packaged-btn" class="big-rd-btn button button-icon ion-checkmark-round pkgDone hide-on-keyboard-open"> </button>
+    </div>
+  </ion-content>
+</ion-view>

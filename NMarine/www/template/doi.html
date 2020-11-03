@@ -1,0 +1,396 @@
+<ion-view cache-view="false" view-title="Sign" class='headerBar'>
+  <ion-content scroll='true' style="top: 0" class='doiView' delegate-handle="doiContent">
+    <form novalidate name="doiForm" class='doiForm'>
+      <div class="html2canvasDiv">
+        <table class="doiHdrTbl">
+          <thead>
+            <tr>
+              <td colspan="2">
+                <h3 class='text-default doiTitle'>Declaration Of Inspection Prior To Bulk Transfer</h3>
+              </td>
+            </tr>
+            <tr class="row vesselsDoi" ng-if="activeAction=='Ship'">
+              <td>
+                <label class="item-label vesselsDoiTitle">Vessel: </label>
+              </td>
+              <td>
+                <input style="pointer-events:auto;" type="text" required class="input-border doiVessel onlyScreen" ng-model='order.OrderHdr.Vehicle.Code' value="{{order.OrderHdr.Vehicle.Code}}" />
+                <label class="doiPLbl onlyPrint">{{order.OrderHdr.Vehicle.Code}}</label>
+              </td>
+            </tr>
+            <tr class="row vesselsDoi" ng-if="activeAction=='Ship'">
+              <td>
+                <label class="item-label vesselsDoiTitle">Transfer Facility: </label>
+              </td>
+              <td>
+                <input style="pointer-events:auto;" my-maxlength="20" type="text" required class="input-border doiVessel onlyScreen" ng-model="order.OrderHdr.INSiteCode" value="{{order.OrderHdr.INSiteCode}}" />
+                <label class="doiPLbl onlyPrint">{{order.OrderHdr.INSiteCode}}</label>
+              </td>
+            </tr>
+            <tr class="row vesselsDoi" ng-if="activeAction=='Ship'">
+              <td>
+                <label class="item-label vesselsDoiTitle">Location: </label>
+              </td>
+              <td>
+                <input type="text" required class="input-border doiVessel onlyScreen" ng-model="order.OrderHdr.INSiteAddress" value="{{order.OrderHdr.INSiteAddress}}" />
+                <label class="doiPLbl onlyPrint">{{order.OrderHdr.INSiteAddress}}</label>
+              </td>
+            </tr>
+            <tr class="row vesselsDoi" ng-if="activeAction=='Deliver'">
+              <td>
+                <label class="item-label vesselsDoiTitle">Vessel: </label>
+              </td>
+              <td>
+                <input style="pointer-events:auto;" ng-show="!(order.OrderHdr.InternalTransferOrder == 'Y')" type="text" required class="input-border onlyScreen doiVessel" ng-model='order.OrderHdr.Vessels[0].VesselCode' value="{{order.OrderHdr.Vessels[0].VesselCode}}" />
+                <input style="pointer-events:auto;" ng-show="(order.OrderHdr.InternalTransferOrder == 'Y' && general.Vehicle.EnforceShipmentMarineApp === 'Y')" type="text" required class="input-border onlyScreen doiVessel" ng-model='order.OrderHdr.Vehicle.Code' value="{{order.OrderHdr.Vehicle.Code}}" />
+                <input style="pointer-events:auto;" ng-show="(order.OrderHdr.InternalTransferOrder == 'Y' && general.Vehicle.EnforceShipmentMarineApp === 'N')" type="text" required class="input-border onlyScreen doiVessel" ng-model='order.OrderHdr.ToSiteCode' value="{{order.OrderHdr.ToSiteCode}}" />
+                <label class="doiPLbl onlyPrint" ng-show="!(order.OrderHdr.InternalTransferOrder == 'Y')">{{order.OrderHdr.Vessels[0].VesselCode}}</label>
+                <label class="doiPLbl onlyPrint" ng-show="(order.OrderHdr.InternalTransferOrder == 'Y' && general.Vehicle.EnforceShipmentMarineApp === 'Y')">{{order.OrderHdr.Vehicle.Code}}</label>
+                <label class="doiPLbl onlyPrint" ng-show="(order.OrderHdr.InternalTransferOrder == 'Y' && general.Vehicle.EnforceShipmentMarineApp === 'N')">{{order.OrderHdr.ToSiteCode}}</label>
+              </td>
+            </tr>
+            <tr class="row vesselsDoi" ng-if="activeAction=='Deliver'">
+              <td>
+                <label class="item-label vesselsDoiTitle">Transfer Facility: </label>
+              </td>
+              <td>
+                <input style="pointer-events:auto;" my-maxlength="20" ng-if="general.Vehicle.EnforceShipmentMarineApp === 'Y'  && general.InternalTransferOrder == 'N'" type="text" required class="input-border onlyScreen doiVessel" ng-model="order.OrderHdr.Vehicle.Code" value="{{order.OrderHdr.Vehicle.Code}}" />
+                <input style="pointer-events:auto;" my-maxlength="20" ng-if="general.Vehicle.EnforceShipmentMarineApp === 'Y' && general.InternalTransferOrder == 'Y'" type="text" required class="input-border onlyScreen doiVessel" ng-model="order.OrderHdr.ToSiteCode" value="{{order.OrderHdr.ToSiteCode}}" />
+                <input style="pointer-events:auto;" my-maxlength="20" ng-if="general.Vehicle.EnforceShipmentMarineApp === 'N'" type="text" required class="input-border onlyScreen doiVessel" ng-model="order.OrderHdr.INSiteCode" value="{{order.OrderHdr.INSiteCode}}" />
+                <label class="doiPLbl onlyPrint" ng-if="general.Vehicle.EnforceShipmentMarineApp === 'Y'  && general.InternalTransferOrder == 'N'">{{order.OrderHdr.Vehicle.Code}}</label>
+                <label class="doiPLbl onlyPrint" ng-if="general.Vehicle.EnforceShipmentMarineApp === 'Y' && general.InternalTransferOrder == 'Y'">{{order.OrderHdr.ToSiteCode}}</label>
+                <label class="doiPLbl onlyPrint" ng-if="general.Vehicle.EnforceShipmentMarineApp === 'N'">{{order.OrderHdr.INSiteCode}}</label>
+              </td>
+            </tr>
+            <tr class="row vesselsDoi" ng-if="activeAction=='Deliver'">
+              <td>
+                <label class="item-label vesselsDoiTitle">Location: </label>
+              </td>
+              <td class="d-inline text-truncate" ng-if="general.InternalTransferOrder == 'N'">
+                <input ng-if="general.Vehicle.EnforceShipmentMarineApp === 'Y'" type="text" required class="input-border onlyScreen doiVessel" ng-model="DoiLocation" value="{{DoiLocation}}" />
+                <label class="doiPLbl onlyPrint" ng-if="general.Vehicle.EnforceShipmentMarineApp === 'Y'">{{DoiLocation}}</label>
+                <span ng-if="general.Vehicle.EnforceShipmentMarineApp === 'N'">
+                  <input type="text" ng-if="selectedSite.SiteType === 'F'" required class="input-border onlyScreen doiVessel" ng-model="general.Destination.Descr" value="{{general.Destination.Descr}}" />
+                  <!-- <input type="text" ng-if="selectedSite.SiteType !== 'F'" required class="input-border doiVessel" ng-model="order.OrderHdr.INSiteAddress" value="{{order.OrderHdr.INSiteAddress}}" /> -->
+                  <input type="text" ng-if="selectedSite.SiteType !== 'F'" type="text" required class="input-border onlyScreen doiVessel" class="input-border doiVessel" ng-model="DoiLocation" value="{{DoiLocation}}" required/>
+                  <label class="doiPLbl onlyPrint" ng-if="selectedSite.SiteType === 'F'"> {{general.Destination.Descr}}</label>
+                  <label class="doiPLbl onlyPrint" ng-if="selectedSite.SiteType !== 'F'">{{DoiLocation}}</label>
+                </span>
+              </td>
+              <td class="d-inline text-truncate" ng-if="general.InternalTransferOrder == 'Y'">
+                <input ng-if="!general.Destination" type="text" required class="input-border onlyScreen doiVessel" ng-model="general.ToSiteAddress" value="{{general.ToSiteAddress}}" />
+                <input ng-if="general.Destination" type="text" required class="input-border onlyScreen doiVessel" ng-model="general.Destination.Code" value="{{general.Destination.Code}}" />
+                <label class="doiPLbl onlyPrint" ng-if="!general.Destination">{{general.ToSiteAddress}}</label>
+                <label class="doiPLbl onlyPrint" ng-if="general.Destination">{{general.Destination.Code}}</label>
+              </td>
+            </tr>
+          </thead>
+          <tbody id="signatureTbl">
+            <tr>
+              <td>
+                <p class='doiInfo'>Safety of operations requires all questions to be answered affirmatively after checking by both vessel and terminal representatives. If an affirmative answer is not possible, the reason should be given and agreement reached upon appropriate precautions to be taken by the vessel and terminal. Numbers in brackets refer to relevant items in CFR 33/46.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table class="doiTable">
+                  <tr>
+                    <th style="display: none;">S.No</th>
+                    <th>Check List</th>
+                    <th ng-if="order.activeAction=='Deliver'" colspan='{{doiData[0].DoiSignData.DeliveringDoiData.deliverySignature.length}}'>Delivery</th>
+                    <th ng-if="order.activeAction=='Deliver'" colspan='{{doiData[0].DoiSignData.DeliveringDoiData.receiverSignature.length}}'>Receiving</th>
+                    <th ng-if="order.activeAction=='Ship'" colspan='{{doiData[0].DoiSignData.ShippingDoiData.deliverySignature.length}}'>Delivery</th>
+                    <th ng-if="order.activeAction=='Ship'" colspan='{{doiData[0].DoiSignData.ShippingDoiData.receiverSignature.length}}'>Receiving</th>
+                  </tr>
+                  <tr ng-repeat='item in doiData' ng-model='doiDataTable' ng-init='sectionIndex = $index' class="{{ (declineDoi && $index+1 != declineQuestion) ? 'disableUI' : '' }}">
+                    <td style="display: none;">{{sectionIndex+1}}</td>
+                    <td>
+                      <p class="doiQuestion">{{$index+1}}. &nbsp;{{item.DOIText}}</p>
+                      <i ng-if="getReasonFlag($index, order.activeAction)" class="ion-information-circled na-alert-btn" ng-click="showReason($index, order.activeAction)">
+          </td>
+          <td ng-show="order.activeAction=='Deliver'" ng-click='states.activeItem=1;doiRecordClick(item,sectionIndex,$index,"D", $event)' ng-repeat='subItem in item.DoiSignData.DeliveringDoiData.deliverySignature track by $index' ng-class="(delLength>1 && !($last))?'disableDOI':''">
+          <div class="sign-img-wrapper">
+          <img ng-show="item.DoiSignData.DeliveringDoiData.deliverySignature[$index]"  ng-model='deliverySign' id="myCanvasDeliver_{{sectionIndex}}{{$index}}" ng-src="{{item.DoiSignData.DeliveringDoiData.deliverySignature[$index]}}" alt="" class='canvasMini' />
+          </div>
+          </td>
+          <td ng-show="order.activeAction=='Deliver'" ng-click='states.activeItem=2;doiRecordClick(item,sectionIndex,$index,"R", $event)' ng-repeat='subItem in item.DoiSignData.DeliveringDoiData.receiverSignature track by $index' ng-class="(recLength>1 && !($last))?'disableDOI':''">
+          <div class="sign-img-wrapper">
+          <img ng-show="item.DoiSignData.DeliveringDoiData.receiverSignature[$index]"  ng-model='recevingSign' id="myCanvasReceiver_{{sectionIndex}}{{$index}}" ng-src='{{item.DoiSignData.DeliveringDoiData.receiverSignature[$index]}}' alt="" class='canvasMini' />
+          </div>
+          </td>
+          <td ng-show="order.activeAction=='Ship'" ng-click='states.activeItem=1;doiRecordClick(item,sectionIndex,$index,"D", $event)' ng-repeat='subItem in item.DoiSignData.ShippingDoiData.deliverySignature track by $index' ng-class="(delLength>1 && !($last))?'disableDOI':''">
+          <div class="sign-img-wrapper">
+          <img ng-show="item.DoiSignData.ShippingDoiData.deliverySignature[$index]"  id="myCanvasDeliver_{{sectionIndex}}{{$index}}" ng-src='{{item.DoiSignData.ShippingDoiData.deliverySignature[$index]}}' alt="" class='canvasMini' />
+          </div>
+          </td>
+          <td ng-show="order.activeAction=='Ship'" ng-click='states.activeItem=2;doiRecordClick(item,sectionIndex,$index,"R", $event)' ng-repeat='subItem in item.DoiSignData.ShippingDoiData.receiverSignature track by $index' ng-class="(recLength>1 && !($last))?'disableDOI':''">
+          <div class="sign-img-wrapper">
+          <img ng-show="item.DoiSignData.ShippingDoiData.receiverSignature[$index]" id="myCanvasReceiver_{{sectionIndex}}{{$index}}" ng-src='{{item.DoiSignData.ShippingDoiData.receiverSignature[$index]}}' alt="" class='canvasMini' />
+          </div>
+          </td>
+          </tr>
+          <tr ng-show="declineDoi">
+            <td class="table-mask"></td>
+          </tr> 
+          </table>
+          </td>
+          </tr>
+          <tr>
+          <td>
+            <div class="row">
+              <div class="col">
+              <p class='doiInfo'>I do certify that I have personally inspected this vessel or facility referencing to the requirements printed above indicating these regulations have been complied. The transfer starts with communication and ends with hose disconnect/closing
+            the connection.</p>
+            </div>
+            </div>
+            </td>
+          </tr>
+          <tr class="onlyPrint" style="width: 710px; display: block;">
+            <td  style='display:block; color:#555; height:12px; vertical-align: bottom;' ng-if="(order.shiftDetails[activeAction].Delivering.length + order.shiftDetails[activeAction].Receiving.length) >=5">
+            <p style="font-weight: bold; font-size: 5px; text-align: right">Page 1 of 2</p>
+            </td>
+          </tr>
+          </tbody>
+          <tfoot style="display: block;">
+          <tr class="row m-t-2 incharge-wrapper">
+          <td class="row p-a-0">
+            <label class="pic doiFootLbl">Person incharge of Delivery Unit</label>
+            </td>
+            <td class="row p-a-0">
+            <label class="tit doiFootLbl">Title</label>
+            </td>
+            <td class="row p-a-0">
+            <label class="tit doiFootLbl">Transfer Start Date & Time</label>
+            </td>
+
+          </tr>
+          <tr class=" row m-t-2 incharge-wrapper " ng-repeat='item in order.shiftDetails[activeAction].Delivering track by $index'>
+          <td class="row p-a-0">
+          <div class="doi-per-name">
+          <span class='icSpan'>
+            <div ng-class="signDelRecvDisabled(order.shiftDetails[activeAction].Delivering[$index])">
+              <div class="sign-img-wrapper" ng-click='doiInchargeClick(1,$index,"D")' ng-class="findDoiClass(delLength,$last,'Delivering')">
+                <img id="myCanvasDeliver{{$index}}"  ng-src='{{doiDataCompleteTemp.deliverySignature[$index]}}' alt="" class='canvasMini incharge'  />
+              </div>
+            </div>
+            <input class="onlyScreen pic-name" ng-model="order.shiftDetails[activeAction].Delivering[$index].name" ng-change="transferDetails.Delivering.name= order.shiftDetails[activeAction].Delivering[$index].name" ng-class="findDoiClass(delLength,$last,'Delivering')" placeholder="Enter Name" my-maxlength="40" />
+            <label class="onlyPrint" style="float: left;width: 100%; font-size: 5px !important; font-weight: normal !important;">{{order.shiftDetails[activeAction].Delivering[$index].name}}</label>
+          </span>
+
+          </div>
+          </td>
+          <td class="row p-a-0">
+          <span class='icSpan'>
+          <div class="title-wrap" ng-init="order.shiftDetails[activeAction].Delivering[$index].title = order.shiftDetails[activeAction].Delivering[$index].title || 'Tankerman'">
+              <select ng-show="!(order.shiftDetails[activeAction].Delivering[$index].title != 'PIC' && order.shiftDetails[activeAction].Delivering[$index].title != 'Tankerman')" class="onlyScreen" ng-model='order.shiftDetails[activeAction].Delivering[$index].title' style="padding:6px;">
+                <option value="Tankerman" selected="selected">Tankerman</option>
+                <option value="PIC">PIC</option>
+                <option value="">Other</option>
+              </select>
+            <div ng-if="(order.shiftDetails[activeAction].Delivering[$index].title != 'PIC' && order.shiftDetails[activeAction].Delivering[$index].title != 'Tankerman')" style="display: flex;">
+                <input class="pic-name onlyScreen" type="text" ng-model='order.shiftDetails[activeAction].Delivering[$index].title' placeholder="Enter Title" >
+                <i style="padding:15px; font-size: 25px;" class="ion-close-circled onlyScreen" ng-click="order.shiftDetails[activeAction].Delivering[$index].title = 'Tankerman'"></i>
+            </div>
+          <label class="onlyPrint" style="font-size: 5px !important;">{{order.shiftDetails[activeAction].Delivering[$index].title}}</label>
+      </div>
+      </span>
+      </td>
+      <td class="row p-a-0">
+        <span class='icSpan' ng-if="$first">
+        <div class="title-wrap">
+        <span class="onlyPrint disableDOI doiFootLbl">{{order.shiftDetails[activeAction].transferStartDate | date:'MM/dd/yyyy HH:mm'}}</span>
+        <span class="doiSignDate onlyScreen">
+          <ng-date selected-dt="order.shiftDetails[activeAction].transferStartDate"></ng-date>     
+        </span>
+        </div> 
+        </span>
+      </td>
+      </tr>
+      <tr class="row m-t-2 incharge-wrapper">
+        <td class="row p-a-0">
+          <label class="pic doiFootLbl">Person incharge of Receiving Unit</label>
+        </td>
+        <td class="row p-a-0" >
+          <label class="tit doiFootLbl">Title</label>
+        </td>
+        <td class="row p-a-0">
+          <label class="tit doiFootLbl">Transfer End Date & Time</label>
+        </td>
+      </tr>
+      <tr class=" row m-t-2 incharge-wrapper" ng-repeat='item in order.shiftDetails[activeAction].Receiving track by $index'>
+        <td class="row p-a-0">
+          <div class="doi-per-name">
+            <span class='icSpan'>
+              <div  ng-class="signDelRecvDisabled(order.shiftDetails[activeAction].Receiving[$index])">
+              <div class="sign-img-wrapper" ng-click='doiInchargeClick(2,$index,"R")' ng-class="findDoiClass(recLength,$last,'Receiving')" >
+              <img id="myCanvasReceiver{{$index}}"   ng-src='{{doiDataCompleteTemp.receiverSignature[$index]}}' alt="" class='canvasMini incharge' />
+              </div>
+              </div>
+              <input class="onlyScreen pic-name" ng-model="order.shiftDetails[activeAction].Receiving[$index].name" ng-change="transferDetails.Receiving.name = order.shiftDetails[activeAction].Receiving[$index].name" ng-class="findDoiClass(recLength,$last,'Receiving')" placeholder="Enter Name" my-maxlength="40" />
+              <label class="onlyPrint" style="float: left;width: 100%; font-size: 5px !important; font-weight: normal !important;">{{order.shiftDetails[activeAction].Receiving[$index].name}}</label>
+            </span>
+          </div>
+        </td>
+        <td class="row p-a-0">
+          <span class='icSpan'>
+            <div class="title-wrap" ng-init="order.shiftDetails[activeAction].Receiving[$index].title = order.shiftDetails[activeAction].Receiving[$index].title || 'Tankerman'">
+              <select ng-show="!(order.shiftDetails[activeAction].Receiving[$index].title != 'PIC' && order.shiftDetails[activeAction].Receiving[$index].title != 'Tankerman')" class="onlyScreen" ng-model='order.shiftDetails[activeAction].Receiving[$index].title' style="padding:6px;">
+              <option value="Tankerman" selected="selected">Tankerman</option>
+              <option value="PIC">PIC</option>
+              <option value="">Other</option>
+              </select>
+              <div ng-if="(order.shiftDetails[activeAction].Receiving[$index].title != 'PIC' && order.shiftDetails[activeAction].Receiving[$index].title != 'Tankerman')" style="display: flex;">
+              <input class="pic-name onlyScreen"  type="text" ng-model='order.shiftDetails[activeAction].Receiving[$index].title' placeholder="Enter Title" ><i style="padding:15px; font-size: 25px;" class="ion-close-circled onlyScreen" ng-click="order.shiftDetails[activeAction].Receiving[$index].title = 'Tankerman'"></i>
+              </div>
+              <label class="onlyPrint" style="font-size: 5px !important;">{{order.shiftDetails[activeAction].Receiving[$index].title}}</label>
+            </div>
+        </span>
+        </td>
+        <td class="row p-a-0">
+          <span class='icSpan' ng-if="$first">
+            <div class="title-wrap" ng-if="order.skipDOIStart">
+              <span class=" onlyPrint disableDOI doiFootLbl">{{currentEntry.transferEndDate | date:'MM/dd/yyyy HH:mm'}}</span>
+              <span ng-if="currentEntry.transferEndDate" class="doiSignDate onlyScreen">
+                <!-- <ng-date selected-dt="currentEntry.transferEndDate" set-after="{{currentDateTime}}"></ng-date> -->
+                 <ng-date selected-dt="currentEntry.transferEndDate"></ng-date>
+              </span>
+            </div>
+          </span>
+        </td>
+      </tr>
+      <tr class="onlyPrint" style="width: 710px; display: block;">
+        <td style='display:block; color:#555; height:12px; vertical-align: bottom;' ng-if="(order.shiftDetails[activeAction].Delivering.length + order.shiftDetails[activeAction].Receiving.length) >= 5">
+          <p style=" font-weight: bold; font-size: 5px; text-align: right">Page 2 of 2</p>
+        </td>
+        <td style='display:block; color:#555; height:12px; vertical-align: bottom;' ng-if="(order.shiftDetails[activeAction].Delivering.length + order.shiftDetails[activeAction].Receiving.length) <= 4">
+          <p style=" font-weight: bold; font-size: 5px; text-align: right">Page 1 of 1</p>
+        </td>
+      </tr>
+      </tfoot>
+      </table>
+      </div>
+      <div class="doiDeclineParent" ng-show='declineDoi'>
+        <span class="doiDecline"><i class="ion-alert-circled doiDeclineWarn"></i>DOI Item {{declineQuestion}} was declined by {{declinerName}}.Cannot continue {{(activeAction=='Ship')?'Shipment':'Delivery'}} on the item.
+        </span>
+        <div class="doi-decline-actions">
+          <a class="button icon-right ion-android-arrow-forward affirm doiCont" ng-click='handleDecline()'>Cancel {{(activeAction=='Ship')?'Shipment':'Delivery'}}</a>
+          <a class="button doiCont clear" ng-click='clearDecline()'>Clear Decline</a>
+        </div>
+      </div>
+      <canvas ng-if="isDoiComplete" id="myCanvas" width="400" height="80"></canvas>
+      <script id="modal.html" type="text/ng-template">
+        <div class="modal modalCustom doiModal">
+          <content has-header="false" padding="true" class="contentData" scroll='true'>
+            <button class="button button-icon ion-close-circled modal-close closeModal" ng-click='closeModal()'></button>
+            <div class="tabs-striped tabs-top doiTabsBg tabs-color-light" ng-if='false'>
+              <div class="tabs doiTabs">
+                <a class="tab-item" ng-class="{'active': states.activeItem == 1}" ng-click="states.activeItem=1" href="#">Delivery</a>
+                <a class="tab-item" ng-class="{'active': states.activeItem == 2}" ng-click="states.activeItem=2" href="#"> Receiving </a>
+                <button class='button button-clear closeModal' ng-click='closeModal()'>Close</button>
+              </div>
+            </div>
+            <div class='DoiModalBody'>
+              <h5 ng-show='isDoiQus' class='qusTitle'>{{index+1}} . {{question.DOIText}}</h5>
+              <div ng-show='states.activeItem==1' id="signature-pad" class="m-signature-pad signDiv">
+                <div class="m-signature-pad--body row">
+                  <canvas width="900" height="300" id='signPad1' ng-class="disableSignPad.Delivering?'disable':''" class="signaturePad horizontal-centered"></canvas>
+                </div>
+                <div class="row">
+                  <div class="horizontal-centered canvasFooter">
+                    <div class="col">
+                      <div class="row p-a-0">
+                        <div class="col col-25 p-a-0">
+                          <div class="description text-xs-left"><i class="ion-person uname"></i> {{transferDetails.Delivering.name}}</div>
+                        </div>
+                        <div class="col p-a-0 description text-xs-right">
+                          {{(isDoiQus)?"Initial":"Sign"}} Above to Confirm {{(isDoiQus)?"":"DOI"}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="m-signature-pad--footer row m-t-3">
+                  <div class='col col-20'>
+                    <button ng-hide="declineDoi" class='button prv doiPrv' ng-show='isDoiQus && index!= 0' ng-hide="index==0" ng-click='prev()' ng-disabled="prevClicked"><i class="icon ion-chevron-left"></i>&nbsp;Prev</button>
+                  </div>
+                  <div class="col btnSet m-a-0">
+                    <button class='button btnColor m-y-0' ng-show='!isDoiQus' ng-click='closeModal()'>Submit</button>
+                    <button ng-show='isDoiQus && !declineDoi && !naEdited' type="button" ng-click='checkNa(true, index, activeAction)' class="button na m-y-0">NA</button>
+                    <button ng-show='isDoiQus && !declineDoi' type="button" ng-click='decline(true,transferDetails.Delivering.name,index+1)' class="button decline m-y-0">Decline</button>
+                    <button type="button" class="button clear m-y-0" ng-click='disableSignPad.Delivering = false;clearCanvas1(true,index+1)'>Clear</button>
+                  </div>
+                  <div class="col col-20">
+                    <button ng-hide="declineDoi" class='button  nxt doiNxt' ng-show='isDoiQus && index!=doiData.length-1' ng-hide="index==doiData.length-1" ng-click='next()' ng-disabled="nextClicked">Next&nbsp; <i class="icon ion-chevron-right"></i></button>
+                    <button class='button  nxt doiNxt' ng-show="index==doiData.length-1 && isDoiQus && !declineDoi" ng-click='closeModal()'>Done&nbsp; <i class="icon ion-android-done"></i></button>
+                  </div>
+                </div>
+                <div ng-show='isDoiQus' class="row">
+                  <div class="col">
+                    <span class='prevQus grayText'>{{doiData[index-1].DOIText}}</span>
+                  </div>
+                  <div class="col">
+                    <span class='nxtQus grayText'>{{doiData[index+1].DOIText}}</span>
+                  </div>
+                </div>
+              </div>
+              <div ng-show='states.activeItem==2' id="signature-pad1" class="m-signature-pad signDiv">
+                <div class="m-signature-pad--body row">
+                  <canvas width="900" height="300" id='signPad2' ng-class="disableSignPad.Receiving?'disable':''" class="signaturePad horizontal-centered"></canvas>
+                </div>
+                <div class="row">
+                  <div class="horizontal-centered canvasFooter">
+                    <div class="col">
+                      <div class="row p-a-0">
+                        <div class="col col-25 p-a-0">
+                          <div class="description text-xs-left"><i class="ion-person uname"></i> {{transferDetails.Receiving.name}}</div>
+                        </div>
+                        <div class="col p-a-0 description text-xs-right">
+                          {{(isDoiQus)?"Initial":"Sign"}} Above to Confirm {{(isDoiQus)?"":"DOI"}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="m-signature-pad--footer row m-t-3">
+                  <div class='col col-20'>
+                    <button ng-hide="declineDoi" class='button prv doiPrv' ng-show='isDoiQus && index!= 0' ng-hide="index==0" ng-click='prev()' ng-disabled="prevClicked"><i class="icon ion-chevron-left"></i>&nbsp;Prev</button>
+                  </div>
+                  <div class="col btnSet m-a-0">
+                    <button class='button btnColor m-y-0' ng-show='!isDoiQus' ng-click='closeModal()'>Submit</button>
+                    <button ng-show='isDoiQus && !declineDoi && !naEdited' type="button" ng-click='checkNa(false, index, activeAction)' class="button na m-y-0">NA</button>
+                    <button ng-show='isDoiQus && !declineDoi' type="button" ng-click='decline(false,transferDetails.Receiving.name,index+1)' class="button decline m-y-0">Decline</button>
+                    <button type="button" class="button clear m-y-0" data-action="clear" ng-click='disableSignPad.Receiving = false;clearCanvas2(false,index+1)'>Clear</button>
+                  </div>
+                  <div class="col col-20">
+                    <button ng-hide="declineDoi" class='button  nxt doiNxt' ng-show='isDoiQus && index!=doiData.length-1' ng-hide="index==doiData.length-1" ng-click='next()' ng-disabled="nextClicked">Next&nbsp; <i class="icon ion-chevron-right"></i></button>
+                    <button class='button  nxt doiNxt' ng-show="index==doiData.length-1 && isDoiQus && !declineDoi" ng-click='closeModal()'>Done&nbsp; <i class="icon ion-android-done"></i></button>
+                  </div>
+                </div>
+                <div ng-show='isDoiQus' class="row">
+                  <div class="col">
+                    <span class='prevQus grayText'>{{doiData[index-1].DOIText}}</span>
+                  </div>
+                  <div class="col">
+                    <span class='nxtQus grayText'>{{doiData[index+1].DOIText}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </content>
+        </div>
+        <div class='no-display' id="blank-signature-pad">
+          <div class="m-signature-pad--body">
+            <canvas width="900" height="300" id='blank'></canvas>
+          </div>
+        </div>
+      </script>
+    </form>
+    <div class="doiButtonContainer" ng-show="((allowDoiProceed && allowDoiDataProceed) || isRequiredDoi)">
+      <div ng-show="order.skipDOIStart">
+        <a ng-cloak class="button button-small affirm doiCont hide-on-keyboard-open" id="enddoi" ng-click='finishDoi()' ng-hide="declineDoi" ng-if="currentEntry.status=='finalSign' || currentEntry.status=='finalShipSign'">Continue</a>
+        <!-- <a ng-cloak class="button button-small affirm doiCont hide-on-keyboard-open" ng-click='startReading();' ng-show='!isDoiComplete && !shiftChange && !(currentEntry.status=="finalSign")' ng-hide="declineDoi">Continue</a> -->
+      </div>      
+      <div ng-show="!order.skipDOIStart"><a ng-cloak class="button button-small affirm doiCont hide-on-keyboard-open" id="startdoi" ng-click='changeDoiStatus();routeItem();' ng-hide="declineDoi || shiftchange">Continue</a></div>      
+    </div>
+  </ion-content>
+</ion-view>

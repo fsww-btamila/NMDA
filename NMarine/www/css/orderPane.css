@@ -1,0 +1,65 @@
+.orderPane {
+    font-family: Roboto;
+/*    height: 550px;*/
+}
+.orderPane .wrapper{
+height:800px;
+  /*border-right:0.5px solid grey*/
+}
+.orderPane .card{
+  margin:10px 10px;
+}
+
+.orderPane .item {
+    padding: 0;
+}
+.defaultItem {
+/*  
+background-color: #F0F0F0;*/
+        
+}
+
+.highlight{
+background: #EDF8F3;     
+}
+
+.item-code{
+  font-size:1.17em;
+  font-weight:bold;
+}
+
+.item-quantity{
+	font-weight: 500;
+}
+
+.item-status{
+	font-size: 25px;
+	color:#D9D9D9;
+}
+
+.orderPaneWrapper {}
+
+.tealBg {
+    background-color: #009688;
+    margin: -1px !important;
+    height: 49px;
+}
+
+.dummyHeader, .tealBg{
+  padding: 0px !important;
+}
+.orderPaneRow{
+margin: 0px !important;
+}
+
+.orderQty {
+    color: white;
+    border-radius: 33px;
+    border: 1px solid;
+    background: gray;
+    text-align: center;
+}
+
+.col-offset-42{
+  margin-left: 42%;
+}

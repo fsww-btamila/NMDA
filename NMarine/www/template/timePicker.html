@@ -1,0 +1,46 @@
+<div class="wrapper-time-picker">
+    <!--<input ng-click="showDialog()" type="text" name="timepicker">-->
+    <p class="label-time">Time:</p>
+    <md-input-container ng-click="showDialog()" md-no-float="" class="md-block input-component date-input time-input">
+        <input ng-model="stringTime" type="text" name="timepicker" ng-disabled="true">
+    </md-input-container>
+
+    <div ng-if="showTime" class="time-pickier">
+        <div class="row-time-hours row-time">
+            <camera class="camera" ng-touchmove="touchMoveEventHours($event)" ng-touchstart="touchStartEventHours($event)">
+                <div class="scroll-time">
+                    <span ng-show="hours >= 0.5" class="hours">{{hours - 1 | number:0}}</span>
+                    <span ng-show="hours < 0.5" class="hours">24</span>
+                    <span class="hours current-time">{{hours | number:0}}</span>
+                    <span ng-show="hours <= 23.4" class="hours">{{hours + 1 | number:0}}</span>
+                    <span ng-show="hours > 23.4" class="hours">0</span>
+                </div>
+            </camera>
+        </div>
+
+        <div class="row-time splitter-time">
+            <span>:</span>
+        </div>
+
+        <div class="row-time-hours row-time">
+            <camera class="camera" ng-touchmove="touchMoveEventMinutes($event)" ng-touchstart="touchStartEventMinutes($event)"
+                    md-swipe-up="onSwipeUpMinutes()" md-swipe-down="onSwipeDownMinutes()">
+                <div class="scroll-time">
+                    <span ng-show="minutes >= 0.5" class="minutes">{{minutes - 1 | number:0}}</span>
+                    <span ng-show="minutes < 0.5" class="minutes">{{60}}</span>
+                    <span class="minutes current-time">{{minutes | number:0}}</span>
+                    <span ng-show="minutes <= 59.4" class="minutes">{{minutes + 1 | number:0}}</span>
+                    <span ng-show="minutes > 59.4" class="minutes">{{0}}</span>
+                </div>
+            </camera>
+        </div>
+
+        <div class="row-time-hours row-time">
+            <camera class="camera" md-swipe-up="onSwipeUpTimeType()" md-swipe-down="onSwipeDownTimeType()">
+                <div class="scroll-time">
+                    <span ng-repeat="item in arrayTimeZone" ng-class="{'current-time':$last}" class="minutes">{{item}}</span>
+                </div>
+            </camera>
+        </div>
+    </div>
+</div>

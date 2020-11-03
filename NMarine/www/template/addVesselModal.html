@@ -1,0 +1,109 @@
+<ion-modal-view ng-class="{'vesselModal': vesselType =='adhoc','addOrderModal smallModal': vesselType =='vessel'}">
+    <ion-header-bar class="modal-header-bar" ng-class="{ 'offline': !$root.isInternet || !$root.online  }">
+        <div class="row p-a-0">
+            <div class="col-80 p-a-0">
+                <div class="row p-a-0">
+                    <div class="col-33 p-a-0">
+                        <h4 ng-hide="vesselType =='adhoc'" class="d-inline-block text-nowrap" ng-click="a=true" >Select Vessel</h4>
+                        <h4 ng-hide="vesselType =='vessel'" class="d-inline-block text-nowrap">Add Vessel</h4>
+                    </div>
+                    <div class="col p-a-0">
+                        <md-input-container ng-hide="vesselType =='adhoc'" class="md-no-float md-block input-component search-input pull-xs-right">
+                            <input ng-model="vslSearch.searchText" type="text" autocomplete="off" focus-me="a" id="vsl_srch" >
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0">
+                    <a style="padding-right: 0.5rem" href="" ng-click="setVesselType('vessel'); closeModal('vesselmodal'); vslSearch.searchText = ''" class="pull-xs-right">
+                        <i class="ion-close-round"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll="false">
+        <div class="row p-a-0 h-100" ng-switch on="vesselType">
+            <div class="col p-a-0 h-100" ng-switch-when="vessel">
+                <div class="row p-b-0 m-t-0 table-header-container">
+                    <div class="col h-100 m-t-0 p-a-0">
+                        <div class="row h-100 table-header">
+                            <div class="col-25 p-x-0">
+                                <h5 class="m-a-0">Vessel Name</h5>
+                            </div>
+                            <div class="col-50 p-x-0 text-xs-center">
+                                <h5 class="m-a-0">IMO</h5>
+                            </div>
+                            <div class="col p-a-0 text-xs-right">
+                                <h5 class="m-a-0">Gross Tonnage</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row table-row-container">
+                    <div class="col h-100 p-a-0">
+                        <ion-scroll class="h-100">
+                            <div ng-repeat="vessel in vessels|filter:searchVessel" ng-click="addVessel(vessel);closeModal('vesselmodal')" class="row table-row">
+                                <div class="col-25 pos-relative p-x-0">
+                                    <h5 class="m-a-0">
+                                    <i ng-class="{'icon ion-android-person f-s-20': vessel.StandardAcctNo == OrderList.Orders.OrderHdr.CustomerNumber}"></i> &nbsp; 
+                                    {{vessel.VesselCode}}</h5>
+                                </div>
+                                <div class="col-50 pos-relative p-x-0 text-xs-center">
+                                    <h5 class="m-a-0">{{vessel.IMONo}}</h5>
+                                </div>
+                                <div class="col pos-relative p-x-0 text-xs-right">
+                                    <h5 class="m-a-0">{{vessel.GrossTonnage}}</h5>
+                                </div>
+                            </div>
+                            <div ng-click="setVesselType('adhoc')" ng-if="!moreVessels && ($root.isInternet && $root.online)" class="row m-t-2 p-a-0 w-p-100">
+                                <div class="col p-a-0">
+                                    <button class="button button button-energized w-100-per text-black">Not on List?</button>
+                                </div>
+                            </div>
+                            <ion-infinite-scroll ng-if="moreVessels" immediate-check='false' on-infinite="loadMoreVessels()" distance="5%"></ion-infinite-scroll>
+                        </ion-scroll>
+                    </div>
+                </div>
+            </div>
+            <div class="col h-100" style="padding: 5px 20px;" ng-switch-when="adhoc">
+                <form name="projectForm">
+                    <div class="row flex-wrap">
+                        <div class="col-50" ng-click="b=true">
+                                <md-input-container class="md-block">
+                                    <input ng-model="newvessel.name" name="newvesselname" placeholder="Vessel Name" required md-no-asterisk focus-me="b">
+                                    <div ng-show="projectForm.newvesselname.$invalid" ng-messages="projectForm.newvesselname.$error">
+                                        <ng-message when="required" translate>Please enter the vessel name.</ng-message>
+                                    </div>
+                                </md-input-container>
+                        </div>
+                        <div class="col-50" ng-click="c=true">
+                            <md-input-container class="md-block">
+                                <input ng-model="newvessel.imo" placeholder="IMO #" focus-me="c">
+                            </md-input-container>
+                        </div>
+                        <div class="col-50" ng-click="d=true">
+                            <md-input-container class="md-block">
+                                <input name="grosstonnage" type="number" min="0" step=".00001" ng-model="newvessel.grosstonnage" placeholder="Gross Tonnage" focus-me="d">
+                                <div ng-show="projectForm.grosstonnage.$invalid" ng-messages="projectForm.grosstonnage.$error">
+                                    <ng-message when="required" translate>Please enter the vessel name.</ng-message>
+                                </div>
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div class="row m-t-0">
+                        <div class="col col-90" ng-click="e=true">
+                            <md-input-container class="md-block">
+                                <label>Additional Notes {{typeof(newvessel.additionalnotes)}}</label>
+                                <textarea ng-model="newvessel.additionalnotes" md-maxlength="150" maxlength="150" rows="5" md-select-on-focus focus-me="e"></textarea>
+                            </md-input-container>
+                        </div>
+                        <a ng-click="createVessel(newvessel)" ng-disabled="!newvessel.name || projectForm.grosstonnage.$invalid" class="big-rd-btn button button-icon ion-checkmark-round orderDone addVesselButton hide-on-keyboard-open">
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

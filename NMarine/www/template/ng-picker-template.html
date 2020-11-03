@@ -1,0 +1,10 @@
+<div class="p-wrapper" overflow-scroll="true">
+	<div class="p-frame">
+		<ul class="p-items">
+			<li class="p-item" ng-class="{selected : $index == (index)}" pick-item ng-repeat="item in cleanItems track by $index" value="item.value">
+				{{item.value}} <span class="unit-wrapper">{{unit}}</span>
+			</li>
+		</ul>
+	</div>
+	<div class="p-selector"></div>
+</div>

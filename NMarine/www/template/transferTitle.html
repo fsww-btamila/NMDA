@@ -1,0 +1,61 @@
+    <ion-modal-view class="addOrderModal titleModal tr">
+    <ion-header-bar style="width: 100%; border: none; background: #202e87">
+        <div class="row p-a-0">
+            <div class="col p-a-0">
+                <h4 class="m-a-0 text-white fs-18x"> Bulk Transfer - <i class="ion-home"></i> <span class='bold'>{{transferDetails.userRole}}</span></h4>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0 fs-18x text-xs-right text-white">
+                    <a style="min-width: 20px; padding: 0 10px" href="" ng-click="closeModal('transfertitlemodal')" class="pull-xs-right text-white">
+                        <i class="ion-close-round"></i>
+                    </a>
+                    <span class="pull-xs-right icon-left ion-person">&nbsp{{loginData.uname ||"Arthur,Curry"}}</span>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll="false">
+        <form name="transferForm" novalidate>
+            <div class='inputParent'>
+                <div class="row p-y-0">
+                    <div class="col">
+                        Who is the person in charge on {{transferDetails.otherRole}} ?
+                    </div>
+                </div>
+                <div class="row p-y-0">
+                    <div class="col" style="margin-top:10px">
+                        <input no-special-char ng-change="transferNameError = false;" class="bdr-b-1" type="text" name="fname" placeholder="First Name" id="firstnameclick" style="display:inline" ng-model="transferDetails[transferDetails.otherRole].name" valid-max="20" maxlength="20" ng-maxlength='20' ng-class="{'disableUIWarn': transferForm.fname.$touched && transferForm.fname.$invalid}" required focus transfer="true">
+                        <input no-special-char class="bdr-b-1" name="lname" type="text" valid-max="20" placeholder="Last Name" style="display:inline" id="secondnameclick" required ng-model="transferDetails[transferDetails.otherRole].lname" maxlength="20" ng-maxlength='20'  ng-class="{'disableUIWarn': transferForm.lname.$touched && transferForm.lname.$invalid}">
+                    </div>
+                </div>
+            </div>
+            <div class="row p-y-0">
+                <div class="col p-y-0">What is their title?</div>
+            </div>
+            <div class="row p-a-0">
+                <div class="col">
+                    <div>
+                        <div class='userTitle d-inline-block'>
+                            <md-radio-group ng-model="group" class="md-primary">
+                                <md-radio-button class="transRadio" id="tankclick" ng-click="setTitle(transferDetails[transferDetails.otherRole],'Tankerman')" value="Tankerman"  >
+                                    Tankerman
+                                </md-radio-button>
+                                <md-radio-button class="transRadio" ng-click="setTitle(transferDetails[transferDetails.otherRole],'PIC')" value="PIC"  >
+                                    PIC
+                                </md-radio-button>
+                            </md-radio-group>
+                        </div>
+                        <div class='titleRadio d-inline-block m-l-2'>
+                            <input ng-change="transferTitleError = false;" class="bdr-b-1" type="text" name="title" placeholder="Title" style="display:inline" ng-model="transferDetails[transferDetails.otherRole].title" ng-keyup='checked=false;' ng-class="{'disableUIWarn': transferForm.title.$touched && transferForm.title.$invalid}" maxlength="20" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-y-0 transfer-title">
+                <span class="error-cls" ng-show="transferForm.fname.$touched && transferForm.fname.$invalid || transferForm.lname.$touched && transferForm.lname.$invalid">Please enter 20 character's only</span>
+            </div>
+            <!-- </div> -->
+            <button ng-click="startProcessing()" id="tankclick3" ng-disabled="transferForm.$invalid" type="submit" class="big-rd-btn button button-icon ion-checkmark-round orderDone rgt-5-btm-5 hide-on-keyboard-open"> </button>
+        </form>
+    </ion-content>
+</ion-modal-view>

@@ -1,0 +1,113 @@
+.order-search-wrapper{
+	width:500px;
+	background: none;
+	margin-left:30px;
+	height: 30px;
+	overflow: visible;
+	margin-top:5px;
+	
+	position: relative;
+	z-index: 100;
+	border-bottom:1px solid #efefef;
+}
+
+.order-search-wrapper .input-wrapper{
+	/*width:94%;*/
+	width:88%;
+	background: none;
+	display: block;
+	box-sizing: border-box;
+	float: left;
+	height: 30px;
+	
+	overflow: visible;
+}
+
+.order-search-wrapper .input-wrapper input{
+	background: none;
+	height: 30px;
+	padding-left: 3px;
+	color:#efefef !important;
+	font-size: 13px;
+}
+.order-search-wrapper .search-icon{
+	margin:0px;
+	padding:3px 0px;
+	width:35px;
+	display: block;
+	height: 100%;
+	background: none;
+	box-sizing: border-box;
+	width:6%;
+	float: left;
+	text-align: center;
+	height: 30px;
+	color:#efefef;
+	line-height: 30px;
+	border-radius: 3px 0px 0px 3px;
+}
+.order-search-wrapper  .os-list-wrapper{
+	width: 100%;
+	border-radius: 0px 0px 3px 3px;
+	position: relative;
+	height:auto;
+	overflow: hidden;
+	background: #fefefe;
+	box-sizing: border-box;
+	padding: 3px 8px;
+	background: rgba(210,210,210, .9);
+	box-shadow: 0px 2px 5px -2px #555;
+	margin: 0px -19px;
+}
+.order-search-wrapper .input-wrapper .os-list-wrapper ul{
+	margin:0px; padding:0px;
+}
+.order-search-wrapper .input-wrapper .os-list-wrapper ul li {
+    box-shadow: 0px 1px 4px -1px #999;
+    margin: 7px 0px;
+    padding: 0px 5px!important;
+    cursor: pointer;
+    background: #fefefe;
+    border-radius: 3px;
+    float: left;
+    color: #333;
+    border-left: 4px solid;
+    width: 100%;
+}
+.order-search-wrapper .input-wrapper .os-list-wrapper ul li:hover, .order-search-wrapper .input-wrapper .os-list-wrapper ul li:active{
+	box-shadow: 0px 0px 3px -1px #333;
+}
+
+.order-search-wrapper .input-wrapper .os-list-wrapper ul li .order-no{
+	width:120px;
+	float:left;
+	font-weight: bold;
+}
+.order-search-wrapper .input-wrapper .os-list-wrapper ul li .opuser-name{
+	width:120px;
+	float:left;
+	font-weight: bold;
+}
+
+.order-search-wrapper .input-wrapper .os-list-wrapper ul li .vessel-code{
+	width:120px;
+	font-weight: bold;
+}
+
+.no-orders{
+	background: #efefef;
+	width:100%;
+	display: block;
+	border-left:none !important;
+}
+
+.os-list-wrapper ul li.open {
+  border-left-color: #7F8C8D !important;}
+.os-list-wrapper ul li.dip {
+  border-left-color: #F1C40F !important;}
+.os-list-wrapper ul li.delivered {
+  border-left-color: #2ECC71 !important;}
+.os-list-wrapper ul li.enroute {
+  border-left-color: #3498DB !important;}
+.os-list-wrapper ul li.sip {
+  border-left-color: #9B59B6 !important;}

@@ -1,0 +1,80 @@
+<ion-content scroll='true' ng-class="pageTitle == 'Delivered' ? 'disableUI':false" class='pageHeight'>
+    <form style="height: 100%" name="$root.orderForm" class="general-form">
+        <div class="row m-b-3">
+            <div class="col col-50">
+                <h3 class="title-element planned-date-title">Planned Date</h3>
+                <md-input-container md-no-float="" class="md-block input-component">
+                    <span><a href="#" type="text" class="md-no-float md-date-fs" name="date">{{general.PlannedDate | date:'MM/dd/yyyy HH:mm'}}</a></span>
+                    <div class="md-errors-spacer"></div>
+                </md-input-container>
+            </div>
+            <div class="col col-50">
+                <h3 class="title-element inventory-block-title">From Site</h3>
+                <md-input-container md-no-float="" class="md-block input-component">
+                    <input type="text" name="icode" placeholder="Inventory Code" class="" ng-disabled='true' ng-model="general.INSiteCode" required autocomplete="off">
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row m-b-3" style="flex-wrap: wrap;">
+            <div class="col col-50" ng-hide="general.InternalTransferOrder == 'Y' || !general.CustomerName">
+                <h3 class="title-element name-edit-title">Customer</h3>
+                <md-input-container class="md-no-float md-block input-component">
+                    <input name="cname" value="{{general.CustomerName | escString}} " ng-disabled="true" type="text" autocomplete="off">
+                </md-input-container>
+                <md-input-container class="md-no-float md-block input-component">
+                    <input name="cnumber" ng-model="general.ReceivingContactNumber" ng-disabled="true" type="text" autocomplete="off"  phone-input>
+                </md-input-container>
+            </div>
+            <div class="col col-50" ng-hide="general.InternalTransferOrder == 'N' || general.CustomerName">
+                <h3 class="title-element name-edit-title">Receiving Site</h3>
+                <md-input-container class="md-no-float md-block input-component">
+                    <input name="cname" ng-model="general.ToSiteCode" ng-disabled="true" type="text" autocomplete="off">
+                </md-input-container>
+            </div>
+            <div class="col col-50">
+                <h3 class="title-element entered-block-title" style="margin-bottom: 18px !important;">Entered By</h3>
+                <md-input-container md-no-float="" class="md-block input-component">
+                    <input type="text" name="enteredby" placeholder='Entered By' class="" ng-model="general.EnteredBy" ng-disabled="true" autocomplete="off">
+                </md-input-container>
+                <md-input-container md-no-float="" class="md-block input-component">
+                    <span><a href="#" type="text" class="md-no-float md-date-fs" name="enteredby">{{general.OrderDtTm | date:'MM/dd/yyyy HH:mm'}}</a></span>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row m-b-3">
+            <div class="col col-50" ng-show="general.Destination.Code">
+                <i style="padding-right: 21px !important;font-size: 22px;" class="ion-location"></i>
+                <h3 class="title-element icon-left block-title d-inline-block">Destination</h3>
+                <md-input-container style="height: 44px" md-no-float="" class="md-block input-component m-y-0">
+                    <input ng-disabled='true' name='cdestcode' type="text" class="" placeholder='Marine Location Code' ng-model="general.Destination.Code" autocomplete="off">
+                </md-input-container>
+            </div>
+            <div class="col col-50" ng-show="general.Vessels[0].VesselCode">
+                <i style="padding-right: 17px !important;" class="ion-android-boat f-s-22"></i>
+                <h3 class="title-element icon-left block-title d-inline-block">Vessel</h3>
+                <md-input-container style="height: 44px" md-no-float="" class="md-block input-component m-y-0">
+                    <input ng-disabled='true' name='cdestcode' type="text" class="" placeholder='Vessel Code' ng-model="general.Vessels[0].VesselCode" autocomplete="off">
+                </md-input-container>
+            </div>
+            <div class="col col-50 disableUI" ng-show="general.ReceivingContactName">
+                <h3 class="title-element receiving-edit-title" style="margin-bottom: 28px !important;">Receiving</h3>
+                <md-input-container ng-init="selectedItem = general.ReceivingContactName" md-no-float="" class="md-block input-component contactPopover">
+                    <md-icon class="ion-ios-person"></md-icon>
+                    <md-autocomplete class="receiving-contact" required md-input-minlength="1" md-input-maxlength="18" md-search-text="general.ReceivingContactName" md-items="item in getReceivingContactsText(general.ReceivingContactName)" md-item-text="item.FullName" md-require-match placeholder="Receiving Contact Name">
+                        <md-item-template>
+                            <span ng-click="receivingContactSelected(item)" md-highlight-text="general.ReceivingContactName">{{item.FullName}}</span>
+                        </md-item-template>
+                    </md-autocomplete>
+                </md-input-container>
+                <md-input-container md-no-float="" class="md-block input-component">
+                    <md-icon class="ion-ios-telephone"></md-icon>
+                    <span ng-if="general.ReceivingContactNumber"><a href="tel:{{general.ReceivingContactNumber}}" type="text" class="md-no-float" name="rnumber">{{(general.ReceivingContactNumber | tel)}}</a></span>
+                    <span ng-if="!general.ReceivingContactNumber"><a style="color:#9a9999; font-size: 17px" href="">Receiving Contact Number</a></span>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="selVehicle">
+            <a ng-class="{'nopointer': OrderList.Orders.OrderHdr.Status != 'Open'}" class="button add-vehicle-icon ion-marine-vehicle-white affirm nopointer" ng-click="openModal('vehiclemodal')">{{(general.Vehicle.Descr || 'Add Vehicle') | limitTo:20 }}&nbsp;<span></span></a>
+        </div>
+    </form>
+</ion-content>

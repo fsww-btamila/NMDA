@@ -1,0 +1,44 @@
+<div class="order-search-wrapper">
+   <div class="search-icon">
+         <i class="icon ion-ios-search"></i>
+   </div>   
+   <div class="input-wrapper">
+       <input spellcheck="false" type="text" placeholder="Search Orders" ng-model="keyword" class="searchBar titleSearch" ng-keyup="showPopup()" />
+
+       <div class="os-list-wrapper" ng-show="keyword.length >=1">
+            <ul>
+               <li ng-repeat="order in items = (list | filter : filterItems) | limitTo:5" ng-click="listClick({'odr':order, id:0, e:$event});hideAutoComplete();" ng-class="{'Open':'open', 'Shipping in Progress' : 'sip', 'En Route' : 'enroute', 'Delivery in Progress' : 'dip', 'Delivered' : 'delivered' }[order.Status]" class="row p-a-0">
+                  <span class="col col-25 text-xs-left bold">{{order.OrderNo}}</span> 
+                  <span class="opuser-name col col-25">
+                    <span ng-show="order.currentUser"><i class="ion-person uname"></i> {{order.currentUser}}</span>
+                  </span>
+                  
+                  <span ng-show="order.Vehicle.EnforceShipmentMarineApp === 'N' && order.Status=='Open'" class="vessel-code col col-30">
+                    <!-- <span ng-class="{orderVessel:!$last}" ng-repeat="vessel in order.Vessels"><i class="ion-android-boat"></i> {{vessel.VesselCode}}</span> -->
+                    <span><i class="ion-android-boat"></i> {{order.vesselStr}}</span>
+                    <!-- <span ng-show="order.Vessels.length==0 && order.InternalTransferOrder==='N'"><i class="ion-android-boat"></i> Unassigned</span> -->
+                    <span ng-show="order.InternalTransferOrder==='Y'"><i class="ion-home"></i> {{order.ToSiteCode}}</span>
+                  </span>
+
+
+                  <span ng-show="order.InternalTransferOrder==='N' && (order.Status=='En Route' || order.Status=='Delivery in Progress' || order.Status=='Delivered')" class="vessel-code col col-30">
+                  <!-- <span ng-show="!order.Orders.deliveryCodes || order.Orders.deliveryCodes.length==0"><i class="ion-android-boat"></i> {{order.Vessels[0].VesselCode}}</span> -->
+                  <span ng-show="!order.Orders.deliveryCodes || order.Orders.deliveryCodes.length==0"><i class="ion-android-boat"></i> {{order.vesselStr}}</span>
+                  <span ng-show="order.Orders.deliveryCodes && order.Orders.deliveryCodes.length>0"><i class="ion-android-boat"></i> {{order.Orders.deliveryCodes[order.Orders.deliveryCodes.length-1]}}<span ng-show="order.Orders.deliveryCodes.length>1">({{order.Orders.deliveryCodes.length-1}})</span></span>
+                  </span>
+                  <span ng-show="order.InternalTransferOrder==='Y' && (order.Status=='En Route' || order.Status=='Delivery in Progress' || order.Status=='Delivered')" class="vessel-code col col-30">
+                      <span><i class="ion-home"></i> {{order.ToSiteCode}}</span>
+                  </span>
+                
+
+               </li>
+               <li class="no-orders" ng-show="items.length<=0">No orders matching {{keyword}} found in this site.</li>
+            </ul>
+             
+       </div>
+   </div>
+   <div class="search-icon" ng-click="clearSearchInput()">
+      <i class="icon ion-close-round" ng-if="keyword"></i>
+   </div>
+   
+</div>

@@ -1,0 +1,12 @@
+<div class="select-wheel">
+    <div class="select-wheel-sel"></div>
+    <ion-scroll class="wheelScroll" zooming="false" on-refresh="onRefresh()" on-scroll="callScroll(event)" direction="y" scrollbar-y="false" delegate-handle="myItem_{{$id}}">
+        <div class="select-wheel-list">
+            <div class="select-wheel-item">
+            </div>
+            <div class="select-wheel-item" ng-repeat="option in options|limitTo:maxDepth">
+                <div ng-class="{'active': $index === index}" data-value="option.value">{{option.label}}<span ng-if='$index === index'>{{unit}}</span></div>
+            </div>
+        </div>
+    </ion-scroll>
+</div>

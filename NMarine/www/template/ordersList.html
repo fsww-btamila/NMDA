@@ -1,0 +1,243 @@
+<ion-view cache-view="false" view-title="" class='headerBar p-b-1'>
+    <ion-header-bar class="bar bar-header tabs-top orderlist-header" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <div class="row p-a-0 height-50">
+            <div class="col p-a-0 pos-relative">
+                <!-- <div class="item-input-inset searchContainer" ng-if="showSearch" ng-click="a=true">
+                    <label class="item-input-wrapper searchSet">
+                        <i class="icon ion-ios-search placeholder-icon"></i>
+                        <input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="text" placeholder="Search Available Orders" ng-model="searchText.all" class="searchBar titleSearch" focus-me="a" />
+                    </label>
+                    <i class="icon ion-close-round placeholder-icon clearOrdersSearch" ng-if="searchText.all" ng-click="searchText.all = ''"></i>
+                </div> -->
+                <order-search list="listOfOrdersNew" list-click="openOrderDetails(odr, id, e)"></order-search>
+            </div>
+            <div class="col-25">
+                <div class="row p-a-0">
+                    <div class="col p-a-0">
+                        <div class="user-dash m-r-0 pull-xs-right">
+                            <span class='uinfo text-truncate'><i class="ion-person uname"></i>
+                            <span>{{loginData.uname || 'Username'}}</span>
+                            </span>
+                            <span class='uinfo text-truncate'><i class="ion-home insite"></i><span>{{selectedSite.Code}}</span></span>
+                            <span class="uinfo text-truncate app-version"><small>V {{$root.appVersion}}</small></span>
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <a href='' class="add-order-rgtbtn ion-android-more-vertical" id="eclipse" ng-click="$root.openSettingsPopover($event,'bySettings')"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row p-a-0 m-t-0 height-50">
+            <div class="col p-a-0 h-100">
+                <md-tabs md-no-ink md-dynamic-height md-selected="tabData.selectedTab" md-align-tabs="top" class="orderListTabs h-100">
+                    <md-tab id="tab1">
+                        <md-tab-label class="orderListTabLabel"><i class="ion-social-buffer"></i><span id="tab_open" class="orderListTabTitle">Open</span></md-tab-label>
+                    </md-tab>
+                    <md-tab id="tab2">
+                        <md-tab-label class="orderListTabLabel"><i class="ion-code-working"></i><span id="tab_sip" class="orderListTabTitle">Shipping In Progress</span></md-tab-label>
+                    </md-tab>
+                    <md-tab id="tab3">
+                        <md-tab-label class="orderListTabLabel"><i class="ion-arrow-return-right"></i><span id="tab_enroute" class="orderListTabTitle">En Route</span></md-tab-label>
+                    </md-tab>
+                    <md-tab id="tab4">
+                        <md-tab-label class="orderListTabLabel"><i class="ion-code-download"></i><span id="tab_dip" class="orderListTabTitle">Delivery In Progress</span></md-tab-label>
+                    </md-tab>
+                    <md-tab id="tab5">
+                        <md-tab-label class="orderListTabLabel"><i class="ion-checkmark-circled"></i><span id="tab_delivered" class="orderListTabTitle">Delivered</span></md-tab-label>
+                    </md-tab>
+                </md-tabs>
+                <a ng-if="$root.disableRefresh" href='#' class="button button-clear icon ion-refresh removePadding iconColor" ng-click='loadOrders();getLogo();'></a>
+                <a href='#' class="button button-clear ion-post-data removePadding ion-android-upload fs-3x iconColor" ng-click='postSyncMasterData();'></a>
+                <!--<a href='#' style='bottom: 0;position: absolute; width: 8%;' class="button button-clear icon ion-navicon-round" ng-click='openSyncModal()'></a>-->
+                <a ng-if="noInternet" href='#' class="button button-clear icon ion-record removePadding internet fs-13x" ng-class="(isInternet && online)?'internet':'noInternet'"><span style="color: #aaa">{{(isInternet && online) ? '&nbspConnected' : '&nbspNot Connected'}}</span></a>
+                <a ng-click="toggle()" class="button button-icon icon ion-android-funnel iconColor"></a>
+            </div>
+        </div>
+    </ion-header-bar>
+    <md-sidenav class="md-sidenav-right md-whiteframe-4dp filterPane" md-is-open="navBar.isSidenavOpen" md-component-id="right" style="position:">
+        <md-content layout-padding>
+            <md-list>
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            <md-subheader class="md-primary filterHeader"><i class="ion-android-options filtIcon"></i>Filters</md-subheader>
+                            <md-input-container ng-class="{'showArrow': openSites}" ng-click="openSites = true" md-no-float>
+                                <md-icon class="ion-android-home filtPlacIcon"></md-icon>
+                                <md-select ng-change="filterBySites(filteredSites.sites)" ng-model="filteredSites.sites" md-on-close="clearSearchTerm(); openSites = false" data-md-container-class="selectdemoSelectHeader" multiple placeholder="Sites">
+                                    <md-select-header class="demo-select-header">
+                                        <input ng-model="searchOptions.searchInsite" type="search" placeholder="Search for a Inventory Site.." class="demo-header-searchbox md-text">
+                                    </md-select-header>
+                                    <md-optgroup>
+                                        <md-option ng-value="item.SiteID" ng-repeat="item in sitesArray | orderBy: item | filter:searchOptions.searchInsite">
+                                            {{item.Code}}
+                                        </md-option>
+                                    </md-optgroup>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <md-input-container ng-class="{'showArrow': openVehicles}" ng-click="openVehicles = true" md-no-float>
+                            <md-icon class="ion-android-boat filtPlacIcon"></md-icon>
+                            <md-select ng-model="searchText.vehiclesArray" md-on-close="clearSearchTerm(); openVehicles = false" data-md-container-class="selectdemoSelectHeader" multiple placeholder="Vehicles">
+                                <md-select-header class="demo-select-header">
+                                    <input type="search" ng-model="searchOptions.searchVehicle" placeholder="Search for a Vehicle.." class="demo-header-searchbox md-text">
+                                </md-select-header>
+                                <md-optgroup label="Vehicles">
+                                    <md-option ng-repeat="item in vehiclesArray | orderBy: item | filter:searchOptions.searchVehicle" ng-model='isVehicleSelected'>{{item}}
+                                    </md-option>
+                                </md-optgroup>
+                            </md-select>
+                        </md-input-container>
+                        <div class='clearFix'></div>
+                        <md-input-container ng-class="{'showArrow': openDate}" ng-click="openDate = true" md-no-float>
+                            <md-icon class="ion-calendar filtPlacIcon"></md-icon>
+                            <md-select ng-model="dateRangeVal" md-on-close="clearSearchTerm(); openDate = false" data-md-container-class="selectdemoSelectHeader" placeholder="Date Range">
+                                <md-optgroup label="Date Range">
+                                    <md-radio-group>
+                                        <md-option value="All" ng-click="setDateRange('all')">
+                                            All
+                                        </md-option>
+                                        <md-option value="Today" ng-click="setDateRange('today')">
+                                            Today
+                                        </md-option>
+                                        <md-option value="Tomorrow" ng-click="setDateRange('tomorrow')">
+                                            Tomorrow
+                                        </md-option>
+                                        <md-option value="Week" ng-click="setDateRange('week')">
+                                            This Week
+                                        </md-option>
+                                        <md-option value="Custom">
+                                            Custom
+                                        </md-option>
+                                    </md-radio-group>
+                                </md-optgroup>
+                            </md-select>
+                        </md-input-container>
+                        <div class="customDate" ng-if="dateRangeVal=='Custom'" ng-init=''>
+                            <md-input-container ng-init="dateRange.dateFrom = $root.today">
+                                <label>From</label>
+                                <input date="MM-dd-yyyy" ng-model="dateRange.dateFrom" ng-value="$root.today" type="date" />
+                            </md-input-container>
+                            <md-input-container ng-init="dateRange.dateTo = $root.today">
+                                <label>To</label>
+                                <input date="MM-dd-yyyy" ng-model="dateRange.dateTo" ng-value="$root.today" type="date" />
+                            </md-input-container>
+                        </div>
+                        <md-divider></md-divider>
+                        <div class="sortOptions sortValues m-t-3">
+                            <md-subheader class="md-primary filterHeader"><i class="ion-arrow-swap filtIcon rot90"></i>Sort</md-subheader>
+                            <md-input-container ng-class="{'showArrow': openDateSort}" ng-click="openDateSort = true" md-no-float>
+                                <md-select ng-model="currentSortOrder" md-on-close="openDateSort = false" data-md-container-class="selectdemoSelectHeader">
+                                    <label>{{currentSortOrder}}</label>
+                                    <md-option ng-click="sortOrders('Orders.OrderHdr.OrderNo',sortReverse)">
+                                        <i ng-class="{'ion-arrow-down-c':sortType == 'Orders.OrderHdr.OrderNo' && sortReverse,'ion-arrow-up-c': sortType == 'Orders.OrderHdr.OrderNo' && !sortReverse}"></i> Order No
+                                    </md-option>
+                                    <md-option ng-click="sortOrders('Orders.OrderHdr.Status',sortReverse)">
+                                        <i ng-class="{'ion-arrow-down-c':sortType == 'Orders.OrderHdr.Status' && sortReverse,'ion-arrow-up-c': sortType == 'Orders.OrderHdr.Status' && !sortReverse}"></i> Status
+                                    </md-option>
+                                    <md-option ng-click="sortOrders('Orders.OrderHdr.INSiteCode',sortReverse)">
+                                        <i ng-class="{'ion-arrow-down-c':sortType == 'Orders.OrderHdr.INSiteCode' && sortReverse,'ion-arrow-up-c': sortType == 'Orders.OrderHdr.INSiteCode' && !sortReverse}"></i> Site
+                                    </md-option>
+                                    <md-option ng-click="sortOrders('Orders.OrderHdr.Vehicle.Descr',sortReverse)">
+                                        <i ng-class="{'ion-arrow-down-c':sortType == 'Orders.OrderHdr.Vehicle.Descr' && sortReverse,'ion-arrow-up-c': sortType == 'Orders.OrderHdr.Vehicle.Descr' && !sortReverse}"></i> Vehicle
+                                    </md-option>
+                                    <md-option ng-click="sortOrders('Orders.OrderHdr.OrderDtTm',sortReverse)">Date
+                                        <i ng-class="{'ion-arrow-down-c':sortType == 'Orders.OrderHdr.OrderDtTm' && sortReverse,'ion-arrow-up-c': sortType == 'Orders.OrderHdr.OrderDtTm' && !sortReverse}"></i>
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+            </md-list>
+        </md-content>
+        <button class='clearAll' ng-click='clearFilter()'>Reset</button>
+    </md-sidenav>
+    <ion-content class="orderlist-content" id="orderlist-content">
+        <div ng-repeat="item in listOfOrdersNew | orderBy:currSort | filter: dateRangeFilter(Orders.OrderHdr.OrderDtTm , dateRange.dateFrom, dateRange.dateTo) | filter : {$:searchText.all} | pick:matchOrders | limitTo: renderLimit" ng-click='openOrderDetails(item,$index,$event)' class="row order-listing" ng-class="{'Open':'open', 'Shipping in Progress' : 'sip', 'En Route' : 'enroute', 'Delivery in Progress' : 'dip', 'Delivered' : 'delivered' }[item.Status]" id="{{item.OrderNo}}">
+            <div class="col col-40">
+                <div class="row p-a-0">
+                    <div class="col col-33 text-xs-left">
+                        <h5 class="orderListNum fs-16x">{{item.OrderNo}}</h5>
+                    </div>
+                    <div class="col col-27 fs-16x text-truncate">
+                        <div ng-show="item.currentUser">
+                            <span class="uinfo text-truncate"><i class="ion-person uname"></i>
+                            <span class="ng-binding">{{item.currentUser}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col fs-16x"><i class="ion-calendar"></i> {{item.OrderDtTm | date:'MM/dd/yyyy HH:mm'}}</div>
+                </div>
+                <div class="row p-a-0">
+                    <div class="col">
+                        {{item.OrderNotes[0].Note}}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-40 ">
+                <div class="row p-a-0">
+                    <div class="col fs-16x text-truncate">
+                        <i ng-class="{'ion-briefcase': item.CustomerName, 'ion-arrow-swap': !item.CustomerName}"></i> {{item.CustomerName || item.ToSiteCode}}
+                    </div>
+                    <div class="col text-truncate" ng-show="item.ReceivingContactName">
+                        <i class="ion-person"></i> {{item.ReceivingContactName}}
+                    </div>
+                </div>
+                <div class="row p-a-0">
+                    <div class="col">
+                        <ol class="cd-breadcrumb p-a-0">
+                            <li ng-if="(item.Status=='Open' || item.Status=='Shipping in Progress') || (item.Status=='Delivery in Progress' &&  item.Vehicle.Descr=='On Site Pickup')">
+                                <a>
+                                <i class="ion-home"></i> {{item.INSiteCode}}
+                                </a>
+                            </li>
+                            <li ng-if="(item.Status=='Open' || item.Status=='Shipping in Progress' || item.Status=='En Route' || item.Status=='Delivery in Progress') && item.Vehicle.EnforceShipmentMarineApp != 'N'">
+                                <a>
+                                <i class="ion-marine-vehicle"></i> {{item.Vehicle.Descr ||'Unassigned'}}
+                                </a>
+                            </li>
+                            <li ng-if="item.Vehicle.EnforceShipmentMarineApp === 'N' && item.Status=='Open'">
+                                <a>
+                                <!-- <span ng-if="item.vesselStr==''" ng-class="{orderVessel:!$last}" ng-repeat="vessel in item.Vessels"><i class="ion-android-boat"></i> {{vessel.VesselCode}}</span> -->
+                                <span><i class="ion-android-boat"></i> {{item.vesselStr}}</span>
+
+                                <span ng-if="item.Vessels.length==0 && item.InternalTransferOrder==='N'">Unassigned</span>
+                                <span ng-if="item.InternalTransferOrder==='Y'"><i class="ion-home"></i> {{item.ToSiteCode}}</span>
+                                </a>
+                            </li>
+                            <li ng-if="item.Status=='En Route' || item.Status=='Delivery in Progress' || item.Status=='Delivered'">
+                                <a ng-if="item.InternalTransferOrder==='N'">
+                                <!-- <span ng-if="!item.Orders.deliveryCodes || item.Orders.deliveryCodes.length==0"><i class="ion-android-boat"></i>  {{item.Vessels[0].VesselCode || 'Unassigned'}}</span> -->
+                                <span ng-if="!item.Orders.deliveryCodes || item.Orders.deliveryCodes.length==0"><i class="ion-android-boat"></i>
+                                {{item.vesselStr || 'Unassigned'}}</span>
+                                <span ng-if="item.Orders.deliveryCodes && item.Orders.deliveryCodes.length>0"><i class="ion-android-boat"></i> {{item.Orders.deliveryCodes[item.Orders.deliveryCodes.length-1]}}<span ng-show="item.Orders.deliveryCodes.length>1">({{item.Orders.deliveryCodes.length-1}})</span></span>
+                                </a>
+                                <a ng-if="item.InternalTransferOrder==='Y'">
+                                <span><i class="ion-home"></i> {{item.ToSiteCode}}</span>
+                                </a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="col ">
+                <div class="row p-a-0">
+                    <div class="col fs-16x">
+                        <span class="blockSpan"><i ng-class="{ 'ion-social-buffer': item.Status=='Open', 'ion-code-working': item.Status=='Shipping in Progress', 'ion-arrow-return-right': item.Status=='En Route', 'ion-code-download' : item.Status=='Delivery in Progress', 'ion-checkmark-circled': item.Status=='Delivered' }"></i> {{item.Status}}</span>
+                        <span class="blockSpan" ng-show="item.Destination.Code"> <i class="ion-ios-location"></i> {{item.Destination.Code}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row show-more-wrapper" ng-show="showMore && listOfOrdersNew.length>0">
+           <p><button class="btn-link" ng-click="checkShowMore(true)">Show more</button><p>
+        </div>
+        
+        <div ng-show="showNoOrders == 0 && ordersLoaded">
+            <div style="text-align: center; padding-top: 20%;">
+                <h5 style="color: #202e87; font-family: RobotoRegular !important;">No Orders assigned to this Site</h5>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

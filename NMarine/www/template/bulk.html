@@ -1,0 +1,97 @@
+<ion-content scroll='false' class="ship-content select-block">
+    <ion-scroll class="w-p-100 h-100">
+        <div ng-show="currentEntry.hasSource">
+      <div ng-if="!(currentItem.IsBillable == 'Y' && currentItem.BIUOM == 'Gallons')">
+            <div ng-show="activeAction=='Ship' || order.OrderHdr.Vehicle.EnforceShipmentMarineApp == 'N'" class="wrapper-element">
+                <div class="row">
+                    <div class="col col-50">
+                        <div class="row pkg-bgd tank-reading">
+                            <div class="col"><i class="icon ion-arrow-swap fs-2x m-r-1"></i> Source Inventory Site</div>
+                        </div>
+                        <div class="row m-t-10">
+                            <div class="col">
+                                <p style="margin-left:30px" class="m-y-0 fs-2x">{{order.OrderHdr.INSiteCode || 'Select Insite'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-50">
+                        <div class="row pkg-bgd ">
+                            <div class="col col-50 text-xs-right m-t-1">Confirm Source Tank</div>
+                            <button class="button button-small" id="sel_tnk" ng-click="showTankModal('Source',currentItem.MasterSiteID)"><i class="icon ion-beaker   iconLarge midIcon"></i>&nbsp; {{currentEntry.Source[0].Code || 'Select Tank'}}</button>
+                        </div>
+                        <div ng-show="currentEntry.Source[0]" class="f-s-17 row">
+                            <div class="col col-10"></div>
+                            <div class="col m-t-10">
+                                Tank Description: {{currentEntry.Source[0].Descr}}
+                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-hide="(order.OrderHdr.InternalTransferOrder=='Y' && activeAction=='Deliver') || (currentEntry.vessel.VesselCode && activeAction=='Deliver')" class="wrapper-element">
+            <div class="row pkg-bgd tank-reading">
+                <div class="col col-50"><i class="icon ion-arrow-swap fs-2x m-r-1"></i> Confirm Receiving {{(activeAction=='Ship')?'Vehicle':'Vessel'}}</div>
+            </div>
+            <div class="row m-t-20" ng-show="activeAction=='Deliver'">
+                <div class="col">
+                    <button class="button button-small" ng-click="ordervesselmodal.show()"><i class="icon ion-android-boat iconLarge midIcon"></i>&nbsp;{{currentEntry.vessel.VesselCode || 'Select Vessel'}}</button>
+                </div>
+            </div>
+            <div class="row m-t-20" ng-show="activeAction=='Ship'">
+                <div class="col">
+                    <button class="button button-small" ng-click="($root.isInternet && $root.online) && vehiclemodal.show()"><i class="icon ion-android-boat iconLarge midIcon"></i>&nbsp;{{order.OrderHdr.Vehicle.Code || 'Select Vehicle'}}</button>
+                </div>
+            </div>
+        </div>
+        <div ng-show="order.OrderHdr.InternalTransferOrder == 'Y'  && activeAction=='Deliver' && currentEntry.hasReceiving" class="wrapper-element">
+            <div class="row">
+                <div class="col col-50">
+                    <div class="row pkg-bgd tank-reading">
+                        <div class="col col-50"> <i class="icon ion-arrow-swap fs-2x m-r-1"></i> Receiving Inventory Site</div>
+                    </div>
+                    <div class="row m-t-10">
+                        <div class="col">
+                            <p style="margin-left: 30px" class="m-y-0 fs-2x">{{order.OrderHdr.ToSiteCode || 'Select Insite'}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-50" ng-hide="currentItem.IsBillable=='Y'">
+                    <div class="row pkg-bgd">
+                        <div class="col col-50 text-xs-right m-t-1">Confirm Receiving Tank</div>
+                        <button class="button button-small" ng-click="showTankModal('Receiving',order.OrderHdr.ToSiteID)"><i class="icon ion-filing iconLarge midIcon"></i>&nbsp;{{currentEntry.Receiving[0].Code || 'Select Tank'}}</button>
+                    </div>
+                    <div class="f-s-17 row" ng-show="currentEntry.Receiving[0]">
+                        <div class="col col-10"></div>
+                        <div class="col">
+                            <div class="m-t-10">
+                                Tank Description: {{currentEntry.Receiving[0].Descr}}
+                            </div>
+                            <div class="m-t-20" ng-hide="true">
+                                Capacity : {{currentEntry.Receiving[0].TankCapacity | number : 2}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper-element">
+            <div class="row pkg-bgd reading-type">
+                <div class="col col-50">Reading Type</div>
+            </div>
+            <div class="row m-t-10 rtype" id="readBy-wrapper" style="margin-left: 25px" ng-init="initReadBy()">
+                <ion-radio ng-model="currentEntry.readBy" ng-value="'Tank'" ng-if="showTankReadBy() && !gauDisable()"  id="rng_gau" name="Gaugeclick" >Non-metered</ion-radio>
+<!--                 <ion-radio ng-model="currentEntry.readBy" ng-value="'Tank'" ng-if="((currentEntry.hasSource || currentEntry.hasReceiving) && currentItem.IsBillable=='Y') && !gauIsbDisable()">Gauged</ion-radio> -->
+    
+              
+                <ion-radio ng-model="currentEntry.readBy" ng-value="'Meter'" ng-if="!meterDisable()"  id="rng_mtr" name="meterclick">Metered</ion-radio>
+
+                <ion-radio ng-model="currentEntry.readBy" ng-value="'Direct'" ng-if="(!currentEntry.hasSource || !currentEntry.hasReceiving) && !currentItem.BIUOM && !nmeterDisable()" id="rng_nomtr_dir" name="notmeterclick">Keyed</ion-radio>
+
+                <ion-radio ng-model="currentEntry.readBy" ng-value="'DirectBilling'" ng-if="((currentItem.BIUOM && (currentItem.BIEnableTankReadings != 'N')))" id="rng_nomtr_dirBg" name="notmeterclick">Keyed</ion-radio>
+            </div>
+        </div>
+    </ion-scroll>
+    <a class="button button-small affirm hide-on-keyboard-open" ng-click="initiateDoi()" ng-disabled="disableProgress()" name="Continue" id="secondcontinue">Continue</a>
+</ion-content>

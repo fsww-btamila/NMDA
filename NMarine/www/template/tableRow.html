@@ -1,0 +1,15 @@
+<tr style="width:100%;">
+	<td style="width:15%;">
+	  <div ng-if="!item.cancelDelivery" style="padding-left:10px;">{{(item.Deliver.shipWeightQty || item.Deliver.finalQty ||  item.Deliver.ShipQty || item.Deliver.quantityShipped || item.Qty)| number:2}}</div>
+	  <div ng-if="item.cancelDelivery" style="padding-left:10px;">{{item.Deliver.ShipQty}}</div>
+	</td>
+	<td style="width:20%;">
+	  <div>{{item.Code}}</div>
+	</td>
+	<td style="width:45%;">
+		<div><pre>{{item.formMdaNotes}}</pre></div>
+	</td>
+	<td style="width:20%;">
+	  <div>{{item.SellByUOM || item.BIUOM}}</div>
+	</td>
+</tr>

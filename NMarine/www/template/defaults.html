@@ -1,0 +1,39 @@
+<ion-view cache-view="false" padding='false' view-title="Login" class='headerColor'>
+    <div class="bar bar-header headerColor">
+        <h1 class="title whiteText">Session Defaults</h1>
+    </div>
+    <ion-content scroll='false' class='bodyBg'>
+        <form name="loginForm" class="loginForm" ng-submit="(loginForm.$valid && login(loginData))|| (loginForm.$invalid  && invalidData(loginData))" novalidate>
+            <div class="list list-inset">
+                <label class="item item-input item-select cursor" for='siteSelectId'>
+                    <div class="input-label siteSelect">
+                        &nbsp;
+                    </div>
+                    <select name='siteName' ng-model='loginData.vehicleName' ng-init="loginData.vehicleName =  'Truck'" required>
+                        <option selected>Select Vehicle</option>
+                        <option ng-repeat='item in loginDependency.vehicles'>{{item}}</option>
+                    </select>
+                </label>
+            </div>
+            <div class="list list-inset">
+                <label class="item item-input item-select cursor" for='siteSelectId'>
+                    <div class="input-label siteSelect">
+                        &nbsp;
+                    </div>
+                    <select name='siteName' ng-model='loginData.driverName' ng-init="loginData.driverName =  'Matt'" required>
+                        <option selected>Select Driver</option>
+                        <option ng-repeat='item in loginDependency.drivers'>{{item}}</option>
+                    </select>
+                </label>
+            </div>
+            <div class='divCenter'>
+                <button type="submit" on-tap="loadPage('login');" class="button btn submitBtn savebtn iconBtn">
+                    <span>Save</span>
+                </button>
+                <button type="button" on-tap="loadPage('login');" class="button resetBtn btn savebtn iconBtn">
+                    <span>Cancel</span>
+                </button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

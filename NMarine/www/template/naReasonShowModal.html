@@ -1,0 +1,31 @@
+<ion-modal-view id="naReasonShowModal" class="addOrderModal titleModal tr">
+    <ion-header-bar style="width: 100%; border: none; background: #202e87">
+        <div class="row p-a-0">
+            <div class="col p-a-0">
+                <h4 class="m-a-0 text-white fs-18x">Reason for NA</h4>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0 fs-18x text-xs-right text-white">
+                    <a style="min-width: 20px; padding: 0 10px" href="" ng-click="naReasonShowModal.hide();" class="pull-xs-right text-white">
+                        <i class="ion-close-round"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll="true">
+        <p class="question">{{selectedNaReason.question}}</p>
+        <div class="delivery-reason" ng-if="selectedNaReason.delivery[0]">
+            <h5 class="sm-title">Delivery</h5>
+            <div ng-repeat="reason in selectedNaReason.delivery track by $index">
+                <p ng-if="reason.length > 0"> {{reason}}<br></p>
+            </div>
+        </div>
+        <div class="receiver-reason" ng-if="selectedNaReason.receiving[0]">
+            <h5 class="sm-title">Receiving</h5>
+            <div ng-repeat="reason in selectedNaReason.receiving track by $index">
+                <p ng-if="reason.length > 0"> {{reason}}<br></p>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

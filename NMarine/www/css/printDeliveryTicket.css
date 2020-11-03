@@ -1,0 +1,177 @@
+.printTktDiv p{
+	font-family: arial;
+}
+
+.printTktDiv header{
+	text-align: center !important;
+}
+
+.printTktDiv header p{
+	font-size: 14px !important;
+	font-weight: bold !important;
+}
+
+.btnColor
+{
+    background-color: #ff7800;
+    color: #fff;
+}
+
+/*.lsign > img
+{
+    height: 40px;
+    width: 150px;
+}
+.lsign > span
+{
+    position: relative;
+    float: right;
+    bottom: -20px;
+}
+
+.lsign
+{
+    width: 350px;
+}*/
+
+.notes {
+	font-size: 12px !important;
+}
+
+.f-s-10{
+    font-size: 10px !important;
+}
+
+.f-s-34{
+    font-size: 34px;
+}
+
+.f-f-a{
+    font-family: arial;
+}
+
+.f-w-n{
+    font-weight: normal;
+}
+
+.f-w-b{
+    font-weight: bold;
+}
+
+.f-st-i{
+    font-style: italic;
+}
+
+.p-l-10{
+    padding-left: 10px;
+}
+
+.dtMain{
+	margin-top: 50px;
+}
+
+.num{
+    padding-top: 20px;
+}
+
+.num p {
+    line-height: 1px;
+}
+
+.dtlogo {
+    padding-left: 20px;
+}
+
+.logoimg{
+    width: 25%;
+}
+
+.descimg{
+    width: 80%;
+}
+
+.delvAddr{
+    margin-top: -30px;
+    padding-left: 30px;
+}
+
+.delvAddr p {
+    line-height: 4px;
+}
+
+.productsHead {
+    border-bottom: 1px solid #000;
+    border-top: 1px solid #000;
+}
+
+.productsHead div{
+    margin-top: 0px;
+    margin-bottom: -22px;
+}
+
+.products{
+    margin-top: 8px;
+    margin-bottom: 20px;
+    border-bottom: 1px dotted #000;
+}
+
+.productHazmat{
+    line-height: 5px;
+    width: 55%;
+    margin: -15px 30% 0 10%;
+    padding-top: 0px;
+    border: 1px solid #000;
+}
+
+.productHazmat p{
+	line-height: 7px;
+}
+
+.productHazmat p:first-child{
+    margin-top: 10px;
+}
+
+.productHazmat p:last-child{
+    margin-bottom: 10px;
+}
+
+.orderItemNote{
+    width: 75%;
+    margin: 0 17.5% 0 7.5%;
+}
+
+.signature{
+	margin-left: 40%;
+}
+
+.printName{
+    margin-top: -35px;
+}
+
+.receivedBy{
+    margin-top: -30px;
+    padding-left: 45px;
+}
+
+.footer{
+    padding-top: 15px;
+    border-top: 1px solid #000;
+}
+
+.footer p{
+    line-height: 5px;
+}
+/* print Delivery page */
+.deliveryItems div{
+    vertical-align: top;
+}
+.imageDisable {
+    pointer-events: none;
+    opacity: 0.8 !important;
+}
+#pdc-content td{
+    padding-bottom: 10px; 
+}
+#pdc-hdr td{
+    padding-bottom: 10px;
+}

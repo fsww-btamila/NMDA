@@ -1,0 +1,145 @@
+<div ng-if="fractions"  class="wrapper-numeric">
+    <div class="digit-wrapper">
+        <!-- <div class="row-num">
+            <div class="col-num button-num" ng-click="setQuantity($event,7)">7</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,8)">8</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,9)">9</div>
+        </div>
+        <div class="row-num">
+            <div class="col-num button-num" ng-click="setQuantity($event,4)">4</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,5)">5</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,6)">6</div>
+        </div>
+        <div class="row-num">
+            <div class="col-num button-num" ng-click="setQuantity($event,1)">1</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,2)">2</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,3)">3</div>
+        </div>
+        <div class="row-num">
+            <div class="col-num button-num"></div>
+            <div class="col-num button-num" ng-click="setQuantity($event,0)">0</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,'.')">.</div>
+        </div> -->
+        <div class="tank-picker-wrapper">
+            <!-- <div class="num-btn label feet" ng-class="{active : selectedUnit == 'feet'}" ng-click="selectUnit('feet')">Feet <br><span class="tiny">max: {{maxFeet}}</span></div>
+            <div class="num-btn label inch" ng-class="{active : selectedUnit == 'inch'}" ng-click="selectUnit('inch')">Inches<br><span class="tiny">max: {{maxInch}}</span></div>
+            <div class="num-btn label fracts" ng-class="{active : selectedUnit == 'fracts'}" ng-click="selectUnit('fracts')">Fracts<br><span class="tiny">max: {{maxFracts}}</span></div> -->
+        
+	         <div class="num-btn seven" id="num_seven"  ng-click="enterValue(7)">7</div>
+			 <div class="num-btn eight" id="num_eight"  ng-click="enterValue(8)">8</div>
+			 <div class="num-btn nine" id="num_nine"   ng-click="enterValue(9)">9</div>
+			 <div class="num-btn four" id="num_four"   ng-click="enterValue(4)">4</div>
+			 <div class="num-btn five" id="num_five"   ng-click="enterValue(5)">5</div>
+			 <div class="num-btn six" id="num_six"    ng-click="enterValue(6)">6</div>
+			 <div class="num-btn one" id="num_one"    ng-click="enterValue(1)">1</div>
+			 <div class="num-btn two" id="num_two"    ng-click="enterValue(2)">2</div>
+			 <div class="num-btn three" id="num_three"  ng-click="enterValue(3)">3</div>
+			 <div class="num-btn zero" id="num_zero"   ng-click="enterValue(0)">0</div>
+            <!-- <div class="num-btn prev" ng-click="selectUnit('feet')"><</div>
+            <div class="num-btn back" ng-click="backspace()"><i class="ion-backspace-outline"></i></div>
+            
+            <div class="num-btn next" ng-click="selectUnit('inch')">></div> -->
+        
+            
+            <div class="num-btn clr" ng-click="clear()">C</div>
+        
+        </div>
+    </div>
+    <div class="fraction">
+        <div class="row-num">
+            <div class="col-num button-num fraction-wrapper" ng-click="setQuantity($event,' 1/2')">
+                <div class="first-digit">1</div>
+                <div class="splitter"></div>
+                <div class="second-digit">2</div>
+            </div>
+            <div class="col-num button-num fraction-wrapper" ng-click="setQuantity($event,' 1/8')">
+                <div class="first-digit">1</div>
+                <div class="splitter"></div>
+                <div class="second-digit">8</div>
+            </div>
+            <div class="col-num button-num fraction-wrapper" ng-click="setQuantity($event,' 5/8')">
+                <div class="first-digit">5</div>
+                <div class="splitter"></div>
+                <div class="second-digit">8</div>
+            </div>
+            <div class="col-num button-num fraction-wrapper" ng-click="backSpace()">
+                <i class="ion-backspace"></i>
+            </div>
+        </div>
+        <div class="row-num left-column">
+            <div class="col-num button-num fraction-wrapper" ng-click="setQuantity($event,' 3/4')">
+                <div class="first-digit">3</div>
+                <div class="splitter"></div>
+                <div class="second-digit">4</div>
+            </div>
+            <div class="col-num button-num fraction-wrapper" ng-click="setQuantity($event,' 7/8')">
+                <div class="first-digit">7</div>
+                <div class="splitter"></div>
+                <div class="second-digit">8</div>
+            </div>
+            <div class="col-num button-num fraction-wrapper" ng-click="setQuantity($event,' 3/4')">
+                <div class="first-digit">3</div>
+                <div class="splitter"></div>
+                <div class="second-digit">4</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-if="!fractions" class="wrapper-numeric">
+    <!-- <div class="">
+        <div class="row-num">
+            <div class="col-num button-num" ng-click="setQuantity($event,1)">1</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,2)">2</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,3)">3</div>
+        </div>
+        <div class="row-num">
+            <div class="col-num button-num" ng-click="setQuantity($event,4)">4</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,5)">5</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,6)">6</div>
+        </div>
+        <div class="row-num">
+            <div class="col-num button-num" ng-click="setQuantity($event,7)">7</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,8)">8</div>
+            <div class="col-num button-num" ng-click="setQuantity($event,9)">9</div>
+        </div>
+        <div class="row-num">
+            <div class="col-num button-num" ng-show="float" ng-click="setQuantity($event,'.')">.</div>
+            <div class="col-num button-num" ng-hide="float"></div>
+            <div class="col-num button-num" ng-click="setQuantity($event,0)">0</div>
+            <div class="col-num button-num fraction-wrapper" ng-click="backSpace()">
+                <i class="ion-backspace"></i>
+            </div>
+        </div>
+    </div> -->
+    <div class="tank-picker-wrapper blue">
+        <!-- <div class="num-btn label feet" ng-class="{active : selectedUnit == 'feet'}" ng-click="selectUnit('feet')">Feet <br><span class="tiny">max: {{maxFeet}}</span></div>
+        <div class="num-btn label inch" ng-class="{active : selectedUnit == 'inch'}" ng-click="selectUnit('inch')">Inches<br><span class="tiny">max: {{maxInch}}</span></div>
+        <div class="num-btn label fracts" ng-class="{active : selectedUnit == 'fracts'}" ng-click="selectUnit('fracts')">Fracts<br><span class="tiny">max: {{maxFracts}}</span></div> -->
+    
+        <div id="num-seven" class="num-btn seven" ng-click="setQuantity($event,7)">7</div>
+        <div id="num-eight" class="num-btn eight" ng-click="setQuantity($event,8)">8</div>
+        <div id="num-nine" class="num-btn nine" ng-click="setQuantity($event,9)">9</div>
+    
+        <div id="num-four" class="num-btn four" ng-click="setQuantity($event,4)">4</div>
+        <div id="num-five" class="num-btn five" ng-click="setQuantity($event,5)">5</div>
+        <div id="num-six" class="num-btn six" ng-click="setQuantity($event,6)">6</div>
+        
+    
+        <div id="num-one" class="num-btn one" ng-click="setQuantity($event,1)">1</div>
+        <div id="num-two" class="num-btn two" ng-click="setQuantity($event,2)">2</div>
+    
+        <div id="num-three" class="num-btn three" ng-click="setQuantity($event,3)">3</div>
+        
+    
+        <div id="num-zero" class="num-btn zero" ng-click="setQuantity($event,0)">0</div>
+        <!-- <div class="num-btn prev" ng-click="selectUnit('feet')"><</div>
+        <div class="num-btn back" ng-click="backspace()"><i class="ion-backspace-outline"></i></div>
+        
+        <div class="num-btn next" ng-click="selectUnit('inch')">></div> -->
+    
+        
+        <div id="num-bkspc" class="num-btn bkspc" ng-click="backSpace()"><i class="ion-backspace"></i></div>
+    
+    </div>
+</div>

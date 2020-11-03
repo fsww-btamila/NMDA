@@ -1,0 +1,30 @@
+<ion-modal-view class="addOrderModal transferModal">
+  <div class="row">
+    <div class="col">
+      <spn>Shift Change</spn>
+      <span class="pull-xs-right text-xs-right"><strong>{{loginData.uname || "Arthur,Curry"}}</strong></span>
+    </div>
+    <div class="col col-10 ">
+      <div class="col-offset-10 closeBtnDiv">
+        <button class="button button-icon ion-close-circled modal-close" ng-click="shiftChangeModal.hide()"></button>
+      </div>
+    </div>
+  </div>
+  <ion-content style="margin-top:80px" class='center'>
+    <div class="row ">
+      <div class="col ">
+        Who is Changing Shift?
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <a class="button affirm" ng-click="changeShift('userRole')">
+                    {{transferDetails[transferDetails.userRole].name}}
+                </a>
+        <a class="button affirm col-offset-10" ng-click="changeShift('otherRole')">
+                    {{transferDetails[transferDetails.otherRole].name}}
+                </a>
+      </div>
+    </div>
+  </ion-content>
+</ion-modal-view>

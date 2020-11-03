@@ -1,0 +1,97 @@
+<ion-view view-title="Ship Order" name="Ship" cache-view="false" class="padding10">
+    <ion-header-bar class="bar bar-header tabs-top shiporder-header" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <div class="row h-100 p-a-0">
+            <div class="col-25">
+                <a ng-hide="currentEntry.hideBack" style="padding: 12px 8px; padding-right: 50px;" class="button button-icon" ng-click="backEnabled =true;saveOrder()"><i class="icon ion-android-arrow-back iconColor f-s-30"></i></a>
+            </div>
+            <div class="col text-xs-center col-45">
+                <h4 class="whiteText m-a-0 fs-2x">{{pageTitle}} {{order.OrderHdr.OrderNo}}</h4>
+            </div>
+            <div class="col col-5" ng-if="(order.activeAction=='Deliver' && order.OrderHdr.AllowDOI == 'Y' && order.OrderHdr.AllowDOIShipTo == 'Y' && $root.EnableElectronicDOI == 'Y') && isBulkItemFinished()" >
+                <div class="col" ng-if="(isBulkRemaining() && noItemInProgress() && !order.hideDoiButton)">
+                    <button  ng-click="newDoi()" class="btn button-icon reading-btn ion-clipboard mtrDoiPos"></button>
+                </div>
+            </div>
+            <div class="col-25">
+                <div style="height: 0" class="row p-a-0">
+                    <div class="col p-a-0">
+                        <div class="user-dash m-r-0 pull-xs-right">
+                            <span class='uinfo text-truncate'><i class="ion-person uname"></i><span>{{loginData.uname || 'Username'}}</span></span>
+                            <span class='uinfo text-truncate'><i class="ion-home insite"></i><span>{{selectedSite.Code}}</span></span>
+                            <span class="uinfo text-truncate app-version"><small>V {{$root.appVersion}}</small></span>
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <a href='' class="add-order-rgtbtn ion-android-more-vertical" ng-click="saveUpdateOrder();$root.openSettingsPopover($event,'bySettings')"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-header-bar>
+    <div class="row shipment">
+        <div class="col-25 h-100 br-s-1 edit-order-wrapper orderPaneWrapper">
+            <div class="row favorite m-t-0">
+                <div class="col-20 h-100">
+                    <img class="ion-person-sidebar" src="./img/person_order.png">
+                </div>
+                <div class="col h-100 p-a-0" style="font-size:1em">
+                    <div class="vertical-centered">
+                        <p class="m-a-0 d-block">{{(general.CustomerNumber) ? '': general.ToSiteCode}} {{general.CustomerName | escString}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-a-0 m-t-0 orderpane-container">
+                <div class="col p-a-0 h-100">
+                    <order-pane item-list="itemList" order="order" show-billing="showBilling" current-item="currentItem" enable-shipping="enableShipping" enable-highlight="enableHighlight" active-action="activeAction" current-entry="currentEntry" settings="settings" swipe-handler="handleSwipe()"
+                        on-swipe-left="routeItem()" route-item="routeItem()" del-index="delIndex"></order-pane>
+                </div>
+            </div>
+            <div class="row p-a-0 m-t-0 h-5 clone-footer hide-on-keyboard-open">
+                <div class="col footerStyle p-a-0">
+                    <ol style="position: absolute" class="cd-breadcrumb triangle bcstyle text-truncate">
+                        <li ng-class="{'current':(general.Status=='Open' || general.Status=='Shipping in Progress') || (general.Vehicle.EnforceShipmentMarineApp =='N' && general.Status=='Delivery in Progress')}"><a class="fs-12x"><i class="breadcrumbIcon ion-home"></i>{{general.INSiteCode}}</a></li>
+                        <li ng-if="general.Vehicle.EnforceShipmentMarineApp ==='Y'" ng-class="{'current':general.Status=='En Route' || general.Status=='Delivery in Progress'}"><a class="fs-12x"><i class="ion-marine-vehicle"></i> {{general.Vehicle.Descr || 'Unassigned'}}</a></li>
+                        <li ng-if="general.Vessels.length>0" ng-class="{'current':general.Status=='Delivered'}" class="finalBox"><a ng-if="general.InternalTransferOrder==='N'" class="finalCrumb fs-12x"><span ng-if="!order.deliveryCodes || order.deliveryCodes.length==0" ng-class="{orderVessel:!$last}" ng-repeat="vessel in general.Vessels"><i class="breadcrumbIcon ion-android-boat"></i>{{vessel.VesselCode}}</span><span ng-if="order.deliveryCodes && order.deliveryCodes.length>0"><i class="breadcrumbIcon ion-android-boat"></i>{{order.deliveryCodes[order.deliveryCodes.length-1]}}<span ng-show="order.deliveryCodes.length>1">({{order.deliveryCodes.length-1}})</span></span></a>
+                        </li>
+                        <li ng-if="general.InternalTransferOrder==='Y'" ng-class="{'current':general.Status=='Delivered'}"><a ng-if="general.InternalTransferOrder==='N'" class="finalCrumb fs-12x"><span ng-class="{orderVessel:!$last}" ng-repeat="vessel in general.Vessels"><i class="breadcrumbIcon ion-android-boat"></i>{{vessel.VesselCode}}</span></a>
+                            <a ng-if="general.InternalTransferOrder==='Y'" class="finalCrumb fs-12x"><span><i class="breadcrumbIcon ion-home"></i>{{general.ToSiteCode}}</span></a>
+                        </li>
+                        <li ng-if="general.Vessels.length<0" ng-class="{'current':general.Status=='Delivered'}"><a class="fs-12x"><i class="breadcrumbIcon ion-android-boat"></i><span>Unassigned</span></a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div id="ship-order-content" class="col p-a-0 pos-r-h100">
+            <ion-nav-view>
+                <div class="row">
+                    <div ng-show="activeView =='packaged'">
+                        <ion-nav-view name="ship-packaged"></ion-nav-view>
+                    </div>
+                    <div ng-show="activeView =='billing'">
+                        <ion-nav-view name="ship-billing"></ion-nav-view>
+                    </div>
+                    <div ng-show="activeView =='bulk'">
+                        <ion-nav-view name='ship-bulk'></ion-nav-view>
+                    </div>
+                    <div ng-show="activeView =='doi'">
+                        <ion-nav-view name='ship-doi'></ion-nav-view>
+                    </div>
+                    <div ng-show="activeView =='reading'">
+                        <ion-nav-view name='ship-reading'></ion-nav-view>
+                    </div>
+                    <div id="summary" ng-show="activeView=='summary'">
+                        <ion-nav-view name='ship-summary'></ion-nav-view>
+                    </div>
+                    <div ng-show="activeView=='cancelled'">
+                        <ion-nav-view name='ship-cancelled'></ion-nav-view>
+                    </div>
+                </div>
+            </ion-nav-view>
+        </div>
+        <div class="proceedContainer buttons pull-right footer-buttons">
+            <a ng-if="order.overallStatus == 'doi'" class="button icon-right ion-android-arrow-forward affirm hide-on-keyboard-open" ng-click="initiateFinalDoi()">Complete DOI</a>
+            <a ng-cloak ng-if="setItemUnFinished() && ($root.viewState.current.name != 'shiporder.meter' && $root.viewState.current.name != 'shiporder.tank') && checkDeliveryDoi()" class="button icon-right ion-android-arrow-forward affirm hide-on-keyboard-open" id="finishorder" ng-click="finishOrderProcessing()">{{finishText}} Order {{doiText}}</a>
+        </div>      
+    </div>
+</ion-view>

@@ -1,0 +1,58 @@
+<ion-modal-view class="addOrderModal smallModal">
+    <ion-header-bar class="modal-header-bar" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <div class="row p-a-0">
+            <div class="col-80 p-a-0">
+                <div class="row p-a-0" ng-click="a=true">
+                    <div class="col-33 p-a-0">
+                        <h4 class="d-inline-block text-nowrap">Add Location</h4>
+                    </div>
+                    <div class="col p-a-0">
+                        <md-input-container class="md-no-float md-block input-component search-input pull-xs-right">
+                            <input ng-model="locationSearch" type="text" autocomplete="off" focus-me="a">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0">
+                    <a style="padding-right: 0.5rem" href="" ng-click="closeModal('locationmodal');" class="pull-xs-right">
+                        <i class="ion-close-round"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll="false">
+        <div class="row p-a-0 h-100" >
+            <div class="col p-a-0 h-100" >
+                <div class="row p-b-0 m-t-0 table-header-container">
+                    <div class="col h-100 m-t-0 p-a-0">
+                        <div class="row h-100 table-header">
+                            <div class="col-50  p-x-0">
+                                <h5 class="m-a-0">Code</h5>
+                            </div>
+                            <div class="col-50 p-x-0 text-xs-center">
+                                <h5 class="m-a-0">Description</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row table-row-container">
+                    <div class="col h-100 p-a-0">
+                        <ion-scroll class="h-100">
+                            <div ng-repeat="loc in marineLocation | locationFilter:locationSearch" ng-click="addLocation(loc);closeModal('locationmodal');" class="row table-row">
+                                <div class="col-50  pos-relative p-x-0">
+                                    <h5 class="m-a-0"> 
+                                    {{loc.Code}}</h5>
+                                </div>
+                                <div class="col-50 pos-relative p-x-0 text-xs-center">
+                                    <h5 class="m-a-0">{{loc.Descr}}</h5>
+                                </div> 
+                            </div> 
+                        </ion-scroll>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

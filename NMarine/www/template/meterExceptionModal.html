@@ -1,0 +1,29 @@
+<ion-modal-view class="addOrderModal transferModal">
+    <ion-header-bar style="width: 100%; border: none; background: #202e87">
+        <div class="row p-a-0">
+            <div class="col p-a-0">
+                <h4 class="m-a-0 text-white fs-18x">Meter Exception</h4>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0 fs-18x text-xs-right text-white">
+                    <a style="min-width: 20px" href="" ng-click="meModal.hide()" class="pull-xs-right text-white">
+                        <i class="ion-close-round"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content class='center'>
+        <div class="row m-t-2">
+            <div class="col ">
+                Choose Reading Method
+            </div>
+        </div>
+        <div class="row m-t-2">
+            <div class="col">
+                <a class="button affirm" ng-click="meModal.hide();handleException('MeterReading')">Add Meter Reading</a>
+                <a class="button affirm col-offset-10" ng-show="(currentEntry.hasReceiving && order.OrderHdr.InternalTransferOrder == 'Y') || currentEntry.hasSource" ng-click="meModal.hide();handleException('TankReading')">Switch to Tank Readings</a>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

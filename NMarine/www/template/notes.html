@@ -1,0 +1,205 @@
+<ion-view>
+  <div ng-cloak class="row notes-modal p-a-0">
+    <div class="col-75 notes-tab" style="height: 100%">
+      <md-content class="widthAuto" style="height: 100%">
+        <md-tabs md-border-bottom md-stretch-tabs style="min-height: 100% !important;">
+          <md-tab label="Notes" class="w-200">
+            <md-content class="md-padding" style="bottom: 0 !important;">
+              <div class="card" ng-click="a=true">
+                <div class="item">
+                  <div class="row">
+                    <div class="col">
+                      <textarea ng-class="(noteNew.length<1)?'height-20':''" class="addNoteArea" style="width: 95%; resize: none !important;height: 20px;" elastic ng-model="noteNew" placeholder="Add Order Note" ng-trim="false" focus-me="a"></textarea>
+                      <div ng-class="{'no-display': editing}" ng-show="noteNew.length>0" ng-click="addNote(noteNew);" class="big-rd-btn button button-icon ion-checkmark-round noteDone addVesselButton" role="button" tabindex="0">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" ng-click="b=true" ng-if="orderNotes.length>0" ng-repeat="note in orderNotes | orderBy : $index : true track by $index" on-hold="deleteNote(note)">
+                <div class="item item-text-wrap">
+                  <div class="row" style="margin-top: -20px;">
+                    <div class="col text-xs-left note-date">
+                      <i class="ion-android-calendar" style="color: #545e96; padding-right: 5px !important;"></i>{{note.DtTm | date:'MM/dd/yyyy HH:mm'}}
+                    </div>
+                    <div class="col text-xs-right note-user">
+                      <i class="ion-person" style="color: #545e96; padding-right: 5px !important;"></i>{{note.User || 'Username'}}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col" ng-show="note.NoteNo!=editingId" ng-click="editNote(note,1);"> <pre>{{note.Note}}</pre>
+                    </div>
+                    <div class="col" ng-show="note.NoteNo==editingId">
+                      <md-input-container md-no-float class="md-block">
+                        <textarea placeholder="Enter Order Notes" ng-change="hideCheckMark(note, newText);" ng-model="newText" focus-me="b"></textarea>
+                      </md-input-container>
+                      <div ng-show="note.NoteNo==editingId " ng-disabled="noteDisable" ng-click="saveEdit(note, newText);" class="big-rd-btn button button-icon ion-checkmark-round noteDone addVesselButton" role="button" tabindex="0">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </md-content>
+            <md-content class="md-padding" style="bottom: 0 !important;">
+              <div class="card">
+                <div class="item">
+                  <div class="col text-xs-left" ng-click="c=true">
+                    <label class="icon-left ion-edit">&nbsp PO Number</label>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <textarea my-maxlength="24" ng-class="(poNew.length<1)?'height-20':''" class="addNoteArea" style="width: 95%; resize: none !important;height: 20px;" elastic ng-model="poNew" placeholder="Enter PO number here if there is only one PO on entire order AND it covers every item on the order." ng-trim="false" focus-me="c" ng-change="savePOEdit(poNew);"></textarea> 
+                      </div>
+                    </div> 
+                  </div> 
+              </div>
+            </md-content>
+          </md-tab>
+          <md-tab label="Activity Logs">
+            <md-content class="md-padding">
+              <div class="card" ng-repeat="log in aLogs | orderBy : 'DtTm'">
+                <div class="item item-text-wrap">
+                  <div class="row" style="margin-top: -20px;">
+                    <div class="col text-xs-left note-date">
+                      <i class="ion-android-calendar" style="color: #545e96;"></i>{{log.DtTm | date:'MM/dd/yyyy HH:mm'}}
+                    </div>
+                    <div class="col text-xs-right note-user">
+                      <i class="ion-person" style="color: #545e96;"></i>{{log.UserID}}
+                    </div>
+                  </div>
+                  <div class="row activity-log">
+                    <div class="col" ng-class="log.data? 'c-blue':''" ng-click="openModal('logs', log)">{{log.Type}}</div>
+                  </div>
+                </div>
+              </div>
+            </md-content>
+          </md-tab>
+        </md-tabs>
+      </md-content>
+    </div>
+    <div class="col-25 attach-tab bg-576376">
+      <div class="attach-head p-a-15 f-s-18">Attachments</div>
+      <md-fab-speed-dial md-direction="down" class="md-fling pull-xs-right attach-button">
+        <md-fab-trigger>
+          <md-button aria-label="Add attachment" class="big-rd-btn md-fab md-warn md-mini">
+            <i class="ion-plus-round f-s-18" style="padding:0 !important"></i>
+          </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+          <md-button aria-label="Photo Upload" ng-click="captureDoc()" class="big-rd-btn md-fab md-raised md-mini">
+            <i class="ion-ios-camera-outline c-white f-s-22" style="padding:0 !important" aria-label="Upload Photo"></i>
+          </md-button>
+          <md-button aria-label="Document Upload" ng-click="openModal('file')" class="big-rd-btn md-fab md-raised md-mini">
+            <i class="ion-document c-white f-s-22" style="padding:0 !important" aria-label="Upload Document"></i>
+          </md-button>
+          <!--           
+          <md-button aria-label="Attachments Re Sync Ascend/Azure " ng-click="mdaAttachmentModal()" class="md-fab md-raised md-mini">
+            <i class="ion-android-list c-white f-s-22" style="padding:0 !important" aria-label="Attachments Re Sync Ascend/Azure"></i>
+          </md-button> -->
+        </md-fab-actions>
+      </md-fab-speed-dial>
+      <div class="attach-list" >
+        <div class="row" ng-repeat="doc in OrderList.Orders.OrderHdr.OrderAttachment track by $index">
+          <div class="col-10"></div>
+          <div class="col" on-hold="deleteDoc(doc)" ng-click="openModal('image', doc)">
+            <div class="attach-title">{{doc.name}}</div>
+            <img class="attach-image" ng-src="{{doc.dataThumb}}" ng-if="($root.isInternet && $root.online)"> 
+            <i class="ion-images offline-doc-ion" ng-if="((doc.type=='CAPTUREDOC') && (!$root.isInternet || !$root.online))"></i>
+            <i class="ion-paperclip offline-doc-ion" ng-if="((doc.type=='DeviceAttachment') && (!$root.isInternet || !$root.online))"></i>
+            <i class="ion-ios-paper offline-doc-ion" ng-if="((doc.type=='P') && (!$root.isInternet || !$root.online))"></i>
+            <div class="attach-date">{{doc.dateTime | date : "MM-dd-yyyy HH:mm"}}</div>
+          </div>
+          <div class="col-10"></div>
+          <div class="col-10" style="background-color:red" ng-show="swiped" ng-click="deleteDoc(doc)"></div>
+        </div>
+        <div class="row" ng-repeat="doc in OrderList.Orders.OrderHdr.orderNotesAttachment track by $index">
+          <div class="col-10"></div>
+          <div class="col" on-hold="deleteDoc(doc)" ng-click="openModal('image', doc)" ng-if="(doc.dataURL && doc.dataURL!=null)">
+            <div class="attach-title">
+            <i class="ion-ios-paper offline-doc-ion"></i>
+             {{doc.name}}
+            </div>
+          </div>
+          <div class="col-10"></div>
+          <div class="col-10" style="background-color:red" ng-show="swiped" ng-click="deleteDoc(doc)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script id="my-modal.html" type="text/ng-template">
+    <ion-modal-view>
+      <ion-header-bar style="background: #dfe0ea;" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <button class="button button-assertive f-s-14" ng-click="deleteDoc(displayDoc);closeModal('image');">
+          <i class="ion-android-delete"></i> Delete
+        </button>
+        <h1 class="title text-xs-center">{{displayDoc.name}}</h1>
+        <button class="button button-icon ion-close-circled modal-close closeModal" ng-click="closeModal('image');" style="top: 15px;right: -4px;"></button>
+      </ion-header-bar>
+      <ion-content>
+        <img class="display-doc-image" ng-src="{{attachmentsObj[displayDoc.dataId]}}">
+      </ion-content>
+    </ion-modal-view>
+  </script>
+  <script id="file-picker.html" type="text/ng-template">
+    <ion-modal-view class="small-modal">
+      <ion-header-bar class="attach-file-modal" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <h1 class="title">Choose File</h1>
+        <button class="button button-icon ion-close-circled modal-close closeModal" ng-click="closeModal('file');" style="top: 15px;right: -4px;"></button>
+      </ion-header-bar>
+      <ion-content class="bg-576376">
+        <div class="list file-list">
+          <div class="c-white" ng-repeat="file in files">
+            <a class="item item-icon-left bg-576376 f-w-n" ng-click="getContents(file)">
+            <i ng-show="file.isDirectory" class="icon ion-ios-folder-outline"></i>
+            <i ng-show="file.isFile" class="icon ion-document"></i> {{file.name}}
+            </a>
+          </div>
+        </div>
+      </ion-content>
+    </ion-modal-view>
+  </script>
+  <script id="mda-attachment-list.html" type="text/ng-template">
+    <ion-modal-view class='mdaAttachModal'>
+      <ion-content>
+        <div class="row m-a-0 p-a-0 avail-header" >
+          <div class="col p-a-0">
+            <ion-list>
+              <ion-item class="card p-x-2 m-a-0">
+                <div class="row row-top item-text-wrap">
+                  <div class="col col-8">
+                    <p class="m-a-0 d-block fs-18x">Attachment List</p>
+                  </div>
+                  <div class="col col-3">
+                    <p class="m-a-0 fs-18x">Re-Sync Ascend/Azure</p>
+                  </div>
+                  <div class="col col-1">
+                        <button class="button button-icon ion-close-circled modal-close closeModal" ng-click="closeModal();" style="top: 12px;right: 4px;background: #fff!important;"></button>
+                  </div>
+                </div>
+              </ion-item>
+            </ion-list>
+          </div>
+        </div>
+        <div class="row m-t-0 h-60 p-a-0">
+          <div class="col h-100 p-a-0">
+            <ion-scroll class="orderPane availabilityList" style="height: 100%;">
+              <ion-list>
+                <ion-item class="p-x-2 m-y-0 bdr-0" ng-repeat="attachObj in OrderList.Orders.OrderHdr.OrderAttachment track by $index">
+                  <div class="row row-top">
+                    <div class="col col-8">
+                      <p class="m-a-0 d-block">{{attachObj.name}}</p>
+                    </div>
+                    <div class="col col-3">
+                      <button class="button button-positive" ng-click="syncAttachment(attachObj)"> Sync </button>
+                    </div>
+                    <div class="col col-1"></div>
+                  </div>
+                </ion-item>
+              </ion-list>
+            </ion-scroll>
+          </div>
+        </div>
+      </ion-content>
+    </ion-modal-view>
+  </script>
+</ion-view>

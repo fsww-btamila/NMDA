@@ -1,0 +1,30 @@
+<ion-view>
+    <ion-content class="innerWidth">
+        <div class="m-t-30">
+            <div class="row">
+                <div class="col col-33" ng-click="a=true">
+                    <div class="row text-xs-center"><i class="ion-edit shippingIcon"></i>Item Notes</div>
+                    <div class="row m-t-1 p-a-0">
+                        <textarea rows="10" cols="70" class="text-area bg-F3F3F3 p-a-10" ng-model='currentItem.Notes' placeholder='Enter Notes' focus-me="a">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-33" ng-click="v=true">
+                    <div class="row text-xs-center"><i class="ion-ios-bookmarks shippingIcon"></i>{{getCurrentString()}} Instructions</div>
+                    <div class="row m-t-1 p-a-0">
+                        <textarea rows="10" cols="70" class="text-area bg-F3F3F3 p-a-10" ng-model='currentEntry.ShippingInstruction' placeholder='Enter Instruction' focus-me="b">
+                        </textarea>
+                    </div>
+                </div>
+                <div class="col col-33 m-l-2p" ng-show="order.OrderHdr.Status =='Delivered' && currentItem.HazmatDesc" ng-click="c=true">
+                    <div class="row pkg-bgd text-xs-center">Hazmat Description</div>
+                    <div class="row m-t-1 p-a-0">
+                        <textarea rows="10" cols="70" class="text-area bg-F3F3F3 p-a-10" disabled focus-me="c">{{currentItem.HazmatDesc}}</textarea >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-content></ion-view>
+

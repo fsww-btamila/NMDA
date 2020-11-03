@@ -1,0 +1,41 @@
+<ion-modal-view class='largeModal'>
+    <ion-header-bar ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <h1 class="title grayText alignCenter">Customer Details</h1>
+        <button class="button button-icon icon ion-close-circled removePadding closeModal" ng-click="closeOrderDetailsModal()" />
+    </ion-header-bar>
+    <ion-content class='cusDetailsDiv' scroll='false'>
+        <div class='cusInfoDiv'>
+            <span class='blockSpan paddings centerText grayText fontm'><span class='evenWidthSmall'>Account No </span>: {{itemInfo.StandardAcctNo}}</span>
+            <span class='blockSpan paddings centerText grayText fontm'><span class='evenWidthSmall'>Description </span>: {{itemInfo.LongDescr}}</span>
+            <span class='blockSpan paddings centerText grayText fontm'><span class='evenWidthSmall'>DBA </span>: {{itemInfo.DBAName}}</span>
+            <span class='blockSpan paddings centerText grayText fontm'><span class='evenWidthSmall'>Mailing Address 1 </span>: <span class='floatright'>{{itemInfo.FormattedAddress}}</span></span>
+        </div>
+        <div class='cusTableDiv'>
+            <div class="row cstdtlsHead w-p-100">
+                <div class="col cstdtlsOrderNo c-5a5a5a">Order No</div>
+                <div class="col cstdtlsDesc c-5a5a5a">Status</div>
+                <div class="col cstdtlsDate c-5a5a5a">Date</div>
+            </div>
+            <ion-scroll class="h-250">
+                <div class="row cstdtlsTable w-p-100" ng-if='customerOrdersList.length>0 && itemInfo.ShipToId == item.Orders.OrderHdr.ToSiteID' ng-repeat="item in customerOrdersList" on-tap='openCustomerOrder(item,$index,$event)'>
+                    <div class="col cstdtlsOrderNo" ng-init='isNoRecords.yes=true'>
+                        {{item.Orders.OrderHdr.OrderNo}}
+                    </div>
+                    <div class="col cstdtlsDesc">
+                        {{item.Orders.OrderHdr.Status}}
+                    </div>
+                    <div class="col cstdtlsDate">
+                        {{item.Orders.OrderHdr.OrderDtTm}}
+                    </div>
+                </div>
+                <div ng-if="customerOrdersList.length == 0 " class=''>
+                    <div class='blockSpan alignCenter'>No Orders!</div>
+                </div>
+            </ion-scroll>
+            <div class='divCenter'>
+                <span class='blockSpan fontl grayText'>Credit Available : $ {{itemInfo.CreditLimitAmt |  number: 2}}</span>
+                <button class="button newSaleBtn padding ion-ios-briefcase iconBtn" ng-click='closeOrderDetailsModal()' ui-sref="addorder({customer: itemInfo})" ng-disabled='itemInfo.CreditHold == false || itemInfo.CreditLimitAmt<=0 || itemInfo.CreditLimitAmt ==undefined'>&nbsp;&nbsp;New Sale</button>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

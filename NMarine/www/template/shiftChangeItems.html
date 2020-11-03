@@ -1,0 +1,48 @@
+<ion-view view-title="Shift Change" name="Shift Change" cache-view="false">
+    <ion-header-bar class="bar bar-header tabs-top shiporder-header" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <div class="row h-100 p-a-0">
+            <div class="col-25">
+                <a ng-hide="true" class="button button-icon" ng-click="navBack()"><i class="icon ion-android-arrow-back iconColor f-s-30"></i></a>
+            </div>
+            <div class="col text-xs-center">
+                <h4 class="whiteText m-a-0 fs-2x"> Please Complete DOI for below items {{order.OrderHdr.OrderNo}}</h4>
+            </div>
+            <div class="col-25">
+                <a href='' class="add-order-rgtbtn ion-android-more-vertical" ng-click="$root.openSettingsPopover($event,'bySettings')"></a>
+            </div>
+        </div>
+    </ion-header-bar>
+    <div class="row shipment">
+        <div class="col-25 h-100 br-s-1 edit-order-wrapper orderPaneWrapper">
+            <div class="row favorite m-t-0">
+                <div class="col-20 h-100">
+                    <img class="ion-person-sidebar" src="./img/person_order.png">
+                </div>
+                <div class="col h-100 p-a-0" style="font-size:1em">
+                    <div class="vertical-centered">
+                        <p class="m-a-0 d-block">{{(order.OrderHdr.CustomerNumber) ? '': order.OrderHdr.ToSiteCode}} {{order.OrderHdr.CustomerName}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-a-0 m-t-0 orderpane-container">
+                <div class="col p-a-0 h-100">
+                    <order-pane item-list="itemList" order="order" show-billing="false" current-item="currentItem" enable-shipping="enableShipping" enable-highlight="enableHighlight" active-action="activeAction" current-entry="currentEntry" shift-change="true" route-item="routeItem()"></order-pane>
+                </div>
+            </div>
+            <div class="row p-a-0 m-t-0 h-5 clone-footer hide-on-keyboard-open">
+                <div ng-hide="true" class="col footerStyle p-a-0">
+                </div>
+            </div>
+        </div>
+        <div class="col p-a-0 pos-r-h100">
+            <ion-nav-view>
+                <div class="row">
+                    <ion-nav-view name='ship-doi'></ion-nav-view>
+                </div>
+            </ion-nav-view>
+        </div>
+        <div class="proceedContainer buttons pull-right footer-buttons" ng-show="((allowDoiProceed) || isRequiredDoi)">
+            <a ng-hide="hideNextBtn" class="button icon-right ion-android-arrow-forward affirm doiCont hide-on-keyboard-open" ng-click='clickOnce();processItemDoi()'>Next</a>
+        </div>
+    </div>
+</ion-view>

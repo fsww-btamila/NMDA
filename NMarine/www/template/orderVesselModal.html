@@ -1,0 +1,53 @@
+<ion-modal-view class="addOrderModal smallModal">
+    <ion-header-bar class="modal-header-bar" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <div class="row p-a-0">
+            <div class="col-90 p-a-0">
+                <div class="row p-a-0">
+                    <div class="col-33 p-a-0">
+                        <h4 class="d-inline-block text-nowrap">Select Vessel</h4>
+                    </div>
+                    <div class="col p-a-0">
+                        <button style="height: 100%; line-height: 100%;" class="button affirm m-a-0 pull-xs-right" ng-click="closeModal('ordervesselmodal');vesselmodal.show()">
+                            All Vessels
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0 fs-18x ">
+                    <a style="padding-right: 0.5rem" href="" ng-click="closeModal('ordervesselmodal')" class="pull-xs-right">
+                        <i class="ion-close-round"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll='false'>
+        <div class="row p-b-0 m-t-0 table-header-container">
+            <div class="col h-100 p-b-0 m-t-0">
+                <div class="row h-100 table-header">
+                    <div class="col p-x-0">
+                        <h5 class="m-a-0">Vessel Name</h5>
+                    </div>
+                    <div class="col p-x-0 text-xs-right">
+                        <h5 class="m-a-0">Gross Tonnage</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row table-row-container">
+            <div class="col h-100 p-b-0">
+                <ion-scroll class="h-100">
+                    <div ng-repeat="vessel in orderVessels|filter:searchVessel" ng-click="addVessel(vessel);closeModal('ordervesselmodal')" class="row table-row">
+                        <div class="col pos-relative p-x-0">
+                            <h5 class="m-a-0">{{vessel.VesselCode}}</h5>
+                        </div>
+                        <div class="col pos-relative p-x-0 text-xs-right">
+                            <h5 class="m-a-0">{{vessel.GrossTonnage}}</h5>
+                        </div>
+                    </div>
+                </ion-scroll>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

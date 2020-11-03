@@ -1,0 +1,13 @@
+<ion-view cache-view="false" class="{{ pageTitle == 'Delivered' ? 'disableUI' : '' }} pos-r-h100">
+    <ion-scroll zooming="true" direction="y" class='w-p-100' style="height: 100%">
+        <ion-list>
+            <ion-item ng-click='selectDestination(e,item)' class='bgWhite grayText' ng-repeat="item in inSiteList">
+                <div class="w-p-60 d-inline-block">{{item.Code}}</div>
+                <div class="w-p-20 d-inline-block text-xs-right">{{item.Distance | number:2}} miles</div>
+            </ion-item>
+            <center>
+                <p class="fs-2x" ng-if="inSiteList.length==0">No items available.</p>
+            </center>
+        </ion-list>
+    </ion-scroll>
+</ion-view>

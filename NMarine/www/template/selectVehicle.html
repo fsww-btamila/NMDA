@@ -1,0 +1,9 @@
+<ion-popover-view>
+    <ion-content>
+        <div class="list">
+            <div class="item" ng-repeat="vehicle in vehicles" ng-click="addVehicle(vehicle.Descr);hidepopover('vehiclepopover')">
+                {{vehicle.Descr}}
+            </div>
+        </div>
+    </ion-content>
+</ion-popover-view>

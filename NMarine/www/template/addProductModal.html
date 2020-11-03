@@ -1,0 +1,63 @@
+<ion-modal-view class="addOrderModal add-order">
+  <ion-view cache-view="false">
+    <div class="content-add-order">
+      <div class="row edit-order-wrapper h-100">
+        <div class="h-100" style="width: 100%">
+          <div class="header-order-list">
+            <p>Order Item List</p>
+            <p class="count">{{OrderList.Orders.OrderItems.length}}</p>
+          </div>
+          <order-pane class="disableEdit" delete-item="deleteItem()" show-delete="true" item-list="OrderList.Orders.OrderItems" order="OrderList.Orders" show-billing="true" current-item="currentItem" enable-shipping="enableShipping" enable-delivery="enableDelivery" active-action="activeAction" process-items="processItems(item)" route-item="routeItem()"></order-pane>
+        </div>
+      </div>
+      <div class="col col-80 h-100 list-product">
+        <div class="row h-11 p-a-0" ng-click="a=true">
+          <div class="col p-a-0">
+            <div class="item-input-inset">
+              <h3>Edit Order</h3>
+              <md-input-container class="md-no-float md-block input-component search-input">
+                <input ng-model="prdSearch.searchText" type="text" autocomplete="off" focus-me="a" id="prd_srch" >
+              </md-input-container>
+            </div>
+          </div>
+        </div>
+        <div class=" row prdHead p-b-0 m-t-0" style="width:100%; height: 9%">
+          <div class="col-40 prdCode" style="color: #5a5a5a;"> Product Code </div>
+          <div class='col-40 textLeft prdDesc' style="color: #5a5a5a;"> Description </div>
+          <div class='col-20 textLeft prdUOM' style="color: #5a5a5a;"> UOM </div>
+        </div>
+        <div class="row h-80 p-a-0 m-t-0">
+          <div class="col h-100 p-a-0">
+            <ion-scroll class="h-100">
+              <div class="row prdTable" ng-class="{'selectedProduct': product.MasterProdID == productSelect.MasterProdID}" ng-repeat="product in products" ng-click="selectedProduct(product)">
+                <div class="col-40 ellipsis prdCode"><i class='iconAbsolute grayText bigIcon iconSpaceRight' ng-class="(product.IsPackaged==='Y')?'ion-soup-can':(product.IsBillable=='Y')?'ion-cash':'ion-waterdrop'"></i><span>{{product.Code}}</span></div>
+                <div class='col-40 ellipsis textLeft prdDesc'> {{product.Descr}}</div>
+                <div class='col-20 ellipsis textLeft prdUOM'> {{product.OnCountUOM || product.BIUOM}}</div>
+              </div>
+              <ion-infinite-scroll ng-if="moreData" immediate-check='false' on-infinite="loadMore()"></ion-infinite-scroll>
+            </ion-scroll>
+          </div>
+        </div>
+      </div>
+      <div class="col shortcuts-panel">
+        <span class='shortcut grayText'>Shortcuts</span>
+        <div class="row h-89 p-a-0 m-t-0">
+          <div class="col h-100 p-a-0">
+            <ion-scroll class="h-100">
+              <div ng-repeat="shortcut in shortcuts">
+                <div ng-click="setCurrentItemfromShortcut($index);closeModal('addmodal');openModal('quantitymodal')" class="button icon-left button-small button-dark shortcut-item" ng-class="(shortcut.IsPackaged==='Y')?'ion-soup-can':(shortcut.IsBillable=='Y')?'ion-cash':'ion-waterdrop'" style="font-size:18px">
+                  {{shortcut.Code}}
+                  <span>{{shortcut.Descr}}</span>
+                </div>
+              </div>
+            </ion-scroll>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-control-buttons" style="z-index:12; position: relative;">
+      <div class="action-button" ng-click="closeModal('addmodal')">Cancel</div>
+      <div class="action-button" id="prd_add" ng-click="processItemAddtion(productSelect)">Add</div>
+    </div>
+  </ion-view>
+</ion-modal-view>

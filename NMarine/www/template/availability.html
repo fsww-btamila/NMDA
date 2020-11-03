@@ -1,0 +1,61 @@
+<ion-view class="{{ pageTitle == 'Delivered' ? 'disableUI' : '' }}">
+    <div ng-hide="true" class="row p-a-0">
+        <div class="col">
+            <md-input-container style="min-width: 150px;" class="m-b-0 pull-xs-right m-t-10">
+                <label class="m-b-0">Selected Site</label>
+                <md-select ng-model="availSite">
+                    <md-option ng-click="getAvailability(insite)" ng-repeat="insite in insites" value="{{insite.Code}}" ng-selected="insite.Code == general.INSiteCode">
+                        {{insite.Code}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+    </div>
+    <div class="row m-a-0 p-a-0 avail-header">
+        <div class="col p-a-0">
+            <ion-list>
+                <ion-item class="card p-x-2 m-a-0">
+                    <div class="row row-top item-text-wrap">
+                        <div class="col ellipsis">
+                            <p class="m-a-0 d-block fs-18x">Code</p>
+                        </div>
+                        <div class="col ellipsis">
+                            <p class="m-a-0 fs-18x">Description</p>
+                        </div>
+                        <div class="col ellipsis right">
+                            <p class="m-a-0 fs-18x">Available Quantity</p>
+                        </div>
+                        <div class="col col-20 ellipsis right">
+                            <p class="m-a-0 text-white">From Site</p>
+                            </br>
+                            <p class="m-a-0 text-white text-xs-left">{{general.INSiteCode}}</p>
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+    </div>
+    <div class="row m-t-0 h-60 p-a-0">
+        <div class="col h-100 p-a-0">
+            <ion-scroll class="orderPane availabilityList" style="height: 100%">
+                <ion-list>
+                    <ion-item class="p-x-2 m-y-0 bdr-0" ng-repeat="product in availabilityList">
+                        <div class="row row-top">
+                            <div class="col ellipsis">
+                                <p class="m-a-0 d-block">{{product.Code}}</p>
+                            </div>
+                            <div class="col ellipsis">
+                                <p class="m-a-0">{{product.Descr}}</p>
+                            </div>
+                            <div class="col ellipsis right">
+                                <p class="m-a-0">{{product.OnHand | number:2}} {{product.OnHandUOM}}</p>
+                            </div>
+                            <div class="col col-20 ellipsis right">
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </ion-scroll>
+        </div>
+    </div>
+</ion-view>

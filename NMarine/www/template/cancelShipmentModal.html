@@ -1,0 +1,41 @@
+<ion-modal-view class="addOrderModal transferModal processModal">
+    <ion-content scroll="false">
+        <ion-scroll style="height:80%;width:100%;">
+            <div class="row">
+                <div class="col col-60" ng-if="activeAction == 'Ship'">
+                    Cancel Shipment
+                </div>
+                <div class="col col-60" ng-if="activeAction == 'Deliver'">
+                    Cancel Delivery
+                </div>
+                <div class="col col-offset-10 closeBtnDiv">
+                    <button class="button button-icon ion-close-circled modal-close" ng-click="cancelShipmentModal.hide()"></button>
+                </div>
+            </div>
+            <br/>
+            <div class="center">
+                <div class="row ">
+                    <div class="col ">
+                        How do you wish to proceed ?
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col" ng-if="isBiuom==false">
+                        <a class="button affirm" ng-click="handleCancellation()" ng-if="activeAction == 'Ship' && unCancellItem==false">Cancel Shipment of Item</a>
+                        <a class="button affirm" ng-click="handleCancellation()" ng-if="activeAction == 'Deliver' && unCancellItem==false">Cancel Delivery of Item</a>
+                        <a class="button affirm" ng-click="handleUnCancellation()" ng-if="unCancellItem == true">Undo Cancellation of Item</a>
+                        <a class="button col-offset-10 affirm" ng-click="cancelShipmentModal.hide();reprocessItem()" ng-if="unCancellItem==false">Reprocess Item</a>
+                        <a class="button col-offset-10 affirm" ng-click="cancelShipmentModal.hide();editItem()" ng-if="((order.OrderHdr.firstDoiComplete === true) && ($root.viewState.current.name == 'shiporder.summary' || ($root.viewState.current.name == 'shiporder.billing' && currentEntry.quantityShipped) || ($root.viewState.current.name == 'shiporder.packaged' && currentEntry.quantityShipped)))">Edit Item</a>
+                        <a class="button col-offset-10 affirm" ng-click="cancelShipmentModal.hide();unsetPkg()">Delete Item</a>
+                    </div>
+                    <div class="col" ng-if="isBiuom==true">
+                        <a class="button col-offset-10 affirm" ng-click="cancelShipmentModal.hide();resetPkgItem()" >Reprocess Item</a>
+                        <a class="button col-offset-10 affirm" ng-click="cancelShipmentModal.hide();editItem()" ng-if="((order.OrderHdr.firstDoiComplete === true) && ($root.viewState.current.name == 'shiporder.summary' || ($root.viewState.current.name == 'shiporder.billing' && currentEntry.quantityShipped) || ($root.viewState.current.name == 'shiporder.packaged' && currentEntry.quantityShipped)))">Edit Item</a>
+                        <a class="button col-offset-10 affirm" ng-click="cancelShipmentModal.hide();unsetPkg()">Delete Item</a>
+                    </div>
+                </div>
+            </div>
+        </ion-scroll>
+    </ion-content>
+</ion-modal-view>

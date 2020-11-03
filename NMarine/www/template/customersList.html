@@ -1,0 +1,85 @@
+<ion-view cache-view="false" view-title="" class='headerBar'>
+    <div class="bar bar-header headerColor">
+        <h1 class="title"></h1>
+        <div class="item-input-inset searchData headerColor" ng-if="showSearch" ng-click="a=true">
+            <a class="button button-clear icon ion-android-arrow-back iconColor addMargin" ui-sref='orders'></a>
+            <label class="item-input-wrapper searchSet">
+                <i class="icon ion-ios-search placeholder-icon"></i>
+                <input type="search" placeholder="Search Customers" ng-model="cstSearch.searchText" class="searchInput" focus-me="a">
+            </label>
+            <i class="icon ion-close-circled placeholder-icon clearCustomersSearch" ng-if="cstSearch.searchText" ng-click="cstSearch.searchText = ''"></i>
+            </a>
+            <a href='#' class="button button-clear icon ion-record removePadding internet"></a>
+        </div>
+        <div class="dash-main">
+            <div class="user-dash"><span class='uinfo'><i class="ion-person uname"></i><span>{{loginData.uname}}</span></span>
+                <span class='uinfo'><i class="ion-home insite"></i><span>{{selectedSite.Code}}</span></span>
+                <span class="uinfo text-truncate app-version"><small>V {{$root.appVersion}}</small></span>
+            </div>
+            <div>
+                <a href='' class="add-order-rgtbtn ion-android-more-vertical" ng-click="$root.openSettingsPopover($event,'bySettings')"></a>
+            </div>
+        </div>
+    </div>
+    <ion-content scroll='false' class="padding has-header">
+        <div class="button-bar buttonBar buttonBar1">
+            <a class="button button-clear refineBtnColor eventsNone">Refine : </a>
+            <a class="button button-small ion-android-contact" ng-click="openPopover($event,'byContact')" ng-click="clicked(2)" ng-class="{'active': var == 2}">&nbsp;Contact</a>
+            <a class="button button-small ion-social-usd" ng-show='false' ng-click="openPopover($event,'byCredit')" ng-click="clicked(3)" ng-class="{'active': var == 3}">&nbsp;Credit</a>
+        </div>
+        <a href='#' class="button button-clear grayText ion-close-circled pullLeft fontxxxl" ng-click="initSearchData();"></a>
+        <a href='#' class="button button-clear grayText pullRight fontxxl" ng-click="openPopover($event,'bySorting');"><i class='ion-arrow-up-c'></i><i class='ion-arrow-down-c'></i></a>
+        <ion-scroll zooming="true" direction="y" class='orderListTablesWH' height="600px">
+            <table class="ordersTable customersTable">
+                <tr class='ordersTableHeader'>
+                    <th>S.No</th>
+                    <th>Acc.No</th>
+                    <th>Customer Name</th>
+                    <th>Customer Description</th>
+                    <th>DBA</th>
+                </tr>
+                <tr ng-if='listOfCustomers' ng-repeat="item in listOfCustomers | orderBy:sortType:sortReverse  | filter : {$:searchText.all}  | filterMultiple:{CustomerName: searchText.addressArray,dba:searchText.dbaArray}" ng-click='openOrderDetailsModal(item,$index,$event)' class='cursor'>
+                    <td>
+                        <span class='blockSpan'><h5>{{item.StandardAcctNo}}</h5></span>
+                        <span class='blockSpan'><h6 ng-show="item.FormattedAddress!='null'"><i class="ion-android-map"></i>{{item.FormattedAddress}}</h6></span>
+                    </td>
+                    <td>
+                        <span class='blockSpan'><h6><i class="ion-briefcase"></i>{{item.CustomerName}}</h6></span>
+                        <span class='blockSpan'><h6 ng-show="item.LongDescr!='null'"><i class="ion-document-text"></i>{{item.LongDescr}}</h6></span>
+                    </td>
+                    <td>
+                        <h6 ng-show="item.DBAName!='null'">{{item.DBAName}}</h6></td>
+                </tr>
+            </table>
+            <ion-infinite-scroll ng-if="moreData" immediate-check='false' on-infinite="loadMore()" distance="5%"></ion-infinite-scroll>
+        </ion-scroll>
+        <script id="my-popover.html" type="text/ng-template">
+            <ion-popover-view class='popOverSize'>
+                <ion-content>
+                    <ion-list>
+                        <ion-checkbox ng-if="filterBy == 'byContact'" ng-click="filterBySearch(item,'contact',listOfCustomers)" ng-model='item.isContactSelected' class='' ng-repeat="item in listOfCustomers | unique: 'ContactName'"><span class=''>{{item.CustomerName}}</span>
+                        </ion-checkbox>
+                        <ion-checkbox ng-if="filterBy == 'byCredit'" ng-click="filterBySearch(item,'credit',listOfCustomers)" ng-model='item.isCreditSelected' class='' ng-repeat="item in listOfCustomers | unique: 'CreditLimitAmt'"><span class=''>{{item.CreditLimitAmt}}</span>
+                        </ion-checkbox>
+                    </ion-list>
+                    <ion-list ng-if="filterBy == 'bySorting'" class='sortByDiv'>
+                        <div>
+                            <ion-item ng-click="sortOrders('StandardAcctNo',sortReverse)">Account No
+                                <i ng-class="{'ion-arrow-down-b':sortType == 'StandardAcctNo' && sortReverse,'ion-arrow-up-b': sortType == 'StandardAcctNo' && !sortReverse}"></i>
+                            </ion-item>
+                            <ion-item ng-click="sortOrders('CustomerName',sortReverse)">Customer Name
+                                <i ng-class="{'ion-arrow-down-b':sortType == 'CustomerName' && sortReverse,'ion-arrow-up-b': sortType == 'CustomerName' && !sortReverse}"></i>
+                            </ion-item>
+                            <ion-item ng-click="sortOrders('LongDescr',sortReverse)">Long Description
+                                <i ng-class="{'ion-arrow-down-b':sortType == 'LongDescr' && sortReverse,'ion-arrow-up-b': sortType == 'LongDescr' && !sortReverse}"></i>
+                            </ion-item>
+                            <ion-item ng-click="sortOrders('FormattedAddress',sortReverse)">By Address
+                                <i ng-class="{'ion-arrow-down-b':sortType == 'FormattedAddress' && sortReverse,'ion-arrow-up-b': sortType == 'FormattedAddress' && !sortReverse}"></i>
+                            </ion-item>
+                        </div>
+                    </ion-list>
+                </ion-content>
+            </ion-popover-view>
+        </script>
+    </ion-content>
+</ion-view>

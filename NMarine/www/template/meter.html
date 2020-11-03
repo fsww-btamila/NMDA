@@ -1,0 +1,77 @@
+<ion-view>
+    <ion-content class="innerWidth meteredReading">
+        <div class="readingMeter h-100">
+            <div ng-if="meter=='stMeter'" class="row h-100" ng-form="stMeterForm">
+                <div class="col">
+                    <div class="d-inline-block horizontal-centered m-t-3">
+                        <p class="titleNew mtrTitle">Start Meter Date/Time</p>
+                        <ng-date selected-dt="currentMeter[meter].datetime">
+                    </div>
+                </div>
+                <div class="btn-btm-rgt">
+                    <button ng-disabled="stMeterForm.stMeterDate.$invalid" ng-click="setMeterState(meter)" class="big-rd-btn button button-icon ion-checkmark-round mtrDone hide-on-keyboard-open"></button>
+                </div>
+            </div>
+            <div ng-if="meter=='endMeter'" class="row m-t-0" ng-form="endMtrForm">
+                <div class="col p-a-0">
+                    <div class="row pkg-bgd f-s-22 padding10y pos-relative">
+                        <div class="col">
+                            Capture Meter Reading
+                        </div>
+                        <button ng-click="takePicture()" class="button mtr-tkt-btn">
+                            <i ng-class="(currentMeter.imgId) ? 'icon ion-loop' : 'icon ion-android-camera' "></i>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col titleNew mtrTitle m-b-1">
+                            <span>{{activeAction == 'Ship' ? 'Shipped': 'Delivered'}} Quantity : </span> <span ng-show="currentMeter.stMeter.reading && currentMeter.endMeter.reading" class="meter-Qty">{{Math.abs(currentMeter.stMeter.reading - currentMeter.endMeter.reading) | number: 2}} {{activeAction == 'Ship' ? (currentItem.OnCountUOM || currentItem.BIUOM) : (currentItem.OnCountUOM || currentItem.BIUOM) }} </span>
+                        </div>
+                    </div>
+                    <div class="row m-t-1rem">
+                        <div class="col-50 m-l-1">
+                            <form name="endMeterForm" class="meter-form">
+                                <md-input-container class="md-no-float md-block" ng-click="a=true">
+                                    <label class="col fs-23x meterLbl md-no-float">{{meterLabel.endMeter || 'End Meter'}}</label>
+                                    <input  focus-me="true" ng-blur="checkMeterStatus(currentMeter)" class="bb-s-1" type="tel" placeholder="Enter Reading" name="endMeter" pattern="^[\-]?\d+(\.\d{1,2})?" required ng-model="currentMeter.endMeter.reading" valid-max="15" id="end-meter" >
+                                    <div ng-messages="endMeterForm.endMeter.$error" role="alert" multiple>
+                                        <div ng-show="!endMeterForm.endMeter.$valid" ng-message="required" class="my-message">
+                                            Please enter valid input
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container class="md-no-float md-block" ng-click="b=true">
+                                    <input  focus-me="b" ng-blur="checkMeterStatus(currentMeter)" class="bb-s-1" type="tel" placeholder="Enter Reading" name="startMeter" pattern="^[\-]?\d+(\.\d{1,2})?" required ng-model="currentMeter.stMeter.reading" valid-max="15" id="st-meter">
+                                    <label  class="col fs-23x meterLbl md-no-float">{{meterLabel.stMeter || 'Start Meter'}}</label>
+                                    <div ng-messages="endMeterForm.startMeter.$error" role="alert" multiple>
+                                        <div ng-show="!endMeterForm.startMeter.$valid" ng-message="required" class="my-message">
+                                            Please enter valid input
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container class="md-no-float md-block" ng-click="c=true">
+                                    <label class="col fs-23x md-no-float">End Meter Date/Time </label>
+                                    <ng-date selected-dt="currentMeter.endMeter.datetime" set-after="{{currentMeter.stMeter.datetime}}" focus-me="c">
+
+                                </md-input-container>
+                                <md-input-container class="md-no-float md-block" ng-click="d=true">
+                                    <label   class="col fs-23x meterLbl md-no-float">{{meterLabel.tNumber || 'Ticket Number'}}</label>
+                                    <input  focus-me="d" class="bb-s-1" type="text" placeholder="Enter Ticket Number" name="ticketNumber" pattern="^[a-zA-Z0-9]{1,12}$" ng-model="currentMeter.ticketNumber">
+                                    <div ng-messages="endMeterForm.ticketNumber.$error" role="alert" multiple>
+                                        <div ng-show="!endMeterForm.ticketNumber.$valid" ng-message="required" class="my-message">
+                                            Please enter valid input
+                                        </div>
+                                    </div>
+                                </md-input-container>
+                            </form>
+                        </div>
+                        <div class="col-50">
+                            <img class="meter-pic" ng-show="imgURI !== undefined" ng-src="{{imgURI}}" ng-click="takePicture()">
+                        </div>
+                    </div>
+                    <div class="btn-btm-rgt">
+                        <a ng-show="meter=='endMeter'" id="meterfinalclick" ng-click="setMeterState(meter)" class="big-rd-btn button button-icon ion-checkmark-round roundDone hide-on-keyboard-open" ng-disabled="currentMeter.stMeter.reading == null || currentMeter.endMeter.reading == null  || endMtrForm.endMeterDate.$invalid || !imgURI || !currentMeter.endMeter.datetime || endMeterForm.ticketNumber.$invalid"></a>
+                    </div>
+                </div>
+            </div>
+    </ion-content>
+</ion-view>

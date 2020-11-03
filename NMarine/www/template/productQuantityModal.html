@@ -1,0 +1,66 @@
+<ion-modal-view class="addOrderModal quality">
+  <form name='QtyForm' ng-submit="submitted=true; QtyFormModel(QtyForm.$valid)" novalidate>
+    <div class="productbgd">
+      <div class="row top-info"> 
+        <div style="height:29px;line-height: 38px;">
+        <p ng-class="(currentItem.IsBillable=='Y') ? 'col-10':'col-5'">
+          <i class='grayText bigIcon' ng-class="(currentItem.IsPackaged==='Y')?'ion-soup-can':(currentItem.IsBillable=='Y')?'ion-cash':'ion-waterdrop'"></i>
+        </p>&nbsp;</div> 
+        <div class="col pqm-code ellipsis textLeft">
+            <div class="pqm-Hdr">{{currentItem.Code}} {{(cod)?currentItem.UnitPrice:''}} - {{currentItem.Descr}}</div> 
+        </div>
+
+        <button class="button button-icon ion-close-round modal-close closeModal whiteText fs-2x" ng-click="$event.preventDefault();closeModal('quantitymodal')"></button>
+      </div>
+    </div>
+    <div class="productbgd second">
+      <div class="row">
+        <div class="col">
+          <span>Quantity:</span>
+          <md-input-container class="md-no-float md-block input-component">
+            <label class="md-no-float">Quantity</label>
+            <input valid-max="15"  name='totQty' valid-type="whole" type="text" ng-model="numericIn.quantity" id="quantityInput" class="highlightQty" required>
+          </md-input-container>
+        </div>
+        <div class="col col-uom">
+          <span>UOM:</span>
+          <md-input-container class="md-no-float md-block input-component">
+            <label class="md-no-float">UOM</label>
+            <input name='UOM' id="UOM" ng-disabled="true" type="text" ng-model="currentItemUOM">
+          </md-input-container>
+        </div>
+      </div>
+    </div>
+    <div class="productbgd second">
+      <div class="row" >
+        <div class="col">
+          <span ng-click="a=true">Notes:</span>
+          <md-input-container class="md-no-float md-block input-component">
+            <label for="iNotes" class="md-no-float">Item Notes</label>
+            <input type="text" id="iNotes" ng-model='currentItem.Notes' focus-me="a">
+          </md-input-container>
+        </div>
+      </div>
+    </div>
+    <div class="productbgd second">
+      <div class="row" >
+        <div class="col">
+          <span ng-click="b=true">PO Number:</span>
+          <md-input-container class="md-no-float md-block input-component">
+            <label for="poNumber" class="md-no-float">Item PO Number</label>
+            <input type="text" id="poNumber" ng-model='currentItem.PONo' focus-me="b" closekeyboard>
+          </md-input-container>
+        </div>
+      </div>
+    </div>
+    <div class="col numeric-keypad">
+      <numeric-pad float="false" max="15" fractions="false" current-item="currentItem" quantity="numericIn.quantity"></numeric-pad>
+    </div>
+        <div class="col bottom-control-buttons">
+            <input type='submit' class="action-button" value='Add' />
+            <a ng-disabled="!itemExists()" class="action-button" ng-click="deleteItem();closeModal('quantitymodal')">Delete</a>
+            <div class='clearfix' />
+        </div>
+    </div>
+  </form>
+</ion-modal-view>

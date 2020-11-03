@@ -1,0 +1,187 @@
+<ion-view class='printTktDiv' cache-view="false" view-title="Delivery Ticket - Preview">
+  <div>
+    <ion-header-bar class="bar bar-header headerColor" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+      <a class="button button-icon removePadding" ng-click="goBack()"><i class="icon ion-android-arrow-back iconColor f-s-30"></i></a>
+      <h1 class="title whiteText text-xs-center">Delivery Ticket</h1>
+      <a ng-if="order.signExists && !hidePrintIcon" class="button button-icon removePadding" ng-click="generatePreview()"><i class="icon ion-android-print iconColor f-s-30"></i></a>
+    </ion-header-bar>
+    <ion-content delegate-handle="deliveryContent" scroll='true' style="font-family: arial;" id="deliveryTicket">
+      <form novalidate name="printForm" class='printForm'>
+        <div style="display: table;width:100%; margin:20px 0px;">
+
+          <table id="newHead" style="font-size:12px; width:100%;">
+            <tr>
+              <td colspan="4">
+                <div>
+                  <h1 style="text-align:center; font-size: 30px; margin:0px 100px 0px 0px; font-family:Arial !important">Delivery Confirmation</h1>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="width:60%;" ng-style="{'vertical-align':logoActive=='Y' ? 'baseline' : 'middle'}">
+                <div style="float:left;" ng-style="{'margin-left':logoActive=='Y' ? '50px' : '150px'}">
+                  <div ng-if="logoActive=='Y'" >
+                    <p style="display: block; text-align: center;"><img style="width: 200px;" src="{{companyImage}}" /></p>
+                  </div>
+                  <div>
+                    <p style="display:block; width:100%; text-align: center;">
+                      {{companyName}}
+                      <br>
+                      <span>{{CustomerNo}}</span>
+                    </p>
+                  </div>
+                </div>
+              </td>
+              <td style="width:40%;">
+                <div  style="float:left;">
+                  <div ng-if="dTOrderList.OrderHdr.InternalTransferOrder=='Y'">
+                    <span>Destination Code :</span> {{dTOrderList.OrderHdr.ToSiteCode}}
+                  </div>
+                  <div>
+                    <span>Order No :</span> {{dTOrderList.OrderHdr.OrderNo}}
+                  </div>
+                  <div>
+                    <span>Delivery Date : </span> {{order.OrderHdr.processOrginalTime | date:'MM/dd/yyyy HH:mm'}}
+                  </div>
+                  <div ng-if="dTOrderList.OrderHdr.CustomerNumber">
+                    <span>Customer No : </span> {{dTOrderList.OrderHdr.CustomerNumber}}
+                  </div>
+                  <div ng-if="dTOrderList.OrderHdr.CustomerNumber">
+                    <span>Customer Name : </span> {{dTOrderList.OrderHdr.CustomerName | escString}}
+                  </div>
+                  <div ng-if="customerAddress">
+                    <span>From Site : </span> {{dTOrderList.OrderHdr.INSiteCode}}
+                  </div>
+                  <div ng-if="dTOrderList.OrderHdr.PONo">
+                    <span>Customer PO : </span> {{dTOrderList.OrderHdr.PONo}}
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr ng-if="vesselStr" style="width:100%; border-top:1px solid #333;">
+              <td colspan="2">
+                  <div style="padding-left:10px;">{{vesselStr}}</div>
+              </td>
+            </tr>
+            <tr ng-if="customerAddress" style="width:100%; border-bottom:1px solid #333; border-top:1px solid #333; ">
+              <td colspan="2">
+                <div style="float:left; padding-left:10px;">{{customerAddress}}</div>
+              </td> 
+            </tr>
+          </table>
+
+          <table style="width:100%" id="newprint">
+            <tr id="pdc-hdr">
+              <td style="padding-left:10px;">Quantity</td>
+              <td>Item</td>
+              <td>Description</td>
+              <td>Unit</td>
+            </tr>
+            <tr id="pdc-content" ng-repeat="items in orderItems | orderBy:'Code'" table-row rows="items"></tr>
+
+          </table>
+          <div id="sigTab" style="display:block; height:170px; overflow:hidden; width:100%">
+
+            <table style="width:100%;">
+              <tr class="additionalItem" ng-if="item.HazmatDesc">
+                  <td>
+                      <p style="line-height: 2px;">{{item.HazmatDesc}}</p>
+                  </td>
+              </tr>
+
+              <tr>
+                <td colspan="3" style="border-bottom: 1px solid #000;">
+                  <label ng-if="!onlyPrint"  for="lastname" style="padding-left: 10px;">Print Name: </label>
+                  <input ng-if="!onlyPrint" class="pic-name" id="receiver-name"  ng-model="order.Dcname" placeholder="Enter Receiver Name" style="font-size: 12px; margin-bottom:10px;" />
+                  <label ng-if="onlyPrint" style="width: 100%; font-size: 12px; margin-bottom:10px; padding-left: 10px; display: block;">Print Name: {{order.Dcname}}</label>
+                </td>
+              </tr>
+              <tr style="border-bottom: 1px solid #000">
+                <td style="width: 33%; text-align: left; margin: 5px 0px;">
+                  <div class="sign-wrapper" style="display: block; margin:10px 0px;">
+                    <img ng-src='{{DelSign}}' onerror="this.src='img/sign.png'" style="margin-left: 10px; width: 50%; height:70px; border: 1px solid silver;" class="{{ (order.Dcname!='') ? 'delSignImg' : 'imageDisable delSignImg'}}" ng-click="printDelSign()" />
+                  </div>
+                </td>
+                <td style="width: 23%; text-align: left;">
+                  <span style="position: relative;margin-top: 40px; font-size: 13px; font-family:Arial !important; ">{{(order.signTime || signTime || currdate) | date:'MM/dd/yyyy HH:mm'}}</span>
+                </td>
+                <td style="width: 43%; text-align: left; ">
+                  <div style="position: relative; margin-top: 40px; font-size: 13px; font-family:Arial !important; width: 75%;" ng-if="orderHdrNotes">{{orderHdrNotes}}</div>
+                </td>
+              </tr>
+              <tr style="border-bottom: 1px solid #000">
+                <td style="width: 33%; text-align: left;">
+                  <p style=" margin-left: 10px;">Received By</p>
+                </td>
+                <td style="width: 23%; text-align: left;">
+                  <p>Date</p>
+                </td>
+                <td style="width: 43%; text-align: left;">
+                  <p ng-if="orderHdrNotes">Notes</p>
+                </td>
+              </tr>
+              <tr class="additionalItem" style="font-size: 10px; font-family:Arial !important;" ng-if="docMessages.length>0">
+                <td style="margin-top: 0px; padding-left: 10px; font-weight: bold; width: 100%; display: inline-block;">
+                  <div ng-repeat="data in docMessages">
+                    <p style="line-height: 5px;display:block" ng-if="(data.MessageDescr1 && data.MessageDescr1!='null')">{{data.MessageDescr1}}</p>
+                    <p style="line-height: 5px;display:block" ng-if="(data.MessageDescr2 && data.MessageDescr2!='null')">{{data.MessageDescr2}}</p>
+                    <p style="line-height: 5px;display:block" ng-if="(data.MessageDescr3 && data.MessageDescr3!='null')">{{data.MessageDescr3}}</p>
+                    <p style="line-height: 5px;display:block" ng-if="(data.MessageDescr4 && data.MessageDescr4!='null')">{{data.MessageDescr4}}</p>
+                  </div>
+                </td>
+              </tr>
+            </table>
+        </div>
+
+        </div>
+      </form>
+    </ion-content>
+    <button ng-hide="!order.signExists" id="finalclick" ng-click="finishOrder()" class="big-rd-btn button button-icon ion-checkmark-round orderDone hide-on-keyboard-open pull-xs-bottom"></button>
+    <button ng-hide="((order.signExists) ||(order.Dcname==''))" id="printclick" ng-click="printDelSign()" style="background-color: #ff7800;" class="big-rd-btn  button button-icon ion-ios-compose-outline orderDone hide-on-keyboard-open pull-xs-bottom"></button>
+  </div>
+  <script id="delSignModal.html" type="text/ng-template">
+    <div class="modal modalCustom" style="width: 90%; height: 90%; top: 5%; left: 5%; right: 5%; bottom: 5%;">
+      <content has-header="false" padding="true" class="contentData" scroll='true'>
+        <button class="button button-icon ion-close-circled modal-close closeModal" ng-click='closeDelSign()'></button>
+        <div class='DoiModalBody'>
+          <h4 ng-if='isDoiQus' class='qusTitle'> </h4>
+          <div class="row horizontal-centered" style="width: 620px">
+            <div class="col">
+              <p class="pull-xs-right m-a-0">{{(order.signTime || signTime) | date:'MM/dd/yyyy HH:mm'}}</p>
+            </div>
+          </div>
+          <div id="signature-pad" class="m-signature-pad signDiv">
+            <div class="m-signature-pad--body">
+              <canvas width="900" height="300" id='signPadDel' class="signaturePad" ng-class="signPad.disableSignPad?'disableUI':''"></canvas>
+            </div>
+            <div class="row">
+              <div class="horizontal-centered canvasFooter">
+                <div class="col">
+                  <div class="row p-a-0">
+                    <div class="col-33 p-a-0">
+                      <div class="description text-xs-left"><i class="ion-person uname"></i> {{order.Dcname}}</div>
+                    </div>
+                    <div class="col p-a-0 description text-xs-right">
+                      Sign Above to Confirm Delivery
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="m-signature-pad--footer">
+              <div class='btnSet'>
+                <button class='button btnColor' id="Submit" ng-click="viewDT()">Submit</button>
+                <button type="button" class="button clear" ng-click='clearDelSign()'>Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </content>
+    </div>
+    <div class='' id="blank-signature-pad" style="display:none;">
+      <div class="m-signature-pad--body">
+        <canvas width="900" height="300" id='blank'></canvas>
+      </div>
+    </div>
+  </script>
+</ion-view>

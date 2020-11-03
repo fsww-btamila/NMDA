@@ -1,0 +1,81 @@
+<ion-view cache-view="false" view-title="" class='headerBar'>
+  <div class="bar bar-header doiHeader">
+    <a ng-hide="true" class="button button-icon" ng-click="navBack()"><i class="icon ion-android-arrow-back iconColor f-s-30"></i></a>
+    <h4 class="title whiteText">Please Complete DOI for below Orders</h4>
+  </div>
+  <ion-content class="doi-content-list">
+    <div ng-if='shiftChangeOrders' ng-repeat="order in shiftChangeOrders track by $index" class="row m-t-0 order-listing" on-tap='processShiftChangeForOrder(order)'>
+      <div class="col col-40  bdr-b-1">
+        <div class="row p-a-0">
+          <div class="col col-33 text-xs-left">
+            <h5 class="orderListNum fs-16x">{{order.OrderHdr.OrderNo}}</h5>
+          </div>
+          <div class="col col-27 fs-16x text-truncate">
+            <div ng-show="order.OrderHdr.currentUser">
+              <span class="uinfo text-truncate"><i class="ion-person uname"></i>
+                <span class="ng-binding">{{order.OrderHdr.currentUser}}</span>
+              </span>
+            </div>
+          </div>
+          <div class="col fs-16x"><i class="ion-calendar"></i> {{order.OrderHdr.OrderDtTm | date:'MM/dd/yyyy hh:mma'}}</div>
+        </div>
+        <div class="row p-a-0">
+          <div class="col" ng-init="order.lastNote = (order.OrderHdr.OrderNotes[(order.OrderHdr.OrderNotes.length)-1]).Note">
+            {{order.lastNote}}
+          </div>
+        </div>
+      </div>
+      <div class="col col-40 bdr-b-1">
+        <div class="row p-a-0">
+          <div class="col fs-16x text-truncate">
+            <i ng-class="{'ion-briefcase': order.OrderHdr.CustomerName, 'ion-arrow-swap': !order.OrderHdr.CustomerName}"></i> {{order.OrderHdr.CustomerName|| order.OrderHdr.ToSiteCode}}
+          </div>
+          <div class="col text-truncate" ng-show="order.OrderHdr.ReceivingContactName">
+            <i class="ion-person"></i> {{order.OrderHdr.ReceivingContactName}}
+          </div>
+        </div>
+        <div class="row p-a-0">
+          <div class="col">
+            <ol class="cd-breadcrumb p-a-0">
+              <li ng-if="(order.OrderHdr.Status=='Open' || order.OrderHdr.Status=='Shipping in Progress') || (order.OrderHdr.Status=='Delivery in Progress' &&  order.OrderHdr.Vehicle.Descr=='On Site Pickup')">
+                <a>
+                <i class="ion-home"></i> {{order.OrderHdr.INSiteCode}}
+                </a>
+              </li>
+              <li ng-if="(order.OrderHdr.Status=='Open' || order.OrderHdr.Status=='Shipping in Progress' || order.OrderHdr.Status=='En Route' || order.OrderHdr.Status=='Delivery in Progress') && order.OrderHdr.Vehicle.EnforceShipmentMarineApp != 'N'">
+                <a>
+                <i class="ion-android-boat"></i> {{order.OrderHdr.Vehicle.Descr ||'Unassigned'}}
+                </a>
+              </li>
+              <li ng-if="order.OrderHdr.Vehicle.EnforceShipmentMarineApp === 'N' && order.OrderHdr.Status=='Open'">
+                <a>
+                <!-- <span ng-class="{orderVessel:!$last}" ng-repeat="vessel in order.OrderHdr.Vessels"><i class="ion-android-boat"></i> {{vessel.VesselCode}}</span> -->
+                <span><i class="ion-android-boat"></i> {{order.OrderHdr.vesselStr}}</span>
+                <span ng-if="order.OrderHdr.Vessels.length==0">Unassigned</span>
+                </a>
+              </li>
+              <li ng-if="order.OrderHdr.Status=='En Route' || order.OrderHdr.Status=='Delivery in Progress' || order.OrderHdr.Status=='Delivered'">
+                <a ng-if="order.OrderHdr.InternalTransferOrder==='N'">
+                <!-- <span ng-if="!order.deliveryCodes || order.deliveryCodes.length==0"><i class="ion-android-boat"></i> {{order.OrderHdr.Vessels[0].VesselCode || 'Unassigned'}}</span> -->
+                <span ng-if="!order.deliveryCodes || order.deliveryCodes.length==0"><i class="ion-android-boat"></i> {{order.OrderHdr.vesselStr || 'Unassigned'}}</span>
+                <span ng-if="order.deliveryCodes && order.deliveryCodes.length>0"><i class="ion-android-boat"></i> {{order.deliveryCodes[order.deliveryCodes.length-1]}}<span ng-show="order.deliveryCodes.length>1">({{order.deliveryCodes.length-1}})</span></span>
+                </a>
+                <a ng-if="order.OrderHdr.InternalTransferOrder==='Y'">
+                <span><i class="ion-home"></i> {{order.OrderHdr.ToSiteCode}}</span>
+                </a>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="col bdr-b-1">
+        <div class="row p-a-0">
+          <div class="col fs-16x">
+            <span class="blockSpan"><i class="ion-information-circled"></i> {{order.OrderHdr.Status}}</span>
+            <span class="blockSpan" ng-show="order.OrderHdr.Destination.Code"> <i class="ion-ios-location"></i> {{order.OrderHdr.Destination.Code}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,125 @@
+<ion-view cache-view="false" class="{{ pageTitle == 'Delivered' ? 'disableUI' : '' }}">
+    <div class="pos-r-h100" ng-show="($root.isInternet && $root.online) && GPSFail==true">
+        <i class="icon ion-close-round placeholder-icon clearDestinationSearch" ng-if="(!OrderList.Orders.OrderHdr.Destination.Code)" ng-click="clearDestinationData()" ng-model="destinationData" ></i>
+        <div class='row searchLoc' ng-show='!OrderList.Orders.OrderHdr.Destination.Code'>
+            <div class="col">
+                <label class="item item-input">
+                    <i class="icon ion-search placeholder-icon"></i>
+                    <input type="search" id="Autocomplete" ng-autocomplete="result" details="details" options="options" ng-model="destinationData" placeholder="Search City,Address,Inventory Site or Location" class='destSearchText' app-go-button="locationChange()" ng-focus="disableTap()">
+                </label>
+                <a class="button button-icon icon ion-android-locate myLoc" ng-click='getMyLocation()' ng-show='!OrderList.Orders.OrderHdr.Destination.Code'></a>
+            </div>
+        </div>
+        <div ng-show='!OrderList.Orders.OrderHdr.Destination.Code' class="row m-a-0 destination-container">
+            <div class="col h-100">
+                <ion-tabs ng-show='(position && !OrderList.Orders.OrderHdr.Destination.Code) || (details && !OrderList.Orders.OrderHdr.Destination.Code)' class="tabs-icon-left tabs-positive destTabs">
+                    <ion-tab title="LIST" icon="ion-android-list" ui-sref="addorder.destination.list">
+                        <ion-nav-view class="pos-r-h100" name='destination-list'></ion-nav-view>
+                    </ion-tab>
+                    <ion-tab title="MAP" icon="ion-android-map" ui-sref="addorder.destination.map">
+                        <ion-nav-view class="pos-r-h100" name='destination-map'></ion-nav-view>
+                    </ion-tab>
+                </ion-tabs>
+            </div>
+        </div>
+        <div class="row" ng-if='OrderList.Orders.OrderHdr.Destination.Code'>
+            <div class="col selVessel">
+                <ion-list class='makeCenter'>
+                    <ion-item class='destList'>
+                        <div class="row">
+                            <div class="col col-10">
+                                <i class="icon ion-location f-s-25"></i>
+                            </div>
+                            <div class="col col-offset-5 col-30 text-truncate">
+                                {{OrderList.Orders.OrderHdr.Destination.Code}}
+                            </div>
+                            <div class="col">
+                                {{OrderList.Orders.OrderHdr.Destination.Descr}}
+                            </div>
+                            <div class="col-10 pull-right" ng-show="OrderList.Orders.OrderHdr.Status == 'Open' || OrderList.Orders.OrderHdr.Status == 'En Route'">
+                                <!-- <i class="ion-ios-trash f-s-30 pull-xs-right"></i> -->
+                                <div ng-click="removeDest()" class="button button-icon delete-dest-btn float-plus hide-on-keyboard-open">
+                                </div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </div>
+        </div>
+        <div class="row">
+            <div style="height:400px;width:100%;" id="map"></div>
+        </div>
+        <div class="row" ng-if='general.MarineLocDescr'>
+            <div class="col p-a-3 destinationDesc">
+                <h3 class="note-header">Location Description</h3>
+                <md-input-container md-no-float class="md-block disablePointer" style="height: 100px;">
+                    <textarea ng-model="general.MarineLocDescr" md-select-on-focus></textarea>
+                </md-input-container>
+            </div>
+        </div>
+    </div>
+    <div class="pos-r-h100" ng-if="(!$root.isInternet || !$root.online) || GPSFail==false">
+      <div class="row offline-destHdr" ng-if="(!OrderList.Orders.OrderHdr.Destination.Code && !OrderList.Orders.OrderHdr.Destination.Descr)">
+        <div class="col">
+            <center><a class="button icon-left ion-android-add affirm" ng-click="openModal('locationmodal')">Add Destination</a></center>
+        </div>
+    </div>
+    <div class="row m-t-0 p-a-0 avail-header"  ng-show="(OrderList.Orders.OrderHdr.Destination.Code && OrderList.Orders.OrderHdr.Destination.Descr)">
+        <div class="col p-a-0">
+            <ion-list>
+                <ion-item class="card p-x-0 m-a-0">
+                    <div class="row row-top item-text-wrap">
+                        <div class="col-offset-10 col col-25">
+                            <p class="m-a-0 fs-18x">Code</p>
+                        </div>
+                        <div class="col ellipsis text-xs-right">
+                            <p class="m-a-0 fs-18x">Description</p>
+                        </div>
+                        <div class="col col-40">
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+    </div>
+    <div class="row m-t-0 h-80 p-a-0" ng-show="(OrderList.Orders.OrderHdr.Destination.Code && OrderList.Orders.OrderHdr.Destination.Descr)">
+        <div class="col h-100 p-a-0">
+            <ion-scroll class="orderPane availabilityList h-100">
+                <ion-list>
+                    <ion-item class="p-x-0 m-a-0 bdr-0">
+                        <div class="row row-top">
+                            <div class="col col-10">
+                                <i class="icon ion-android-boat f-s-25"></i>
+                            </div>
+                            <div class="col col-25">
+                                <p class="m-a-0">
+                                   {{OrderList.Orders.OrderHdr.Destination.Code}}
+                                </p>
+                            </div>
+                            <div class="col">
+                                <div class="text-xs-right">
+                                    <p class="m-a-0">{{OrderList.Orders.OrderHdr.Destination.Descr}}</p>
+                                </div>
+                            </div>
+                            <div class="col col-40">
+                                <div ng-if="OrderList.Orders.OrderHdr.Status != 'Delivered'" ng-click="removeLocation()" class="button button-icon delete-tank-btn float-plus hide-on-keyboard-open"></div>
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </ion-scroll>
+        </div>
+    </div>
+    </div>
+    <script id="locationsPopover.html" type="text/ng-template">
+        <ion-popover-view class='locationsPopOver'>
+            <ion-content scroll='true' class='bgWhite'>
+                <ion-list>
+                    <ion-item ng-click='locationPopOverClose(e,item)' class='bgWhite grayText' ng-repeat="item in inSiteList">
+                        {{item.Address}}
+                    </ion-item>
+                </ion-list>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+</ion-view>

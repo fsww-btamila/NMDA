@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, target-densityDpi=device-dpi">
+    <title>Marine App</title>
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/acute.select.css" rel="stylesheet">
+    <link href="css/printDeliveryTicket.css" rel="stylesheet">
+    <link href="css/orderPane.css" rel="stylesheet">
+    <link href="css/addOrder.css" rel="stylesheet">
+    <link href="css/selectWheel.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="node_modules/angular-material/angular-material.css">
+    <link href="css/fonts.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style_theme.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/breadcrumb.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/marine-material.css">
+    <link rel="stylesheet" href="css/ng-picker.css">
+    <link rel="stylesheet" href="css/notify.css">
+    <link rel="stylesheet" href="css/ng-date.css">
+    <link rel="stylesheet" href="css/tank-picker.css">
+    <link rel="stylesheet" href="css/orderSearch.css">
+    <!-- <link rel="stylesheet" href="css/spinner.css"> -->
+    <!-- <script src="http://maps.googleapis.com/maps/api/js?libraries=places" async defer></script> -->
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places&client=gme-firestreamworldwide" async defer></script>
+    <!-- &key=AIzaSyCCLNUILXzlKDZbmg2trOazr9wPk7G40cU -->
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+      <link href="css/ionic.app.css" rel="stylesheet">
+      -->
+    <!-- <script type="text/javascript" src="firebug-lite/build/firebug-lite-debug.js"></script> -->
+    <!-- Html2Canvas -->
+    <script src="libs/lodash.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script> -->
+    <script src="js/websqldump.js"></script>
+    <!-- <script src="libs/html2canvas/html2canvas.js"></script> -->
+    <script src="libs/jquery-2.2.3.min.js"></script>
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="js/ng-cordova.min.js"></script>
+    <script src="js/angular-idle.min.js"></script>
+    <script src="js/templates.js"></script> 
+    <script src="lib/filelogger/dist/filelogger.js"></script>
+    <script src="cordova.js"></script>
+    <script src="libs/sign_pad/signature_pad.js"></script>
+    <script src="libs/websql/websql.js"></script>
+    <script src="libs/gmap/ngAutoComplete.js"></script>
+    <script src="libs/moment.min.js"></script>
+    <script src="libs/humanize-duration.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/appConfig.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/envConfig.js"></script>
+    <!-- <script src="js/envProdConfig.js"></script> -->
+    <script src="js/configLoader.js"></script>
+    <script src="libs/acute.select.js"></script>
+    <script src="node_modules/ngtouch/build/ngTouch.min.js"></script>
+    <script src="node_modules/angular-aria/angular-aria.js"></script>
+    <script src="node_modules/angular-material/angular-material.js"></script>
+
+    <script src="js/controllers/mainController.js"></script>
+    <script src="js/controllers/loginController.js"></script>
+    <script src="js/controllers/doiController.js"></script>
+    <script src="js/controllers/ordersController.js"></script>
+    <script src="js/controllers/signController.js"></script>
+    <script src="js/controllers/addOrderController.js"></script>
+    <script src="js/controllers/notesController.js"></script>
+    <script src="js/controllers/destinationController.js"></script>
+    <script src="js/controllers/shipOrderController.js"></script>
+    <script src="js/controllers/readingController.js"></script>
+    <script src="js/controllers/meterController.js"></script>
+    <script src="js/controllers/readingSetupController.js"></script>
+    <script src="js/controllers/shiftChangeController.js"></script>
+    <script src="js/controllers/shiftChangeOrdersController.js"></script>
+    <script src="js/controllers/destinationMapController.js"></script>
+    <script src="js/controllers/printDeliveryTicketController.js"></script>
+    <script src="js/controllers/bulkController.js"></script>
+    <script src="js/controllers/summaryController.js"></script>
+    <script src="js/controllers/tankReadingController.js"></script>
+
+    <script src="js/directives/orderPane.js"></script>
+    <script src="js/directives/gMap.js"></script>
+    <script src="js/directives/timepicker.js"></script>
+    <script src="js/directives/shortcutToolbar.js"></script>
+    <script src="js/directives/dateformat.js"></script>
+    <script src="js/directives/numericKeypad.js"></script>
+    <script src="js/directives/focusNext.js"></script>
+    <script src="js/directives/numberPad.js"></script>
+    <script src="js/directives/selectWheel.js"></script>
+    <script src="js/directives/isNumber.js"></script>
+    <script src="js/directives/ng-dt.js"></script>
+    <script src="js/directives/onImgError.js"></script>
+    <script src="js/directives/valid.js"></script>
+    <script src="js/directives/tankPicker.js"></script>
+    <script src="js/directives/tableRow.js"></script>
+    <!-- <script src="js/directives/spinner.js"></script> -->
+    <script src="js/directives/ng-picker.js"></script>
+    <script src="js/directives/orderSearch.js"></script>
+
+    <script src="js/services/ordersListService.js"></script>
+    <script src="js/services/getAllSiteService.js"></script>
+    <script src="js/services/interceptorService.js"></script>
+    <script src="js/services/createOrderService.js"></script>
+    <script src="js/services/addOrderService.js"></script>
+    <script src="js/services/commonService.js"></script>
+    <script src="js/services/dbService.js"></script>
+    <script src="js/services/notifyService.js"></script>
+
+    <script src="js/factories/localStorage.js"></script>
+    <script src="js/filters/filters.js"></script>
+    
+    <script src="libs/filter/angular-filter.min.js"></script>
+    <!-- Offline Js-->
+    <script src="js/offlineServices/readingService.js"></script>
+    <script src="js/offlineServices/weightVolumeService.js"></script>
+    <!-- jspdf -->
+    <script src="js/services/html2canvas.js"></script>
+    <script src="js/services/jspdf.debug.js"></script>
+    <script src="js/services/jspdf.plugin.autotable.js"></script>
+</head>
+
+<body ng-app="starter" class="platform-android platform-cordova platform-webview">
+    <div ng-controller="mainController">
+        <ion-nav-view class="slide-left-right"> </ion-nav-view>
+    </div>
+    <div class="parent" data-ng-if="loading">
+        <div class="spinner">
+            <ion-spinner icon="android" class="spinner-w-bg spinner-positive"></ion-spinner>
+        </div>
+    </div>
+    <div class="app-alerts-wrap" ng-if="syncInProgress > 0">
+        <ion-spinner icon="android" class="spinner-energized"></ion-spinner>{{syncInProgress}}
+    </div>
+    <script id="settings-popover.html" type="text/ng-template">
+        <ion-popover-view class='settingsPopover'>
+            <ion-content>
+                <div ng-if="filterBy == 'bySettings'" class='settingsDiv'>
+                    <ion-list class='removePad'>
+                        <ion-item class="item-icon-left" ng-click='goTankReading()'>
+                            <i class="icon ion-edit fs-2x"></i> Tank Readings
+                        </ion-item>
+                        <ion-item class="item-icon-left" ng-click='beginShiftChange()' ng-if="hideShiftMenu">
+                                    <i class="icon ion-arrow-swap fs-2x"></i> Shift Change 
+                        </ion-item>
+                        <ion-item class="item-icon-left" ng-if="$root.showSIP && isInternet" ng-click="cancelOrder()">
+                            <i class="icon ion-android-cancel fs-2x"></i> Cancel Order
+                        </ion-item>
+                        <ion-item class="item-icon-left" ng-click='closeSettingsPopover();debug();'>
+                            <i class="icon ion-android-download fs-2x"></i> Export DB
+                        </ion-item>
+                        <ion-item class="item-icon-left" ng-click='offline()' >
+                            <span ng-if="$root.online"><i class="icon ion-wifi fs-2x"></i> Go Offline</span>
+                            <span ng-if="!$root.online"><i class="icon ion-wifi fs-2x"></i> Go Online</span>
+                        </ion-item>
+						<ion-item class="item-icon-left" ng-click='closeSettingsPopover();getCloudDB();'>
+                            <i class="icon ion-loop fs-2x"></i> Download DB
+                        </ion-item>
+                        <ion-item class="item-icon-left" ng-click='syncOrders();closeSettingsPopover();'>
+                            <i class="icon ion-android-upload fs-2x"></i> Post Offline Data
+                        </ion-item>
+                        <ion-item class="item-icon-left" ng-click='closeSettingsPopover();doLogout();' id="logout">
+                            <i class="icon ion-log-out fs-2x"></i> Logout
+                        </ion-item>
+                    </ion-list>
+                </div>
+            </ion-content>
+        </ion-popover-view>
+    </script>
+</body>
+
+</html>

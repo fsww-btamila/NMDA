@@ -1,0 +1,17 @@
+.ng-date-wrapper{
+	position: relative;
+}
+input.ng-dt-picker{
+	color: rgba(0,0,0,0);
+	position: relative;
+	background: none;
+	z-index: 22;
+	padding:10px;
+}
+.ng-dt-mask{
+	font-size: 14px;
+	color:#333;
+	position: relative;
+	top:-20px;
+	z-index: 20;
+}

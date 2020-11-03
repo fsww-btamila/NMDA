@@ -1,0 +1,200 @@
+.tank-picker-wrapper{
+	display: grid;
+	content-box: border-box;
+	padding:3px;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 3px;
+    grid-auto-rows: minmax(50px, auto);
+    padding: 8px;
+    border-radius: 8px;
+    margin: 5px;
+}
+.tank-picker-wrapper.plain{
+    background: none;
+}
+.tank-picker-wrapper.blue{
+    background: rgba(206,222,222,.7);
+}
+.tank-picker-wrapper .tiny{
+	display:none;
+	font-size:13px;
+	position: absolute;
+	//color:#ff2222;
+	//background:rgba(255, 0, 0, 1);
+	//border:1px solid #ff1111;
+}
+.tank-picker-wrapper.alert .active .tiny{
+	display:block;
+	//background:rgba(255, 0, 0, 1);
+	//border:1px solid #ff111
+}
+.tank-picker-wrapper.alert .num-btn.label.active{
+	background: rgba(255, 70, 70, .8);
+	border-bottom: 2px solid #ff2222;
+
+}
+.tank-picker-wrapper.alert{
+	//background:rgba(255, 0, 0, 1);
+	//border:1px solid #ff1111;
+	//box-shadow: 0px 0px 3px #ff2222;
+}
+
+.tank-picker-wrapper .num-btn{
+	padding: 20px;
+    border-radius: 50px;
+    font-size: 22px;
+    box-shadow: 0px 2px 4px -2px #333;
+    background: #efefef;
+    text-align: center;
+    margin: 2px;
+    border: 1px solid #dadada;
+    height: 62px;
+    width: 62px;
+    overflow: hidden;
+    color: #555;
+}
+.tank-picker-wrapper.blue .num-btn{
+    background: #fefefe;
+}
+.tank-picker-wrapper .num-btn:hover, .tank-picker-wrapper .num-btn:active {
+	border:1px solid #bbb;
+	box-shadow: 0px 1px 4px -2px #333;
+}
+.tank-picker-wrapper .num-btn.label{
+	font-size: 16px;
+	background: #f2f2f2;
+
+	//box-shadow:0px 0px 2px #777;
+}
+.tank-picker-wrapper .num-btn.clr{
+	grid-column-start: 2;
+	grid-column-end: 3 !important;
+	background: #ffbc80;
+	color:#777;
+	font-size: 24px;
+	border:1px solid #eeab70;
+
+}
+.tank-picker-wrapper .num-btn.bkspc{
+	grid-column-start: 2;
+	grid-column-end: 3 !important;
+	padding: 18px 0px;
+	color:#777;
+	font-size: 24px;
+
+}
+.tank-picker-wrapper .num-btn.next, .tank-picker-wrapper .num-btn.prev, .tank-picker-wrapper .num-btn.back{
+	
+	background: #bbb;
+	color:#555;
+
+
+}
+.tank-picker-wrapper .num-btn.label.active{
+	//color:#6277fd;
+	background: #efefef;
+	border-bottom: 2px solid #777;
+
+}
+.tank-picker-wrapper .num-btn.label{
+	font-size: 16px;
+}
+
+.gauge-values{
+	width:100%;
+
+}
+.gauge-inp-container{
+	box-sizing: border-box !important;
+	width:100%;
+	float:left;
+	padding:10px;
+	background: #efefef;
+	box-shadow: 0px 2px 5px -2px #555;
+	position: relative;
+	left:5px;
+	border-radius: 3px;
+}
+.gauge-inp-container.w-fracts{
+	width: 70%;	
+	margin-top:12px;
+}
+.gauge-inp-container .gauge-label{
+	width:100%;
+	height: 20px;
+    line-height: 24px;
+    text-align: left;
+    color:#333;
+}
+
+.gauge-inp-container .gauge-inp{
+	width:40%;
+	box-sizing: border-box !important;
+	margin:5%;
+	background: #efefef;
+	height: auto;
+	overflow: hidden;
+	float:left;
+	border-radius: 3px;
+}
+.gauge-inp-container .gauge-inp .inp-label, .gauge-inp-container .gauge-inp .inp-val{
+	width:100%;
+	float:left;
+	clear:both;
+	overflow: hidden;
+	display: block;
+
+}
+.gauge-inp-container .gauge-inp .inp-label{
+	height:30px;
+	line-height: 24px;
+	padding-left:5%;
+	text-align: left;
+	background: #ccc;
+    width: 90%;
+    /* padding-right: 5px; */
+    font-size: 16px;
+	border-radius: 3px;
+	position:relative;
+	top: 3px;
+	color:#888;
+
+}
+.gauge-inp-container .gauge-inp .inp-label.active{
+	background: #fffece;
+	color:#555;
+    box-shadow: 0px 0px 3px -1px #aaa;
+}
+.gauge-inp-container .gauge-inp .inp-val{
+	position: relative;
+	margin: 0px;
+	box-sizing: border-box !important;
+	background: #fefefe;
+	padding-top:0px;
+	line-height: 44px;
+	height:40px;
+	text-align:center;
+	color: #444;
+    font-size: 28px;
+    border-radius: 3px;	
+    box-shadow: 0px 0px 5px -2px #333;
+    margin-bottom:2px;
+}
+.gauge-spin-container{
+	box-sizing: border-box !important;
+	width:30%;
+	float: left;
+}
+
+.error-text{
+	    /* text-align: center; */
+    font-size: 16px;
+    color: #ff5555;
+    margin:5px 10px;
+}
+.error-text .error-label{
+	background: #ff5555;
+    color: #efefef;
+    padding: 0px 3px;
+    border-radius: 3px;
+}

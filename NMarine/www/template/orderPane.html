@@ -1,0 +1,61 @@
+<div class="order-pane-hero">
+    <ion-scroll class="orderPane edit-order" direction="y" has-bouncing="true" style="height:100%;">
+        <div class="row enterAnim nosidepadding" id="op_item_{{$index}}" ng-repeat="item in itemList track by $index" ng-show="showItem(item)" ng-click="routeItem()" 
+        on-swipe-left="onSwipeLeft($index, item);$event.stopPropagation();" 
+        on-swipe-right="item.showCancel=false">
+            <div class="card col" ng-init="item.showCancel = false">
+                <div class="item" ng-class="{highlight:item.MasterProdID==currentItem.MasterProdID && ($index == 0) && enableHighlight,defaultItem:true}" id="opl_item_{{$index}}" ng-click='setCurrentItem($index);processItems({obj:item})'>
+                    <div class="row" id="item_{{item.SysTrxLine}}">
+                        <div class="col">
+                            <div class="row p-a-0">
+                                <div class="col-10 order-icon">
+                                    <i ng-class="(item.IsPackaged==='Y')?'ion-soup-can':(item.IsBillable=='Y')?'ion-cash':'ion-waterdrop'" class="f-s-25 c-727272"></i>
+                                </div>
+                                <div class="col col-73 p-r-0 item-code text-truncate fs-16x">{{item.Code}} </div>
+                                <div class="col" ng-if="showDelete && activeAction=='Ship'" class="delete-product" ng-click="deleteItem()"></div>
+                                <div class="col p-x-0" ng-if="!item.cancelDelivery">
+                                    <div ng-if="(enableShipping || enableDelivery) && item[activeAction].statusList.length > 0 && !showDelete && item.IsBillable!='Y'" class="icon-item">
+                                        <span ng-show="enableShipping || enableDelivery" ng-repeat="status in item[activeAction].statusList">
+                                            <i class="ion-record item-status" ng-class="findItemClass(item[activeAction].overallStatus,status)"></i>
+                                        </span>
+                                    </div>
+                                    <div ng-if="(enableShipping || enableDelivery) && item[activeAction].statusList.length > 0 && !showDelete && (item.IsBillable=='Y' && activeAction!='Ship')" class="icon-item">
+                                        <span ng-show="enableShipping || enableDelivery" ng-repeat="status in item[activeAction].statusList">
+                                            <i class="ion-record item-status" ng-class="findItemClass(item[activeAction].overallStatus,status)"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col" ng-show="order.OrderHdr.Status =='Delivered' && item.HazmatDesc"><i class="ion-alert-circled hazard"></i></div>
+                                </div>
+                                <div ng-if="item.cancelDelivery" class="col col-20 col-offset-10">
+                                    <span ng-click="handleCancel($index);$event.stopPropagation();"><i class="ion-close cancelShipReset"></i></span>
+                                </div>
+                            </div>
+                            <div class="row p-a-0">
+                                <div class="col item-description text-truncate">{{item.Descr}}</div>
+                            </div>
+                            <div class="row p-a-0">
+                                <div class="col item-uom ml-3rem">
+                                    {{item.SellByUOM || item.BIUOM}}
+                                </div>
+                                <div class="col text-xs-right item-uom">
+                                    <span ng-show="item[activeAction].overallStatus!='finished'">{{item.Qty | number:2}}</span>
+                                    <span ng-show="item[activeAction].overallStatus =='finished'">
+                                    {{(item.Deliver.shipWeightQty || item.Deliver.ShipQty || item.Deliver.quantityShipped || item.Ship.quantityShipped || item.Ship.shipWeightQty || item.Qty)| number:2}} 
+                                  </span>
+                                </div>
+                            </div>
+                            <div class="row p-a-0" ng-if="item.Notes">
+                                <div class="col item-description text-truncate">{{item.Notes | keepDots}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="item.showCancel" class="warnContainer">
+                <div ng-if="page != 'add'" class="col col-10 cancelAnim ">
+                    <span ng-click="handleCancel($index);$event.stopPropagation();"><i class="ion-ios-close-outline warn cancelShip"></i></span>
+                </div>
+            </div>
+        </div>
+    </ion-scroll>
+</div>

@@ -1,0 +1,98 @@
+<ion-view>
+  <ion-content class="innerWidth">
+    <div class="row bdr-b-blue h-70p">
+      <div class="col col-50 summaryItems">
+        <span class="summaryDrop"><i class="c-727272 ion-waterdrop-blue"></i></span>
+        <h5 class="m-a-0 d-inline-block summaryItems">{{currentItem.Code}}</h5>
+        <br>
+        <h6 class="m-l-3 m-a-0 summaryItems fs-14x" ng-show="order.OrderHdr.Destination.Descr"><i class="icon icon ion-ios-location"></i>{{order.OrderHdr.Destination.Descr}}&nbsp;&nbsp;<i class="icon ion-android-boat" ng-if="currentEntry.vessel && currentEntry.vessel.VesselCode"></i>{{currentEntry.vessel.VesselCode}}</h6>
+      </div>
+      <div class="col summaryItems" ng-show="currentItem.Ship.readBy">
+        <div class="row">
+          <div class="col text-xs-right fs-16x">Quantity Shipped</div>
+        </div>
+        <div class="row" style="position:relative">
+          <div class="col text-xs-right fs-2x"><span class="summaryVal fs-16x">{{(currentItem.Ship.ShipQty || currentItem.Ship.quantityShipped || currentItem.Deliver.ShipQty || currentItem.TotalDeliverQty || currentItem.Deliver.quantityShipped) | number:2}}</span></div>
+        </div>
+      </div>
+      <div class="col summaryItems" style="position:relative">
+        <div class="row">
+          <div class="col text-xs-right fs-16x">Quantity Ordered</div>
+        </div>
+        <div class="row" style="position:relative">
+          <div class="col text-xs-right fs-2x"><span class="summaryVal fs-16x">{{currentItem.Qty | number:2}}</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="row h-40p">
+      <div class="col col-50 f-s-18">
+      </div>
+      <div class="col packagedDetails" ng-show="currentItem.Ship.readBy">
+        <div class="row">
+          <div class="col text-xs-right">{{currentItem.OnCountUOM || currentItem.BIUOM}}</div>
+        </div>
+      </div>
+      <div class="col packagedDetails">
+        <div class="row">
+          <div class="col text-xs-right">{{currentItem.SellByUOM || currentItem.BIUOM}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="row summaryBody">
+      <div class="col col-60 h-100 pos-relative">
+        <div class="row p-a-0 pull-xs-bottom">
+          <div class="col p-a-0">
+            <div class="row p-a-0">
+              <div class="col p-a-0" ng-click="hideItemProperty('po')" id="po">
+                <div class="card" ng-click="a=true">
+                  <div class="packagedDetails p-x-1">
+				            <escaped-input enc-value="currentItem.PONo" id="textareaPo" label="Item PO Number" placeholder="Add Item PO Number" maxlen="24"  style="resize: none !important; padding-left: 21.5px"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row p-a-0">
+              <div class="col p-a-0" ng-click="hideItemProperty('note')" id="note">
+                <div class="card" ng-click="b=true">
+                  <div class="packagedDetails p-x-1">
+                    <escaped-input enc-value="currentItem.Notes" id="textareaNotes" label="Item Notes" placeholder="Add Item Note" maxlen="255" style="resize: none !important; padding-left: 21.5px"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div ng-show="order.OrderHdr.Status =='Delivered' && currentItem.HazmatDesc" class="row p-a-0" ng-click="c=true">
+              <div class="col">
+                <div class="row text-xs-center p-a-0 summaryItems">Hazmat Description</div>
+                <div class="row m-t-1 p-a-0">
+                  <textarea rows="10" cols="70" id="text-area" class="bg-F3F3F3 p-a-10" disabled  focus-me="c">{{currentItem.HazmatDesc}}</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="m-l-3 col packagedDetails">
+        <div class="row">&nbsp</div>
+        <span class="col md-no-float fs-16x text-xs-right" ng-class="{'disablePointer': order.OrderHdr.Status =='Delivered'}">
+          {{(activeAction=='Deliver')?'Quantity Delivered':'Quantity Shipped'}}
+          <!-- <span ng-show="currentEntry.overallStatus == 'finished' && order.OrderHdr.Status !='Delivered'" class="d-inline"> <i class="ion-edit"></i> </span> -->
+          <button ng-if= "!(order.OrderHdr.Status=='Delivered')" ng-click="readingPage()" class="btn button-icon reading-btn"> <i class="ion-edit"></i> </button>
+        </span>
+        <md-input-container class="md-no-float md-block input-component m-a-0 nopointer no-error">
+          <input style="color: #202387" name='totQty' type="text" value="{{ (currentEntry.shipWeightQty || currentEntry.finalQty)| number: 2}}" id="quantityInput" required class="nopointer text-xs-right fs-16x">
+        </md-input-container>
+        <span class="pull-xs-right biuom">{{currentItem.SellByUOM || currentItem.BIUOM}}</span>
+        <div ng-if="false" ng-hide="currentEntry.overallStatus == 'finished' || order.OrderHdr.InternalTransferOrder=='Y'" class="row p-a-0">
+          <div class="col p-x-0">
+            <a ng-click="addDelivery()" class="button icon-left add-delivery-btn float-add affirm pull-xs-right m-r-0"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div >
+      <div class="col m-t-40" ng-hide="currentEntry.overallStatus == 'finished'">
+        <button ng-click="setItemFinished()" id="finalsumary" class="big-rd-btn button button-icon roundDone ion-checkmark-round mtrPos hide-on-keyboard-open"></button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

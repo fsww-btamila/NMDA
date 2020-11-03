@@ -1,0 +1,239 @@
+<ion-view>
+    <ion-content class="innerWidth ship-content reading" scroll='false'>
+        <ion-scroll zooming="false" direction="y" style="width: 100%; height: 100%">
+            <div ng-if="(activeAction=='Ship' || order.OrderHdr.Vehicle.EnforceShipmentMarineApp == 'N' || currentEntry.readBy!='Meter') && currentEntry.weightQty" class="toShipQty" style="padding:5px; position: absolute; left: 0; right: 0;">
+                <span style="float: right; padding: 10px; background: rgba(32, 46, 135, 0.2); color: #202e87; font-size: 16px;">Expected Quantity :{{currentEntry.weightQty | number: 2}} {{currentItem.OnCountUOM || currentItem.BIUOM}}</span>
+            </div>
+            <div class="wrapper-content">
+                <div class="meterInitial" ng-show="currentEntry.readBy=='Direct'">
+                    <div class="row pkg-bgd meter">
+                        <div class="col col-50">{{getCurrentAction()}} Quantity</div>
+                    </div>
+                    <div ng-show="currentEntry.ShipQty">
+                        <div style="display:inline-block;width:100%;font-size:20px;padding:5px" class="finishedReading">
+                            <div>
+                                <span style="float:left">{{shipping.timeDiff}}</span>
+                                <span style="float:right">{{getCurrentAction()}} : {{currentEntry.ShipQty | number: 2}} 
+                                <span ng-show="activeAction=='Ship'">{{currentItem.OnCountUOM}}</span>
+                                <span ng-show="activeAction=='Deliver'">{{currentItem.SellByUOM || currentItem.BIUOM}}</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row select-block" style="">
+                        <div class="line-intervalsDirect">
+                            <div class="circle-interval"></div>
+                        </div>
+                        <div class="button-intervals">
+                            <div class="meterInitial" id="notmeterqty" ng-click="goToDirectEntry()"><a ng-hide="currentEntry.quantityShipped" class="button icon-right ion-android-add-circle button-calm affirmbutton">Enter Quantity</a>
+                                <a ng-show="currentEntry.quantityShipped" class="button icon-right ion-android-add-circle button-calm affirmbutton">{{currentEntry.quantityShipped}} &nbsp;<span ng-show="activeAction=='Ship'">{{currentItem.OnCountUOM}}</span><span ng-show="activeAction=='Deliver'">{{currentItem.OnCountUOM || currentItem.SellByUOM || currentItem.BIUOM}}</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-class="{'disableUI':activeAction=='Deliver' && (currentItem.Ship.meterReadings[0] && currentItem.Ship.meterReadings[0].stMeter) && general.Vehicle.EnforceShipmentMarineApp === 'Y' && currentItem.IsBillable == 'N' }" class="meterInitial" ng-show="currentEntry.readBy=='Meter'">
+                    <div class="row pkg-bgd meter">
+                        <div class="col col-50"> Metered </div>
+                    </div>
+                    <div ng-show="currentEntry.stMeter.status" class="row" style="margin-top:10px;font-size:16px">{{shipping.shippingString}}</div>
+                    <div ng-show="currentEntry.ShipQty">
+                        <div style="display:inline-block;width:100%;font-size:20px;padding:5px" class="finishedReading">
+                            <div>
+                                <span style="float:left">{{shipping.timeDiff}}</span><span style="float:right">{{getCurrentAction()}} Quantity :<span ng-show="activeAction=='Ship'"> {{currentEntry.ShipQty | number: 2}} {{currentItem.OnCountUOM}}</span>
+                                <span ng-show="activeAction=='Deliver'"> {{currentEntry.ShipQty || currentItem.Ship.shipWeightQty | number: 2}} &nbsp {{currentItem.OnCountUOM || currentItem.SellByUOM || currentItem.BIUOM}}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row select-block pos-relative" ng-repeat="currentMeter in currentEntry.meterReadings" style="" 
+                    ng-hide="!currentMeter.stMeter.reading && !currentMeter.endMeter.reading && activeAction=='Deliver' && general.Vehicle.EnforceShipmentMarineApp == 'Y' && currentItem.IsBillable == 'N' && currentEntry.readBy!='Meter'">
+                        <div class="line-intervals">
+                            <div class="circle-wrapper" ng-click="setStMeter('stMeter',currentMeter)">
+                                <div class="circle-interval"></div>
+                            </div>
+                            <div class="circle-wrapper" ng-click="meModal.show()" ng-show="$index==currentEntry.meterReadings.length-1">
+                                <div class="circle-interval center"></div>
+                            </div>
+                            <div class="circle-wrapper" ng-click="currentMeter.stMeter.status == 'finished' && goToMeter('endMeter',currentMeter)">
+                                <div class="circle-interval"></div>
+                            </div>
+                        </div>
+                        <div class="button-intervals">
+                            <div class="button-interval" id="startmeterclick" ng-click="setStMeter('stMeter',currentMeter)">
+                                <a ng-hide="currentMeter.stMeter.status =='finished'" class="button icon-right ion-android-add-circle button-calm affirmbutton">START METER</a>
+                                <div class="finishedReading" style="font-size:25px;padding:5px;font-weight:500" ng-show="currentMeter.stMeter.status=='finished' && currentMeter.endMeter.status !='finished'">
+                                    <div>Start Meter Date/Time</div>
+                                    <div>{{currentMeter.stMeter.reading}}</div>
+                                    <div style="font-size:20px">{{currentMeter.stMeter.datetime | date:'MM/dd/yyyy HH:mm'}}</div>
+                                </div>
+                                <div class="finishedReading" style="font-size:25px;padding:5px;font-weight:500" ng-show="currentMeter.endMeter.status=='finished'">
+                                    <div class="">Start Meter</div>
+                                    <div class="">{{currentMeter.stMeter.reading | number : 2}}</div>
+                                    <div style="font-size:16px">{{currentMeter.stMeter.datetime | date:'MM/dd/yyyy HH:mm'}}</div>
+                                </div>
+                            </div>
+                            <div class="center">
+                                <span ng-click="meModal.show()" ng-show="$index==currentEntry.meterReadings.length-1">During</span>
+                                <span ng-if="currentEntry.meterReadings.length>1 && $index != 0"><div ng-click="removeMeter(currentMeter)" class="button-icon add-meter-btn float-plus hide-on-keyboard-open"></div></span>
+                            </div>
+                            <fieldset ng-disabled="(currentMeter.stMeter.status == 'finished') ? false : true" id="endmeterclick" ng-click="goToMeter('endMeter',currentMeter)" class="button-interval">
+                                <a ng-hide="currentMeter.endMeter.status =='finished'" class="button icon-right ion-android-add-circle button-calm affirmbutton">END METER</a>
+                                <div class="finishedReading" style="font-size:25px;padding:5px;font-weight:500" ng-show="currentMeter.endMeter.status=='finished'">
+                                    <div class="">End Meter</div>
+                                    <div class="">{{currentMeter.endMeter.reading | number : 2}}</div>
+                                    <div style="font-size:16px">{{currentMeter.endMeter.datetime | date:'MM/dd/yyyy HH:mm'}}</div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="currentEntry.Source.length>0 || currentEntry.Receiving.length>0" class="readingInitial">
+                <div class="wrapper-content">
+                    <div class="row pkg-bgd ">
+                        <div class="col col-50 tank-reading"> Tank Reading</div>
+                        <div class="col col-50 pos-relative">
+                            <div ng-show="!checkFinished() && !currentEntry.Source[0].VehicleID" ng-click="showTankModal()" class="big-rd-btn button button-icon float-plus add-srctnk-btn hide-on-keyboard-open"></div>
+                        </div>
+                    </div>
+                    <div class="row pkg-bgd" ng-if="currentEntry.Source.length > 0">
+                        <div class="col col-15">Source Tank</div>
+                        <div class="col text-xs-right" style="padding-right: 50px;">
+                            <p class="m-a-0" ng-if="currentEntry.Source.length > 1">
+                                Total Gauged Quantity : {{currentEntry.sourceTotalTankQuantity | number:2}} {{currentItem.OnCountUOM || currentItem.BIUOM}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="sample tabsdemoDynamicTabs tabs-main" layout="column" ng-cloak="">
+                        <md-content md-swipe-left="onSwipeLeft()" md-swipe-right="onSwipeRight()" ng-if="currentEntry.Source.length > 0">
+                            <md-tabs class="src-tnk-tab" md-swipe-left="onSwipeLeft()" md-swipe-right="onSwipeRight()" md-swipe-content="true" md-selected="selectedIndex" md-border-bottom="" md-autoselect="">
+                                <md-tab ng-repeat="reading in currentEntry.Source" label="{{reading.Code}}">
+                                    <div class="demo-tab tab{{$index%4}}" style="padding: 15px 25px; text-align: center;">
+                                        <div ng-show="currentEntry.Source.length>1" ng-click="removeTank(reading)" class="button button-icon delete-tank-btn float-plus hide-on-keyboard-open">
+                                        </div>
+                                        <div class='row' ng-if="reading.endTank.quantityShipped >=0">
+                                            <div style="display:inline-block;width:100%;font-size:20px;padding:5px" class="finishedReading">
+                                                <div ng-hide="reading.TankQty === 0">
+                                                    <span style="float:left"></span><span style="float:right">Tank Gauged Quantity : {{(reading.TankQty) | number: 2}} {{currentItem.OnCountUOM || currentItem.BIUOM}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="select-block">
+                                                <div class="line-intervals">
+                                                    <div class="circle-wrapper" ng-click="goToReading(reading,'stTank', 'Source')">
+                                                        <div class="circle-interval"></div>
+                                                    </div>
+                                                    <div class="circle-wrapper">
+                                                        <div class="circle-interval"></div>
+                                                    </div>
+                                                    <div class="circle-wrapper" ng-click="reading.stTank.status && goToReading(reading,'endTank', 'Source')">
+                                                        <div class="circle-interval"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="button-intervals">
+                                                    <div class="button-interval" id="tnk_beg" ng-click="goToReading(reading,'stTank', 'Source')"><a ng-hide="reading.stTank.status =='finished'" class="button icon-right ion-android-add-circle button-calm affirmbutton">TANK BEGIN</a>
+                                                        <div class="finishedReading" style="font-size:25px;padding:5px;font-weight:500" ng-show="reading.stTank.status=='finished'">
+                                                            <div>Start Tank Reading</div>
+                                                            <div>{{reading.stTank.quantityShipped | number:2}} &nbsp; {{currentItem.OnCountUOM || currentItem.BIUOM}}</div>
+                                                            <div style="font-size:16px;padding-top:10px;">{{reading.stTank.datetime | date:'MM/dd/yyyy HH:mm'}}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="button-interval">
+                                                        <div class="row readingIconText" ng-show="reading.TankID">
+                                                            {{reading.Code}}
+                                                        </div>
+                                                        <div ng-show="!reading.TankID" class="row readingIconText">
+                                                            {{reading.Code}}
+                                                        </div>
+                                                    </div>
+                                                    <div ng-class="{'disableUI' : !(reading.stTank.status)}" id="tnk_end" ng-click="goToReading(reading,'endTank', 'Source')" class="button-interval">
+                                                        <a ng-hide="reading.endTank.status =='finished'" class="button icon-right ion-android-add-circle button-calm affirmbutton">TANK END</a>
+                                                        <div class="finishedReading" style="font-size:25px;padding:5px;font-weight:500" ng-show="reading.endTank.status=='finished'">
+                                                            <div>End Tank Reading</div>
+                                                            <div>{{reading.endTank.quantityShipped | number:2}} &nbsp; {{currentItem.OnCountUOM || currentItem.BIUOM}}</div>
+                                                            <div style="font-size:16px;padding-top:10px;">{{reading.endTank.datetime | date:'MM/dd/yyyy HH:mm'}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </md-tab>
+                            </md-tabs>
+                        </md-content>
+                    </div>
+                </div>
+                <div class="wrapper-content">
+                    <div class="row pkg-bgd " ng-show="currentEntry.Receiving.length>0">
+                        <div class="col col-50">Receiving Tank</div>
+                        <div class="col col-60">
+                            <p class="m-a-0" ng-if="currentEntry.Receiving.length > 1">
+                                Total Gauged Quantity : {{currentEntry.receivingTotalTankQuantity | number:2}} {{currentItem.OnCountUOM || currentItem.BIUOM}}
+                            </p>
+                        </div>
+                    </div>
+                    <div ng-repeat="reading in currentEntry.Receiving">
+                        <div class='row' ng-if="reading.endTank.quantityShipped >=0">
+                            <div style="display:inline-block;width:100%;font-size:20px;padding:5px" class="finishedReading">
+                                <div ng-hide="reading.TankQty === 0">
+                                    <span style="float:left"></span><span style="float:right">Tank Gauged Quantity : {{(reading.TankQty) | number: 2}} {{currentItem.OnCountUOM || currentItem.BIUOM}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="select-block">
+                            <div>
+                                <div class="line-intervals">
+                                    <div class="circle-wrapper" ng-click="goToReading(reading,'stTank', 'Receiving')">
+                                        <div class="circle-interval"></div>
+                                    </div>
+                                    <div class="circle-wrapper">
+                                        <div class="circle-interval"></div>
+                                    </div>
+                                    <div class="circle-wrapper" ng-click="reading.stTank.status && goToReading(reading,'endTank', 'Receiving')">
+                                        <div class="circle-interval"></div>
+                                    </div>
+                                </div>
+                                <div class="button-intervals">
+                                    <div class="button-interval" ng-click="goToReading(reading,'stTank', 'Receiving')">
+                                        <a ng-hide="reading.stTank.status =='finished'" class="button icon-right ion-android-add-circle button-calm affirmbutton">TANK BEGIN</a>
+                                        <div class="finishedReading" style="font-size:25px;padding:5px;font-weight:500" ng-show="reading.stTank.status=='finished'">
+                                            <div>Start Tank Reading</div>
+                                            <div>{{reading.stTank.quantityShipped | number:2}} &nbsp; {{currentItem.OnCountUOM || currentItem.BIUOM}}</div>
+                                            <div style="font-size:16px">{{reading.stTank.datetime | date:'MM/dd/yyyy HH:mm'}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="button-interval">
+                                        <div class="row readingIconText" ng-hide="true">
+                                            <span ng-show="activeAction=='Ship'"></span>{{order.OrderHdr.INSiteCode}}
+                                        </div>
+                                        <div class="row readingIconText">
+                                            {{reading.Code}}
+                                        </div>
+                                    </div>
+                                    <div ng-class="{'disableUI' : !(reading.stTank.status)}" ng-click="goToReading(reading,'endTank', 'Receiving')" class="button-interval">
+                                        <a ng-hide="reading.endTank.status =='finished'" class="button icon-right ion-android-add-circle button-calm affirmbutton">TANK END</a>
+                                        <div class="finishedReading" style="font-size:25px;padding:5px;font-weight:500" ng-show="reading.endTank.status=='finished'">
+                                            <div>End Tank Reading</div>
+                                            <div>{{reading.endTank.quantityShipped | number:2}} &nbsp; {{currentItem.OnCountUOM || currentItem.BIUOM}}</div>
+                                            <div style="font-size:16px">{{reading.endTank.datetime | date:'MM/dd/yyyy HH:mm'}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-scroll>
+
+        
+        <div ng-click="finishItemReading()" ng-if="checkReadingFinished() && !checkFinished() && !currentEntry.editItem" ng-hide="((currentItem.hideSourceFinishBtn || currentItem.hideReceiveFinishBtn) || (currentItem.srcTankGaugedQty || currentItem.recvTankGaugedQty) || ( currentItem.posSrcHideFinishBtn || currentItem.posRecvHideFinishBtn || currentItem.negSrcHideFinishBtn || currentItem.negRecvHideFinishBtn))" class="btn-btm-rgt" id="meterclickfinal">
+            <button class="big-rd-btn button button-icon ion-checkmark-round floatDone"> </button>
+        </div>
+        <div ng-click="itemSummaryPage()" ng-if="currentEntry.editItem" ng-hide="((currentItem.hideSourceFinishBtn || currentItem.hideReceiveFinishBtn) || (currentItem.srcTankGaugedQty || currentItem.recvTankGaugedQty) || (currentItem.posSrcHideFinishBtn || currentItem.posRecvHideFinishBtn || currentItem.negSrcHideFinishBtn || currentItem.negRecvHideFinishBtn))" class="btn-btm-rgt">
+            <button class="big-rd-btn button button-icon ion-checkmark-round floatDone"> </button>
+        </div>
+    </ion-content>
+</ion-view>

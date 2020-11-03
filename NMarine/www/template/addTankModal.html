@@ -1,0 +1,60 @@
+<ion-modal-view class="addOrderModal smallModal">
+    <ion-header-bar class="modal-header-bar">
+        <div class="row p-a-0">
+            <div class="col-80 p-a-0">
+                <div class="row p-a-0" ng-click="a=true">
+                    <div class="col-33 p-a-0">
+                        <h4 class="d-inline-block text-nowrap">Select Tank</h4>
+                    </div>
+                    <div class="col p-a-0">
+                        <md-input-container ng-hide="vesselType =='adhoc'" class="md-no-float md-block input-component search-input pull-xs-right">
+                            <input ng-model="searchTank" type="text" autocomplete="off" focus-me="a">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0 ">
+                    <a style="padding-right: 0.5rem" href="" ng-click="addtankmodal.hide()" class="pull-xs-right">
+                        <i class="ion-close-round"></i>
+                    </a>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll='false'>
+        <div class="row m-t-0 table-header-container">
+            <div class="col h-100 p-b-0 m-t-0">
+                <div class="row h-100 table-header">
+                    <div class="col p-x-0">
+                        <h5 class="m-a-0">Code</h5>
+                    </div>
+                    <div class="col col-50 p-x-0 textLeft">
+                        <h5 class="m-a-0">Product Description</h5>
+                    </div>
+                    <div class="col p-x-0 text-xs-right">
+                        <h5 class="m-a-0">Tank Type</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row table-row-container">
+            <div class="col h-100 p-a-0">
+                <ion-scroll class="h-100">
+					<div ng-repeat="tank in sourceTanks | tankFilter:searchTank" ng-click="addTank(tank);addtankmodal.hide();" class="row table-row" id="{{tank.Code}}">
+
+                        <div class="col pos-relative p-x-0">
+                            <h5 class="m-a-0">{{tank.Code}}</h5>
+                        </div>
+                        <div class="col col-50 pos-relative p-x-0 textLeft text-truncate">
+                            <h5 class="m-a-0">{{tank.EffectiveTankProContDesc}}</h5>
+                        </div>
+                        <div class="col pos-relative p-x-0 text-xs-right">
+                            <h5 class="m-a-0">{{tank.TankType}}</h5>
+                        </div>
+                    </div>
+                </ion-scroll>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

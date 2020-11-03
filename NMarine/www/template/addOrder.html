@@ -1,0 +1,95 @@
+<ion-view view-title="Add Order" name="Add" class="view-order" cache-view="false">
+    <ion-header-bar class="bar bar-header tabs-top addorder-header" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+        <div class="row p-a-0">
+            <div class="col-25">
+                <h4 class="add-order-title icon-left ion-android-arrow-back whiteText m-l-1" ng-click="goBack()"> {{pageTitle}} {{OrderList.Orders.OrderHdr.OrderNo}}</h4>
+            </div>
+            <div class="col"></div>
+            <div class="col-25">
+                <div style="height: 0" class="row p-a-0">
+                    <div class="col p-a-0">
+                        <div class="user-dash m-r-0 pull-xs-right">
+                            <span class='uinfo text-truncate'><i class="ion-person uname"></i><span>{{loginData.uname || 'Username'}}</span></span>
+                            <span class='uinfo text-truncate'><i class="ion-home insite"></i><span>{{selectedSite.Code}}</span></span>
+                            <span class="uinfo text-truncate app-version"><small>V {{$root.appVersion}}</small></span>
+                        </div>
+                    </div>
+                    <div class="col-10">
+                        <a href='' class="add-order-rgtbtn ion-android-more-vertical" id="opt_btn" ng-click="saveOrder();$root.openSettingsPopover($event,'bySettings')"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ion-header-bar>
+    <div class="row p-a-0 h-100 addorder-content">
+        <div class="col-25 pos-r-h100 edit-order-wrapper orderPaneWrapper">
+            <div class="row cloneheader" ng-class="{ 'offline': !$root.isInternet || !$root.online }"></div>
+            <div class="row p-a-0 clone-content">
+                <div class="col p-a-0 h-100">
+                    <div class="row favorite m-t-0">
+                        <div class="col-20 h-100">
+                            <img class="ion-person-sidebar" src="./img/person_order.png">
+                        </div>
+                        <div class="col h-100 p-a-0" style="font-size:1em">
+                            <div class="vertical-centered">
+                                <p class="m-a-0 d-block">{{(general.CustomerNumber) ? '': general.ToSiteCode}} {{general.CustomerName}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row orderpane-container">
+                        <div class="col p-a-0 h-100">
+                            <order-pane item-list="OrderList.Orders.OrderItems" order="OrderList.Orders" show-billing="true" current-item="currentItem" enable-shipping="enableShipping" enable-delivery="enableDelivery" active-action="activeAction" process-items="processItems(item)" settings="settings" route-item="routeItem()" page="add"></order-pane>
+                        </div>
+                    </div>
+                    <div class="row p-a-0 m-t-0 clone-footer hide-on-keyboard-open">
+                        <div class="col footerStyle p-a-0">
+                            <ol style="position: absolute" class="cd-breadcrumb triangle bcstyle text-truncate">
+                                <li ng-class="{'current':(general.Status=='Open' || general.Status=='Shipping in Progress') || (general.Vehicle.EnforceShipmentMarineApp =='N' && general.Status=='Delivery in Progress')}"><a class="fs-12x icon-left"><i class="breadcrumbIcon ion-home"></i> {{general.INSiteCode}}</a></li>
+                                <li ng-if="general.Vehicle.EnforceShipmentMarineApp ==='Y'" ng-class="{'current':general.Status=='En Route' || general.Status=='Delivery in Progress'}"><a class="fs-12x icon-left ion-marine-vehicle"> {{general.Vehicle.Descr || 'Unassigned'}}</a></li>
+                                <li ng-if="general.Vessels.length>0" ng-class="{'current':general.Status=='Delivered'}" class="finalBox"><a ng-if="general.InternalTransferOrder==='N'" class="finalCrumb fs-12x icon-left"><i class="breadcrumbIcon ion-android-boat"></i><span ng-if="!OrderList.Orders.deliveryCodes || OrderList.Orders.deliveryCodes.length==0"> {{general.Vessels[0].VesselCode}}</span>
+                         <span ng-if="OrderList.Orders.deliveryCodes && OrderList.Orders.deliveryCodes.length>0">{{OrderList.Orders.deliveryCodes[OrderList.Orders.deliveryCodes.length-1]}}<span ng-show="OrderList.Orders.deliveryCodes.length>1">({{OrderList.Orders.deliveryCodes.length-1}})</span></span></a>
+                                </li>
+                                <li ng-if="general.InternalTransferOrder==='Y'" ng-class="{'current':general.Status=='Delivered'}"><a ng-if="general.InternalTransferOrder==='N'" class="finalCrumb fs-12x icon-left"><i class="breadcrumbIcon ion-android-boat"></i><span ng-class="{orderVessel:!$last}" ng-repeat="vessel in general.Vessels"> {{vessel.VesselCode}}</span></a>
+                                    <a ng-if="general.InternalTransferOrder==='Y'" class="finalCrumb fs-12x icon-left"><i class="breadcrumbIcon ion-home"></i><span> {{general.ToSiteCode}}</span></a>
+                                </li>
+                                <li ng-if="general.Vessels.length<0" ng-class="{'current':general.Status=='Delivered'}"><a class="fs-12x icon-left"><i class="breadcrumbIcon ion-android-boat"></i><span> Unassigned</span></a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!--             <div class="button button-icon float-plus hide-on-keyboard-open" ng-show="(!enableShipping || enableDelivery) && (OrderList.Orders.OrderHdr.Status !='En Route' && OrderList.Orders.OrderHdr.Status != 'Delivered') && (stateName == 'addorder.general' || stateName == 'addorder' || stateName == 'addorder.destination' || stateName == 'addorder.destination.list')"
+                ng-click="openModal('addmodal')">
+            </div> -->
+               <div class="button button-icon float-plus hide-on-keyboard-open" ng-show="(OrderList.Orders.OrderHdr.Status != 'Delivered') && (stateName == 'addorder.general' || stateName == 'addorder' || stateName == 'addorder.destination' || stateName == 'addorder.destination.list')"
+                ng-click="openModal('addmodal')">
+            </div>
+        </div>
+        <div style="position: relative" class="col p-a-0 content-edit-order m-l-0">
+            <ion-tabs class="tabs-striped tabs-top tabs-icon-left order-tabs">
+                <ion-tab title="GENERAL" icon="icon ion-home" ui-sref="addorder.general" id='add-general'>
+                    <ion-nav-view name='add-general' ></ion-nav-view>
+                </ion-tab>
+                <ion-tab title="DESTINATION" icon="icon ion-ios-location" id='add-destination' ui-sref="addorder.destination" hidden="{{OrderList.Orders.OrderHdr.InternalTransferOrder==='Y' ? !OrderList.Orders.OrderHdr.Destination:false}}">
+                    <ion-nav-view name='add-destination' ></ion-nav-view>
+                </ion-tab>
+                <!--<ion-tab title="AVAILABILITY" icon="icon ion-ios-list" ui-sref="addorder.availability">
+                    <ion-nav-view name='add-availability' ></ion-nav-view>
+                </ion-tab>-->
+                <ion-tab title="VESSEL" icon="icon ion-android-boat" ui-sref="addorder.vessel" hidden="{{OrderList.Orders.OrderHdr.InternalTransferOrder==='Y'}}" id='add-vessel'>
+                    <ion-nav-view name='add-vessel' ></ion-nav-view>
+                </ion-tab>
+                <ion-tab title="NOTES" icon="icon ion-android-document" ui-sref="addorder.notes" id='add-notes'>
+                    <ion-nav-view name='add-notes' ></ion-nav-view>
+                </ion-tab>
+            </ion-tabs>
+            <div ng-show="stateName == 'addorder.general' || stateName == 'addorder' || stateName == 'addorder.destination' || stateName == 'addorder.destination.list' || stateName == 'addorder.destination.map'" class="proceedContainer buttons pull-right footer-buttons">
+                <a class="button icon-left ion-ios-download affirm" ng-hide="true" ng-click="saveOrder()">Save Order</a>
+                <a class="button icon-right ion-android-arrow-forward affirm iconBtn hide-on-keyboard-open" ng-disabled="allowShipping()" id="shipclick" ng-click="openModal('transfermodal')" ng-show="activeAction == 'Ship' && !enableShipping"><span>Ship Order</span></a>
+                <a class="button icon-right ion-android-arrow-forward affirm iconBtn hide-on-keyboard-open" ng-show="activeAction == 'Deliver' && !enableDelivery" id="deliverclick" ng-click="deliverOrder()"><span>Deliver Order</span></a>
+                <a class="button icon-right ion-android-arrow-forward affirm iconBtn hide-on-keyboard-open" ng-disabled="allowShipping()" ng-show="OrderList.Orders.OrderHdr.Status == 'Delivered'" ng-click="gotoReview()"><span>Review</span></a>
+            </div>
+        </div>
+    </div>
+</ion-view>

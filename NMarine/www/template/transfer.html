@@ -1,0 +1,35 @@
+<ion-modal-view class="addOrderModal transferModal">
+    <ion-header-bar style="width: 100%; border: none; background: #202e87">
+        <div class="row p-a-0">
+            <div class="col p-a-0">
+                <h4 class="m-a-0 text-white fs-18x">Bulk Product Transfer</h4>
+            </div>
+            <div class="col p-a-0">
+                <h4 class="m-a-0 fs-18x text-xs-right text-white">
+                    <a style="min-width: 20px" href="" ng-click="closeModal('transfermodal')" class="pull-xs-right text-white">
+                        <i class="ion-close-round"></i>
+                    </a>
+                    <span class="pull-xs-right icon-left ion-person">&nbsp{{loginData.uname ||"Arthur,Curry"}}</span>
+                </h4>
+            </div>
+        </div>
+    </ion-header-bar>
+    <ion-content scroll="false">
+            <br/>
+            <div class="center">
+                <div class="row ">
+                    <div class="col ">
+                        Which side of the transfer are you on?
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col">
+                        <a class="button affirm" id="trs_del" ng-click="closeModal('transfermodal');setUserRole('Delivering')">Delivering</a>
+                        <a class="button affirm col-offset-10" id="trs_rece" ng-click="closeModal('transfermodal');setUserRole(
+                'Receiving');">Receiving</a>
+                    </div>
+                </div>
+            </div>
+    </ion-content>
+</ion-modal-view>

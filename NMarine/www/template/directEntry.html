@@ -1,0 +1,32 @@
+<ion-view>
+    <ion-content class="innerWidth">
+        <div class="row">
+            <div class="col col-50 m-l-2p">
+                <div ng-click="resetPkgItem()" class="row text-xs-center" ng-class="{'finishedReading':checkFinished(), 'disablePointer': order.OrderHdr.Status =='Delivered'}">
+                    <div class="finishPkg"><span class="qs">{{currentEntry.overallStatus == 'finished'? (currentEntry.quantityShipped | number:2) :(activeAction=='Deliver')?'Enter Quantity Delivered':'Enter Quantity Shipped'}}</span><span class="finishUOM" ng-show="checkFinished()">{{currentItem.OnCountUOM}}</span></div>
+                </div>
+                <div class="row m-t-10" ng-hide="checkFinished()">
+                    <div class="col">
+                        <md-input-container class="md-no-float md-block input-component d-inline-block">
+                            <label class="md-no-float fs-13x">Quantity</label>
+                            <input name='totQty' type="text" ng-model="currentEntry.quantityShipped" id="quantityInput" required class="nopointer" valid-type="whole">
+                        </md-input-container>
+                        <md-input-container class="md-no-float md-block input-component d-inline-block m-l-3">
+                            <label class="md-no-float fs-13x">UOM</label>
+                            <input name='totQty' ng-if="activeAction=='Ship'" ng-disabled="true" type="text" ng-model="currentItem.OnCountUOM" autofocus>
+                            <input name='totQty' ng-if="activeAction=='Deliver'" ng-disabled="true" type="text" value="{{currentItem.OnCountUOM || currentItem.SellByUOM || currentItem.BIUOM}}" autofocus>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-40 m-l-2p" ng-hide="checkFinished()">
+                <numeric-pad current-item="currentItem" max="15" quantity="numericIn.quantity"></numeric-pad>
+            </div>
+        </div>
+        <div class="btn-btm-rgt">
+            <button ng-click="finishEntry()" id="finishnotmeter" class="big-rd-btn button button-icon ion-checkmark-round pkgDone hide-on-keyboard-open"> </button>
+        </div>
+    </ion-content>
+</ion-view>

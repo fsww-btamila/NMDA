@@ -1,0 +1,57 @@
+<div id="mLogin" class="bodyBg login-page headerColor h-100">
+    <section>
+        <div class="column login-info">
+            <div class="column siteWrapper" ng-show="siteFlag">
+                <div class="site-content">
+                    <ul>
+                        <li ng-repeat="item in loginDependency" name='siteName' ng-model='$root.selectedSite.Code' ng-click="siteSelct(item)" id="site_{{item.SiteID}}">
+                            <md-icon class="inv-clr"><i ng-class="(item.SiteType=='I') ? 'icon ion-home' : 'icon ion-android-boat'"></i></md-icon>{{item.Code}}
+                        </li>
+                    </ul>
+                </div>
+            </div> 
+            <h2 ng-class="{ 'offline': !$root.isInternet || !$root.online  }">Marine Delivery App</h2>
+            <div class="loginContainer">
+                <form name="loginForm" class="loginForm" autocomplete="off" ng-submit="(loginForm.$valid && login(loginData))|| (loginForm.$invalid  && invalidData(loginData))" novalidate>
+                    <div>
+                        <div class="loginContent">
+                            <div>
+                                <md-input-container class="md-no-float md-block input-component">
+                                    <label for="uName" class="md-no-float">Username</label>
+                                    <md-icon><img src="img/person_icon.png" alt="Bookmark"></md-icon>
+                                    <input name='uName' id="uName" class="person-input" ng-model="$root.loginData.uname" type="text" autocomplete="off" my-maxlength="32" required focus>
+                                    <span class="error" ng-show="$root.submitted && loginForm.uName.$touched  && loginForm.uName.$invalid">Username is required!</span>
+                                </md-input-container>
+                            </div>
+                            <div>
+                                <md-input-container class="md-no-float md-block input-component">
+                                    <label for="pword" class="md-no-float">Password</label>
+                                    <md-icon><img src="img/pass_icon.png" alt="Bookmark"></md-icon>
+                                    <input name="pword" id="pword" class="person-input" ng-model="loginData.pword" type="password" autocomplete="off" my-maxlength="32" required>
+                                    <span class="error" ng-show="$root.submitted && loginForm.pword.$touched && loginForm.pword.$invalid">Password is required!</span>
+                                </md-input-container>
+                            </div>
+                            <div class="site-dpn">
+                                <div class="siteBtn">
+                                    <md-button type="button" id="siteselection" ng-click='openSiteModal();' class="md-raised site-btn">{{selectedSite.Code || 'Select Site'}}</md-button>
+                                    <span class="error siteError" ng-show='siteValid'>Site is required!</span>
+                                </div>
+                                <div class="remPass" ng-show='false'>
+                                    <input id='remember' type="checkbox" value="Remember Me" />
+                                    <label for='remember'>Remember Me</label>
+                                </div>
+                                <div class="logBtn">
+                                    <md-button type="submit" id="loginclick" ng-click='$root.submitted=true;clickOnce();' class="md-raised md-warn login-button" ng-disabled="$root.isDisabled" ng-model="isDisabled">Login</md-button>
+                                </div>
+                            </div>
+                            <i ng-click="showDb = true" ng-show="!showDb" class="ion-ios-information info-btn"></i>
+                            <p ng-show="showDb" class="info-txt">Connected To: {{db}},Version: {{$root.appVersion}}</p>
+                            <br>
+                            <i ng-click="showDb = false" ng-show="showDb" class="ion-close-round close-info-btn"></i>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>

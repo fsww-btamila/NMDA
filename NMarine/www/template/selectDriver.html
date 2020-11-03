@@ -1,0 +1,9 @@
+<ion-popover-view>
+    <ion-content>
+        <div class="list">
+            <div class="item" ng-repeat="driver in drivers" ng-click="addDriver(driver.Name);hidepopover('driverpopover')">
+                {{driver.Name}}
+            </div>
+        </div>
+    </ion-content>
+</ion-popover-view>

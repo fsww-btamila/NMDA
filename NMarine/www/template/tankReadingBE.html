@@ -1,0 +1,217 @@
+<ion-view>
+  <ion-header-bar class="bar bar-header tabs-top shiporder-header" ng-class="{ 'offline': !$root.isInternet || !$root.online }">
+    <div class="row h-100 p-a-0">
+      <div class="col-25">
+        <a style="padding: 12px 8px; padding-right: 50px;" class="button button-icon" ng-click="goTankBack()"><i class="icon ion-android-arrow-back iconColor f-s-30"></i></a>
+      </div>
+      <div class="col text-xs-center">
+        <h4 class="whiteText m-a-0 fs-2x">Enter Tank Readings</h4>
+      </div>
+      <div class="col-25">
+        <div style="height: 0" class="row p-a-0">
+          <div class="col p-a-0">
+            <div class="user-dash m-r-0 pull-xs-right">
+              <span class='uinfo text-truncate'><i class="ion-person uname"></i><span>{{loginData.uname || 'Username'}}</span></span>
+              <span class='uinfo text-truncate'><i class="ion-home insite"></i><span>{{selectedSite.Code}}</span></span>
+              <span class="uinfo text-truncate app-version"><small>V {{$root.appVersion}}</small></span>
+            </div>
+          </div>
+          <div class="col-10">
+            <a href='' class="add-order-rgtbtn ion-android-more-vertical" ng-click="$root.openSettingsPopover($event,'bySettings')"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ion-header-bar>
+  <ion-content class="innerWidth tankView" overflow-scroll="true">
+    <div class="readingTank h-100">
+      <div class="row f-s-18 h-100">
+        <div class="col col-33 readingTop h-100">
+                    <div class="DBS hide-on-keyboard-open draft-compartment-wrapper" style="margin-top: 1.2%;height:61%;" ng-show="currentTank.showDBS">
+                        <div class="row pkg-bgd" ng-click="showDraftComp = !showDraftComp;">
+                            Draft 
+                            <span class="draft-reading">Bow: {{currentTank.draft.draftB.feet || '0'}} ft {{currentTank.draft.draftB.inch || '0'}}</span>
+                            <span class="draft-reading">Stern: {{currentTank.draft.draftS.feet || '0'}} ft {{currentTank.draft.draftS.inch || '0'}}</span>
+                            <span class="drop-btn"><i ng-if="showDraftComp" class="ion-chevron-up"></i><i ng-if="!showDraftComp" class="ion-chevron-down"></i></span>
+                        </div>
+                        <div class="compartment" ng-show="showDraftComp">
+                            <div class="row draftrow grayText" ng-init="setDraftField(0)">
+                                <div class="col tankinput" ng-class="{'darkinput':currentDraft=='draftB'}">
+                                    <div class="">
+                                        <section class="inputspan">
+                                            <div class="readDiv gauge-values pickerDraft">
+                                                <div class="gauge-inp-container">
+                                                    <div class="gauge-label">Bow</div>
+                                                    <div class="gauge-inp feet" ng-click="setDraftField(0)">
+                                                        <span class="inp-label" ng-class="selectedDraftTank == 'draftB' && selectedDraftField == 'feet' ? 'active' : ''">Feet</span>
+                                                        <span class="inp-val">{{currentTank.draft.draftB.feet || '0'}}</span>
+                                                    </div>
+                                                    <div class="gauge-inp inch" ng-click="setDraftField(1)">
+                                                        <span class="inp-label" ng-class="selectedDraftTank == 'draftB' && selectedDraftField == 'inch' ? 'active' : ''">Inches</span>
+                                                        <span class="inp-val">{{currentTank.draft.draftB.inch || '0'}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div class="col tankinput" ng-class="{'darkinput':currentDraft=='draftS'}">
+                                    <div class="">
+                                        
+                                        <section class="inputspan">
+                                            <div class="readDiv gauge-values pickerDraft">
+                                              
+                                                <div class="gauge-inp-container">
+                                                    <div class="gauge-label">Stern</div>
+                                                    <div class="gauge-inp feet" ng-click="setDraftField(2)">
+                                                        <span class="inp-label" ng-class="selectedDraftTank == 'draftS' && selectedDraftField == 'feet' ? 'active' : ''">Feet</span>
+                                                        <span class="inp-val">{{currentTank.draft.draftS.feet || '0'}}</span>
+                                                    </div>
+                                                    <div class="gauge-inp inch" ng-click="setDraftField(3)">
+                                                        <span class="inp-label" ng-class="selectedDraftTank == 'draftS' && selectedDraftField == 'inch' ? 'active' : ''">Inches</span>
+                                                        <span class="inp-val">{{currentTank.draft.draftS.inch || '0'}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row makeDivCenter draftWheels">
+                                <div class="wheelPicker  pickerDraft">
+                                    <div class='clearfix'></div>
+                                    <tank-picker field="selectedDraftField" index="" selected-value="currentTank.draft[selectedDraftTank]" denom="" max-feet="" max-inch="" max-fracts="" max-value="999" id="direct"></tank-picker>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+      <div class="row" style="position: absolute; bottom: 13%;">
+        <div class="col p-a-0" ng-click="a=true">
+          <div class='row p-a-0'>
+            Reading Date/Time
+          </div>
+          <div class="row p-a-0 m-t-0">
+            <ng-date selected-dt="currentTank.datetime" focus-me="a">
+
+          </div>
+        </div>
+      </div>
+      <div class="row m-t-20 tempData" ng-click="b=true">
+        <h3 class="titleNew">Liquid Temp</h3> &nbsp;&nbsp;
+        <form name="tempratureForm">
+          <input style="width: 85%; min-width: 90px; margin-top:10px;" name="temperature" ng-blur="checkDraftTemp($event)" ng-model='currentTank.draftTemp' ng-trim="false" type="tel" neagtive-only class="numInput bb-s-1" focus-me="b" />
+        </form>
+        <h3 class="titleNew m-t-0">&deg;F </h3>
+      </div>
+      <div class="row tempData" ng-show="tstate.HasLinearExpansionCoeff=='Y' && tstate.Insulated=='N'" ng-click="c=true">
+        <h3 class="titleNew">Ambient Temp</h3> &nbsp;&nbsp;
+        <form name="tempratureForm">
+          <input style="width: 85%; min-width: 90px; margin-top:10px;" name="temperature" ng-blur="checkDraftATemp($event)" ng-model='currentTank.draftATemp' ng-trim="false" type="tel" neagtive-only class="numInput bb-s-1" ng-disabled="tstate.Insulated =='Y'" focus-me="c"/>
+          <!--span class="error fs-13x" ng-show="tempError">
+            Value must be between -199 to 199 </span-->
+        </form>
+        <h3 class="titleNew m-t-0">&deg;F </h3>
+      </div>
+      <div class="row" style="position: absolute;  bottom: 9%;" ng-click="d=true">
+        <div class="col p-a-0">
+          <div class='row p-a-0 hide-on-keyboard-open'>
+            Comment
+          </div>
+          <div class="row p-a-0 m-t-0">
+            <input style="width: 56%; min-width: 90px" placeholder="Enter a comment" ng-model='currentTank.comment' class="numInput bb-s-1" valid-max="48" valid-type="alpha" focus-me="d" />
+          </div>
+        </div>
+      </div>
+      <div style="position: absolute;  bottom: -35px;" class="row hide-on-keyboard-open">
+        <div class="col p-a-0">
+          <div class="row p-a-0">
+            <div class="col p-a-0">
+              {{(tank=='stTank')?'Start':'End'}} Quantity
+            </div>
+          </div>
+          <div class="row p-a-0 m-t-0">
+            <div class="col p-a-0">
+              <div class="row">
+                <div class="col col-75 finishedReading m-t-10 p-a-5 h-30p">
+                  {{(calcQty || 0) | number: 2}} <span>&nbsp;{{readingUOM}}</span>
+                </div>
+                <div class="col">
+                  <button ng-class="{'disableUI': tempratureForm.temperature.$error.min || tempratureForm.temperature.$error.max}" id="tnk_clc_btn" ng-click="calcTankReading(currentCompartment, currentTank,0);" ng-if='currentTank.Compartments.length>0' class="button button-icon ion-calculator readingCalc"> </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col col-68">
+      <div class="row" ng-repeat="compartment in currentTank.Compartments track by $index" ng-init="showCompartment=true;setCurrentCompartment(0);">
+        <div class="w-p-100">
+          <div class="row pkg-bgd f-s-20 p-a-12" ng-click="(checkCompartmentStatus(compartment)?showCompartment  = true : showCompartment =!showCompartment);setCurrentCompartment($index);unsetCompartment(compartment,showCompartment,$index)">
+            <span class="comp-title" ng-hide="compartment.Code || compartment.CompartmentCode" ng-click="resetSide()">{{checkCompartmentStatus(compartment)? getCompartmentReading(compartment) :'COMPARTMENT ' +($index +1)}}<i ng-hide="checkCompartmentStatus(compartment)" class="icright" ng-class="currentCompartmentIndex == $index ? 'ion-chevron-up' :'ion-chevron-down'"></i></span>
+            <!-- <span class="pull-xs-right comp-title" ng-show="compartment.CompartmentCode && !compartment.Code"> {{compartment.CompartmentCode}} </span>
+            <span class="comp-title" ng-show="compartment.Code && !compartment.CompartmentCode">{{compartment.Code}}</span> -->
+            <div class="pull-xs-right readDiv-wrapper">
+              <div ng-repeat="subCompartment in compartment.subCompartments" class="subReading">
+                <div class="readDiv">
+                  <span id="{{subCompartment.TankChartCode}}" ng-if="subCompartment.TankChartCode" class="compart-title">{{subCompartment.TankChartCode}}</span>
+                  <span id="{{compartment.Code}}" ng-if="!subCompartment.TankChartCode" class="compart-title">{{compartment.Code}}</span>
+                  <!-- <span ng-if="subCompartment.ReadingSide">{{subCompartment.ReadingSide | eToMiddle}}</span> -->:
+                  <span class="values" ng-show="subCompartment.quantity.feet || subCompartment.quantity.inch || subCompartment.quantity.fracts">
+                    <span class="feet">{{subCompartment.quantity.feet || '0'}} ft</span>
+                  <span class="inch"> {{subCompartment.quantity.inch || '0'}}</span>
+                  <span class="fracts"> {{subCompartment.quantity.fracts}}</span> in
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+                    <div class="compartment" ng-if="expandCompartment(currentCompartmentIndex,$index,showCompartment)">
+                        <div class="row tankrow grayText">
+                            <div ng-repeat="subCompartment in compartment.subCompartments track by $index" class="col tankinput comb" ng-init="setFieldFlag($index, 'feet')">
+                                <div class="">
+                                    <div class="inputspan">
+                                        <div>
+                                            <div class="readDiv gauge-values">
+                                               
+                                                <div class="gauge-inp-container w-fracts" >
+                                                    <div class="gauge-label">{{subCompartment.ReadingSide | eToMiddle}}</div>
+                                                    <div class="gauge-inp feet" ng-click="setFieldFlag($index, 'feet')">
+                                                        <span class="inp-label" ng-class="fieldFlag[subCompartment.SubCompartmentID] == 'feet' ? 'active' : ''">Feet</span>
+                                                        <span class="inp-val">{{subCompartment.quantity.feet || '0'}}</span>
+                                                    </div>
+                                                    <div class="gauge-inp inch" ng-click="setFieldFlag($index, 'inch')">
+                                                        <span class="inp-label" ng-class="fieldFlag[subCompartment.SubCompartmentID] == 'inch' ? 'active' : ''">Inches</span>
+                                                        <span class="inp-val">{{subCompartment.quantity.inch || '0'}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="gauge-spin-container">
+                                                    <ng-picker items="wheelOptions.fracts" config='{"type":"small"}' params="draftFeetParams" error="subCompartment.error" selected-value="currentCompartment.subCompartments[$index].quantity.fracts" max-inch-reached="subCompartment.inch.maxReached" reached-max="subCompartment.denom.maxReached" max-value="currentCompartment.subCompartments[$index].MaxDenominator" unit="{{wheelOptions.subUnit}}" id="{{currentCompartment.subCompartments[$index].SubCompartmentID}}" munit="fracts" scmp-len="{{currentTank.Compartments.length}}"></ng-picker>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="wheelPicker">
+                                        <div class='clearfix'></div>
+                                        <tank-picker field="fieldFlag" reached-max="subCompartment.inch.maxReached" index="{{$index}}" error="subCompartment.error" selected-value="subCompartment.quantity" denom="{{currentTank.Denominator}}" max-feet="{{currentCompartment.subCompartments[$index].maxDepth}}" max-inch="{{currentCompartment.subCompartments[$index].MaxInch}}" max-denom-reached="subCompartment.denom.maxReached" max-fracts="{{currentCompartment.subCompartments[$index].MaxDenominator}}" id="{{subCompartment.SubCompartmentID}}"></tank-picker>
+                                    </div>
+                                    <div class="row" ng-if="subCompartment.error">
+                                      <div class="error-text col"> <span class="error-label">Error</span> {{subCompartment.error}}</div>
+                                    </div>
+                                    <!-- <div class="row" ng-if="subCompartment.inch.maxReached && subCompartment.denom.maxReached">
+                                      <div class="error-text col"> <span class="error-label">Error</span> Max fracts is {{currentCompartment.subCompartments[$index].MaxDenominator}}</div>
+                                    </div> -->
+                                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div> 
+    </div>
+    </div>
+    <div class='hide-on-keyboard-open'>
+      <button id="Std_fn_Reading" ng-click="calcTankReading(currentCompartment, currentTank,1);" ng-class="{'disableUI': tankError}" class="big-rd-btn button button-icon roundDone ion-checkmark-round mtrPos"></button>
+    </div>
+  </ion-content>
+</ion-view>
