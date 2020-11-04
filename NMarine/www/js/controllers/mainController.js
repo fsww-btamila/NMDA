@@ -527,13 +527,13 @@ app.controller('mainController', function($scope, $rootScope, $state, $localstor
           // if (response.data.OrderUpdTime.LastUpdatedTime != null) {
           //     $localstorage.set('Open-syncDateTime', response.data.OrderUpdTime.LastUpdatedTime);
           // }
-          if (appConstants.source === 'ordersNew' && response.data.OrderUpdTime && response.data.OrderUpdTime.ShipLastUpdatedTime != null) {
+          if (appConstants.source === 'ordersNew' && response.data.OrderUpdTime.ShipLastUpdatedTime != null) {
             $localstorage.set('Ship-syncDateTime', response.data.OrderUpdTime.ShipLastUpdatedTime);
           }
           var insertFlag = true;
           var shipDatesArray = [];
           var orderDatesArray = [];
-          if (response.data.length > 0) {
+          if (response.data.Orders.length > 0) {
             var tempOrders = [];
             var inprUpdatedTime = $localstorage.get('Ship-syncDateTime');
             var openUpdatedTime = $localstorage.get('Open-syncDateTime');
@@ -542,22 +542,21 @@ app.controller('mainController', function($scope, $rootScope, $state, $localstor
                 insertFlag = false;
               }
             }
-            angular.forEach(response.data, function(value, key) {
-              console.log("---------", value.Orders.OrderHdr.Status)
-              if (value.Orders.OrderHdr.Status == 'Open') {
+            angular.forEach(response.data.Orders, function(value, key) {
+              if (value.OrderHdr.Status == 'Open') {
                 setRequestTimestamp(1);
-                orderDatesArray.push(value.Orders.OrderHdr.LastUpdatedTime)
+                orderDatesArray.push(value.OrderHdr.LastUpdatedTime)
               } else {
                 setRequestTimestamp(2);
               }
-              if (value.Orders.OrderHdr.OrderNotes.length > 0) {
-                angular.forEach(value.Orders.OrderHdr.OrderNotes, function(val, k) {
+              if (value.OrderHdr.OrderNotes.length > 0) {
+                angular.forEach(value.OrderHdr.OrderNotes, function(val, k) {
                   if (val && val.Note)
                     val.Note = val.Note.replace(/\\r\\n/g, "\n");
                 });
               }
               tempOrders.push({ "Orders": value });
-              if (key == response.data.length - 1) {
+              if (key == response.data.Orders.length - 1) {
                 if (3 > 2) {
                   res = $scope.loadOnSql(tempOrders);
                 } else {
@@ -595,7 +594,7 @@ app.controller('mainController', function($scope, $rootScope, $state, $localstor
       }
       var orderDatesArray = [];
       var insertFlag = true;
-      if (response.data.length > 0) {
+      if (response.data.Orders.length > 0) {
         var tempOrders = [];
         var inprUpdatedTime = $localstorage.get('Ship-syncDateTime');
         var openUpdatedTime = $localstorage.get('Open-syncDateTime');
@@ -607,22 +606,22 @@ app.controller('mainController', function($scope, $rootScope, $state, $localstor
         if (appConstants.source === 'ordersNew') {
           $localstorage.set('Ship-syncDateTime', response.data.OrderUpdTime.ShipLastUpdatedTime);
         }
-        angular.forEach(response.data, function(value, key) {
+        angular.forEach(response.data.Orders, function(value, key) {
 
-          if (value.Orders.OrderHdr.Status == 'Open' || value.Orders.OrderHdr.Status == 'Reassigned by Dispatch') {
+          if (value.OrderHdr.Status == 'Open' || value.OrderHdr.Status == 'Reassigned by Dispatch') {
             setRequestTimestamp(1);
-            orderDatesArray.push(value.Orders.OrderHdr.LastUpdatedTime)
+            orderDatesArray.push(value.OrderHdr.LastUpdatedTime)
           } else {
             setRequestTimestamp(2);
           }
 
-          angular.forEach(value.Orders.OrderHdr.OrderNotes, function(val, k) {
+          angular.forEach(value.OrderHdr.OrderNotes, function(val, k) {
             if (val && val.Note) {
               val.Note = val.Note.replace(/\\r\\n/g, "\n");
             }
           });
           tempOrders.push({ "Orders": value });
-          if (key == response.data.length - 1) {
+          if (key == response.data.Orders.length - 1) {
             if (3 > 2) {
               $scope.loadOnSql(tempOrders);
             } else {
